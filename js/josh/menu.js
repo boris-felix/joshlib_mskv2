@@ -2,6 +2,9 @@
 	
 	J.Menu = J.Class({
 		
+		index : {},
+		currentPath : "/",
+		
 		__construct:function() {
 			this.index = {};
 			
