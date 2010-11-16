@@ -2,9 +2,8 @@
 	
 	J.UI.Panel = J.Class(J.UIElement,{
 		
-		insert:function() {
-			var elt = $("<div id='"+this.elementId+"'></div>");
-			this.app.baseElement.appendChild(elt);
+		getHtml:function() {
+			return "<div id='"+this.elementId+"'></div>";
 		}
 	},{
 		type:"Panel"

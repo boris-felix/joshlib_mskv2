@@ -1,16 +1,19 @@
 (function(J,$) {
 	
 	J.UI.ListView = J.Class(J.UIElement,{
-		
-		__contruct:function(app) {
+
+		getHtml:function() {
+			var ret = ["<ul id='"+this.htmlId+"'>"];
 			
-		},
-		insert:function() {
-			
+			for (var i=0;i<this.data.length;i++) {
+			    ret.push("<li>"+this.data[i]["label"]+"</li>");
+			}
+			ret.push("</ul>");
+			return ret.join("");
 		},
 		
 		setData:function(data) {
-			
+			this.data = data;
 		}
 		
 	},{
