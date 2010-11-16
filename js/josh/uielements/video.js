@@ -1,16 +1,17 @@
 (function(J,$) {
 	
 	J.UI.Video = J.Class(J.UIElement,{
+		type:"Video",
 		
-		play:function(url) {
+		play:function(options) {
 		    
 		    //https://github.com/maccman/flarevideo
 		    
-			this.flare = $("#video").flareVideo();
+			this.flare = $("#"+this.htmlId).flareVideo();
             this.flare.load([
                     {
-                      src:  url,
-                      type: 'video/mp4',
+                      src:  options["url"],
+                      type: options["mime"] || 'video/mp4',
                       autoplay:true
                       
                     }
@@ -19,10 +20,12 @@
 		
 		pause:function() {
 		    this.flare.pause();
-	    }
+	    },
+	    
+	    getHtml:function() {
+			return "<div id='"+this.htmlId+"'></div>";
+		}
 		
-	},{
-		type:"Video"
 	});
 	
 	

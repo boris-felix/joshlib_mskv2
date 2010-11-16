@@ -1,12 +1,8 @@
 (function( window, $, undefined ) {
 
-	var J = $.inherit({
-		
-	},{
-		Class:$.inherit,
-		
-		
-	});
+	var J = {};
+	
+	J.Class = $.inherit;
 	
 	window.Joshlib = J;
 

@@ -1,12 +1,11 @@
 (function(J,$) {
 	
 	J.UI.Panel = J.Class(J.UIElement,{
+		type:"Panel",
 		
 		getHtml:function() {
-			return "<div id='"+this.elementId+"'></div>";
+			return "<div id='"+this.htmlId+"'></div>";
 		}
-	},{
-		type:"Panel"
 	});
 	
 	
