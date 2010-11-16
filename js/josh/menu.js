@@ -2,7 +2,7 @@
 	
 	J.Menu = J.Class({
 		
-		index : {},
+		index : new Object(),
 		currentPath : "/",
 		
 		__construct:function() {
