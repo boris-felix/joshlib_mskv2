@@ -15,7 +15,7 @@ test('Installation Joshlib',function(){
 })  
 
 test('Construction de l\'arbre',function(){
-	expect(2);
+	expect(10);
 	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
 	equals(testee2.currentPath,'/','chemin d\'origine');
@@ -26,32 +26,31 @@ test('Construction de l\'arbre',function(){
 
 	testee2.setData('leaf','babebibobu-3');
 	equals(testee2.data,'babebibobu-3','setData leaf');
-	equals(testee2.index['/'],11,'setData index');
+	equals(testee2.index['/'],{'undefined':11},'setData index');
 	
 	
-console.log(testee2);
+	testee2.goTo('leaf');
+	equals(testee2.currentPath,'leaf','repositionnement absolu');
+	
+	testee2.setData('bourgeon1','b-1');
+	testee2.setData('bourgeon2','b-2');
+	testee2.setData('bourgeon3','b-3');
+
+
+	testee2.goParent();
+	equals(testee2.currentPath,'/','repositionnement relatif parent');
+	
+	testee2.goTo('leaf/bourgeon1');
+	equals(testee2.currentPath,'leaf/bourgeon1','repositionnement relatif de deux niveaux');
+	testee2.goNext();
+	equals(testee2.currentPath,'leaf/bourgeon2','repositionnement relatif suivant');
+	testee2.goPrev();
+	equals(testee2.currentPath,'leaf/bourgeon1','repositionnement relatif précédent');
+
+	testee2.setData('kiddie','c-1');
+	testee2.goChildren();
+	equals(testee2.currentPath,'leaf/bourgeon1/kiddie','repositionnement relatif enfant');
+	
+
+
 })  
-
-
-/*
-test('Construction de l\'arbre',function(){
-  expect(2);
-	var testee = Joshlib();
-console.log(typeof testee);
-console.log(typeof window.Joshlib);
-	equals(testee.currentPath,'/','Ok, on a une racine en prime chemin');
-	equals(testee.index,{},'avec une arborescence vide');
-	testee.setRootData(true);
-	testee.index['/'][0]=0;
-})
-
-/*
-test('Construction de l\'arbre',function(){
-  expect(2);
-	var testee = J.Menu();
-	equals(testee.currentPath,'/','Ok, on a une racine en prime chemin');
-	equals(testee.index,{},'avec une arborescence vide');
-	
-})
-
-*/
