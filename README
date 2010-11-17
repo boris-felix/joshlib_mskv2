@@ -1,0 +1,16 @@
+Joshlib
+-------
+
+
+Dependencies
+------------
+
+ - NodeJS for development & build system
+ - https://github.com/joshfire/garcon checkouted/cloned in ../garcon
+
+How to run
+----------
+
+$ node build/garcon.js
+
+Then browse to joshlib/test/index-f24.html
