@@ -26,7 +26,7 @@
 		buildIndex:function(path,data,recursive) {
 			this.index[path] = {};
 			for (var i = 0; i < data.length; i++) {
-				this.index[path][data[i]["id"]] = i;
+				this.index[path][data[i]["id"]] = data.i;
 				if (recursive && data["children"]) {
 					this.buildIndex(path+data[i]["id"]+"/",data["children"],true);
 				}
@@ -42,8 +42,17 @@
 			
 			var current = "/";
 			for (var i = 0; i < paths.length; i++) {
+console.log(paths[i]);
 				
+				if (typeof this.index[current]!=='undefined') {
+					current += (current!='/'?'/':'')+paths[i];
+				} else {
+					return false;
+				}
 			}
+			
+			this.currentPath=current;
+			return true;
 		},
 		
 		goNext:function() {
@@ -55,7 +64,10 @@
 		},
 		
 		goParent:function() {
+			var path=this.currentPath;
 			
+			path = path.substr(0,path.lastIndexOf('/')-1);
+			this.currentPath = path;
 		},
 		
 		goChildren:function() {

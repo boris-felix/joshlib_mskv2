@@ -22,13 +22,13 @@ test('Construction de l\'arbre',function(){
 	testee2.setRootData('babebibobu-2');
 	equals(testee2.data,'babebibobu-2','setRootData');
 
-	testee2.setData('leaf','babebibobu-3');
-	equals(testee2.data,'babebibobu-3','setData leaf');
-	equals(testee2.index['/'],{'undefined':11},'setData index');
+	testee2.setData('/leaf',{'babebi':'bobu'});
+	equals(testee2.data,{'babebi':'bobu'},'setData leaf');
+	equals(testee2.index['/'],{'babebi':'bobu'},'setData index');
 	
 	
-	testee2.goTo('leaf');
-	equals(testee2.currentPath,'leaf','repositionnement absolu');
+	testee2.goTo('/leaf');
+	equals(testee2.currentPath,'/leaf','repositionnement absolu');
 	
 	testee2.setData('bourgeon1','b-1');
 	testee2.setData('bourgeon2','b-2');
@@ -38,21 +38,34 @@ test('Construction de l\'arbre',function(){
 	testee2.goParent();
 	equals(testee2.currentPath,'/','repositionnement relatif parent');
 	
-	testee2.goTo('leaf/bourgeon1');
-	equals(testee2.currentPath,'leaf/bourgeon1','repositionnement relatif de deux niveaux');
+	testee2.goTo('/leaf/bourgeon1');
+	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif de deux niveaux');
 	testee2.goNext();
-	equals(testee2.currentPath,'leaf/bourgeon2','repositionnement relatif suivant');
+	equals(testee2.currentPath,'/leaf/bourgeon2','repositionnement relatif suivant');
 	testee2.goPrev();
-	equals(testee2.currentPath,'leaf/bourgeon1','repositionnement relatif précédent');
+	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif précédent');
 
 	testee2.setData('kiddie','c-1');
 	testee2.goChildren();
-	equals(testee2.currentPath,'leaf/bourgeon1/kiddie','repositionnement relatif enfant');
+	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif enfant');
 	
-
-
 });
 
+test('Chargement d\'un arbre',function(){
+	expect(10);
+	var testee = new Joshlib.Menu();
+	$.ajax({                                                                                      
+		url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
+		dataType: 'jsonp',                                                                          
+		success: function(data){
+console.log(data);
+			testee.setRootData(data);
+console.log(testee);
+		}                                                                                           
+	});
+	equals(testee.currentPath,'leaf/bourgeon1/kiddie','repositionnement relatif enfant');
+	
+});
 
 test('UIElements',function(){
     
