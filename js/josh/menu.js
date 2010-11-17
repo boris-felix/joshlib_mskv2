@@ -4,11 +4,9 @@
 		
 		index : new Object(),
 		currentPath : "/",
-		refreshed : [],
 		
 		__construct:function() {
 			this.index = {};
-			
 			this.currentPath = "/";
 		},
 		
@@ -17,11 +15,10 @@
 		},
 		
 		setData:function(path,data) {
-			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif
+			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
 			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 			
 			this.buildIndex(path,data,true);
-			
 			this.data = data;
 		},
 		
@@ -34,32 +31,31 @@
 					parpath = (parpath == '' )? '/' : parpath;
 					
 					if (this.index[parpath]['_child']===undefined) {
-console.log('firstchild path '+path+' parent '+parpath+ ' prevchild '+prevchild );
 						this.index[path]['_prev'] = false;
 						this.index[parpath]['_child'] = [path];
 					} else {
-						var prevchild = this.index[parpath]['_child'].lastIndexOf();
-console.log('anotherchild path '+path+' parent '+parpath+ ' prevchild '+prevchild );
-console.log(this.index[parpath]['_child']);
+						var prevchild = this.index[parpath]['_child'][this.index[parpath]['_child'].length-1];
 						this.index[parpath]['_child'].push(path);
 						this.index[path]['_prev']=prevchild;
-
+						this.index[this.index[path]['_prev']]['_next']=path;
 					}
 					this.index[path]['_next']=false;
 				}
 			}
-			
+			if (typeof data === 'string'){
+				this.index[path][0]=data;
+			} else {
+				// on a un object
+				for (var key in data) {
+					console.log(data[key]);
+					this.index[path][key]=data[key];
+				}
+			}
 
-			for (var i = 0; i < data.length; i++) {
-				this.index[path][data[i]["id"]] = data.i;
-				/// indiquer au dernier __child du parent qui a désormais un __next
-				
-				}
-				var d=new Date();				
-				this.index[path]['_when'] = d.getTime(); // ceci pour un usage futur qui permettrait de mettre à jour les données passé un certain temps.
-				if (recursive && data["children"]) {
-					this.buildIndex(path+data[i]["id"]+"/",data["children"],true);
-				}
+			var d=new Date();				
+			this.index[path]['_when'] = d.getTime(); // ceci pour un usage futur qui permettrait de mettre à jour les données passé un certain temps.
+			if (recursive && data["children"]) {
+				this.buildIndex(path+data[i]["id"]+"/",data["children"],true);
 			}
 		},
 		
@@ -89,8 +85,6 @@ console.error('goTo : OUCH '+path);
 		},
 		
 		goNext:function() {
-			// .goParent() . __next
-console.log('next: '+this.currentPath+' ::  '+this.index[this.currentPath]['_next']);
 			if (this.index[this.currentPath]['_next']===false) {
 				return false;
 			} else {
@@ -99,8 +93,6 @@ console.log('next: '+this.currentPath+' ::  '+this.index[this.currentPath]['_nex
 		},
 		
 		goPrev:function() {
-			// .goParent() . __prec
-console.log('prev: '+this.currentPath+' ::  '+this.index[this.currentPath]['_prev']);
 			if (this.index[this.currentPath]['_prev']===false) {
 				return false;
 			} else {
@@ -114,17 +106,18 @@ console.log('prev: '+this.currentPath+' ::  '+this.index[this.currentPath]['_pre
 			path = path.substr(0,path.lastIndexOf('/'));
 			path = (path=='') ? '/' : path;
 			
-console.log('prev: '+this.currentPath+' ::  '+path);
-			
 			this.goTo(path);
 		},
 		
-		goChildren:function() {
-			
+		goChildren:function(id) {
+			if (id===undefined) {
+				// TODO à définir ce que l'on va renvoyer. J'ai pas vraiment décidé
+				return this.index[this.currentPath]['_child'];
+			} else {
+				this.goTo(this.index[this.currentPath]['_child'][id])
+			}
 		}
 		
-		
 	});
-	
 	
 })(Joshlib,jQuery);

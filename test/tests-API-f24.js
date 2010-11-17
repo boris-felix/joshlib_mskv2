@@ -13,7 +13,7 @@ test('Installation Joshlib',function(){
 })  
 
 test('Construction de l\'arbre',function(){
-	expect(11);
+	expect(12);
 	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
 	equals(testee2.currentPath,'/','chemin d\'origine');
@@ -23,8 +23,7 @@ test('Construction de l\'arbre',function(){
 	equals(testee2.data,'babebibobu-2','setRootData');
 
 	testee2.setData('/leaf',{'babebi':'bobu'});
-	equals(testee2.data,{'babebi':'bobu'},'setData leaf');
-	equals(testee2.index['/'],{'babebi':'bobu'},'setData index');
+	equals(testee2.index['/leaf']['babebi'],'bobu','setData index');
 	
 	
 	testee2.goTo('/leaf');
@@ -58,25 +57,26 @@ test('Construction de l\'arbre',function(){
 	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif précédent');
 
 	testee2.setData('kiddie','c-1');
-	testee2.goChildren();
-	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif enfant');
+	testee2.goChildren(0);
+	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif au premier enfant');
 console.log(testee2);
 });
 
+var testee = new Joshlib.Menu();
+
 test('Chargement d\'un arbre',function(){
-	expect(10);
-	var testee = new Joshlib.Menu();
+	expect(1);
+	
 	$.ajax({                                                                                      
 		url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
 		dataType: 'jsonp',                                                                          
 		success: function(data){
 console.log(data);
 			testee.setRootData(data);
-console.log(testee);
 		}                                                                                           
 	});
-	equals(testee.currentPath,'leaf/bourgeon1/kiddie','repositionnement relatif enfant');
-	
+	equals(testee.currentPath,'/','repositionnement relatif enfant');
+console.log(testee)
 });
 
 test('UIElements',function(){
