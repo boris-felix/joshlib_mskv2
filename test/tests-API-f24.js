@@ -13,7 +13,7 @@ test('Installation Joshlib',function(){
 })  
 
 test('Construction de l\'arbre',function(){
-	expect(10);
+	expect(11);
 	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
 	equals(testee2.currentPath,'/','chemin d\'origine');
@@ -37,6 +37,10 @@ test('Construction de l\'arbre',function(){
 
 	testee2.goParent();
 	equals(testee2.currentPath,'/','repositionnement relatif parent');
+
+	testee2.goTo('/leaf/bourgeon1');
+	testee2.goParent();
+	equals(testee2.currentPath,'/leaf','repositionnement relatif parent sublevel');
 	
 	testee2.goTo('/leaf/bourgeon1');
 	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif de deux niveaux');
