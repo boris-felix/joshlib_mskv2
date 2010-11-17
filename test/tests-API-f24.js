@@ -30,13 +30,21 @@ test('Construction de l\'arbre',function(){
 	testee2.goTo('/leaf');
 	equals(testee2.currentPath,'/leaf','repositionnement absolu');
 	
-	testee2.setData('bourgeon1','b-1');
-	testee2.setData('bourgeon2','b-2');
-	testee2.setData('bourgeon3','b-3');
+	testee2.setData('/leaf/bourgeon1','b-1');
+	testee2.setData('/leaf/bourgeon2','b-2');
+	testee2.setData('/leaf/bourgeon3','b-3');
 
+	
+	testee2.goTo('/leaf');
+	
+	equals(testee2.currentPath,'/leaf','repositionnement absolu');
 
+	testee2.setData('bourgeon4','b-4');
+	testee2.goTo('/leaf/bourgeon4');
+	equals(testee2.data,'b-4','création de feuille relative');
+	
 	testee2.goParent();
-	equals(testee2.currentPath,'/','repositionnement relatif parent');
+	equals(testee2.currentPath,'/leaf','repositionnement relatif parent');
 
 	testee2.goTo('/leaf/bourgeon1');
 	testee2.goParent();
@@ -52,7 +60,7 @@ test('Construction de l\'arbre',function(){
 	testee2.setData('kiddie','c-1');
 	testee2.goChildren();
 	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif enfant');
-	
+console.log(testee2);
 });
 
 test('Chargement d\'un arbre',function(){
