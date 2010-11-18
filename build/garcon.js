@@ -11,7 +11,7 @@ myApp = server.addApp({
   buildVersion:"HEAD"
 });
 
-var jsFiles = {
+var files = {
     "js/libs/jquery":[
         "js/libs/jquery-1.4.4.js",
         "js/libs/jquery.inherit-1.3.2.M.js",
@@ -20,15 +20,38 @@ var jsFiles = {
         
         
     ],
+    "js/libs/sencha-touch":[
+           "js/libs/sencha-touch-debug.js",
+           "js/libs/jquery-1.4.4.js",
+           "js/libs/jquery.inherit-1.3.2.M.js"
+    ],
+    
     "js/josh":[
           'js/josh/main.js',
           'js/josh/app.js',
           'js/josh/menu.js',
           'js/josh/ui.js',
-          'js/josh/uielements/video.js',
           'js/josh/uielements/panel.js',
-          'js/josh/uielements/list.js'
+          'js/josh/uielements/list/all.js'
+    ],
+    
+    "js/josh/targets/10feet/googletv":[
+        'js/josh/targets/10feet/googletv.js',
+        'js/josh/uielements/video/flarevideo.js'
+    ],
+    
+    "js/josh/targets/smartphones/iphone":[
+        'js/josh/targets/smartphones/main.js',
+        'js/josh/uielements/list/smartphones.js',
+        'js/josh/uielements/video/smartphones.js'
+    ],
+    
+    "js/josh/targets/smartphones/android":[
+        'js/josh/targets/smartphones/main.js',
+        'js/josh/uielements/list/smartphones.js',
+        'js/josh/uielements/video/smartphones.js'
     ]
+    
     
 }
 
@@ -36,11 +59,26 @@ var jsFiles = {
 // add other dependencies
 myApp.addFrameworks(
   
-  // a third party framework
-  // { path: 'frameworks/calendar' },
-  //{ path:'js/libs/jquery',files:jsFiles['js/libs/jquery'], combineScripts: true },
+  { path:'css/googletv',files:[
+        'css/style.css',
+        'css/flarevideo/flarevideo.css',
+        'css/flarevideo/flarevideo.vimeo.scss'
+    ], combineStylesheets: true },
+  { path:'css/iphone',files:["css/sencha-touch/apple.css"], combineStylesheets: true },
+  { path:'css/android',files:['css/sencha-touch/android.css'], combineStylesheets: true },
   
-  { path:'js/josh',files:jsFiles['js/libs/jquery'].concat(jsFiles['js/josh']), combineScripts: true }
+  { path:'js/josh/targets/10feet/googletv',files:[].concat(
+      files['js/libs/jquery'],
+      files['js/josh'],
+      files['js/josh/targets/10feet/googletv']
+     ), combineScripts: true },
+  
+  { path:'js/josh/targets/smartphones/iphone',files:[].concat(
+      files['js/libs/sencha-touch'],
+      files['js/josh'],
+      files['js/josh/targets/smartphones/iphone']
+     ), combineScripts: true }
+  
 );
 
 

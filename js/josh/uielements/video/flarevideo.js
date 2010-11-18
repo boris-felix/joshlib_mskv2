@@ -5,8 +5,6 @@
 		
 		play:function(options) {
 		    
-		    //https://github.com/maccman/flarevideo
-		    
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:J.basePath+"swf/FlareVideo.swf",
               //controls:true,
