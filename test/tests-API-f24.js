@@ -93,6 +93,7 @@ test('UIElements',function(){
     expect(3);
     
     var J=Joshlib;
+    J.basePath = "../";
     
 	var testApp = J.Class(J.App,{
 		
@@ -156,6 +157,10 @@ test('UIElements',function(){
 	
 	equals($("#testAppId_e_Video_vplayer").length,1);
     
+    app.playMedia({
+        "url":"fixtures/video.mp4",
+        "type":"video"
+    });
 	
     
 });
