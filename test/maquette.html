@@ -59,7 +59,20 @@
 		populate = function()
 		{
 			// à partir de menu , j'insère les éléments récupérés dans le jsonp
-		
+			
+			$.ajax({                                                                                      
+				url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
+				dataType: 'jsonp',                                                                          
+				success: function(data)
+				{
+			
+					var data = data.result.f24fr.list;
+					for ( var i in data)
+					{
+						testee.setData(i,data[i]);
+					}
+				}           
+			});
 		};
 		
 		
@@ -75,6 +88,8 @@
 		$(document).ready(function(){
 			$('head').append('<style>'+style+'</style>');
 			$('body').html(body);
+			
+			populate();
 		});
 
 		//<script src="main.js"> ]]>
