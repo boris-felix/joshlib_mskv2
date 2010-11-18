@@ -47,7 +47,6 @@
 			} else {
 				// on a un object
 				for (var key in data) {
-					console.log(data[key]);
 					this.index[path][key]=data[key];
 				}
 			}

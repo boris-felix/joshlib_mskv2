@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<title>Maquette</title>
+
+	<script src="../js/libs/modernizr-1.6.min.js"></script>
+	
+	<script src="../js/libs/jquery-1.4.4.js"></script> 
+	<script src="../js/libs/jquery.inherit-1.3.2.M.js"></script> 
+	<script src="../js/josh/main.js"></script>  
+	<script src="../js/josh/api.js"></script>  
+	
+	
+	<script src="../js/plugins.js"></script> 
+	<script src="../js/script.js"></script> 
+
+	<script src="../js/josh/main.js"></script> 
+	<script src="../js/josh/menu.js"></script>    
+	<script src="../js/josh/app.js"></script>    
+	
+	<script src="../js/josh/ui.js"></script>    
+	<script src="../js/josh/uielements/video.js"></script>    
+	<script src="../js/josh/uielements/panel.js"></script>  
+	<script src="../js/josh/uielements/list.js"></script>  
+
+
+	
+	<script>
+		//<![CDATA[  <script src="basics/--generic.js">
+		
+		var style='/* Ceci est la déclaration de style embarquée et injectée  */';
+		var body='<!-- Ceci est le HTML injecté -->';
+		
+		var menu = new Joshlib.Menu();
+		
+		var populate = function(){};
+		
+		//<script src="basics/--generic.js"> ]]>
+	</script>
+	
+	<script>
+		//<![CDATA[  <script src="basics/-generic-browser.js">
+		
+		//<script src="basics/-generic-browser.js"> ]]>
+	</script>
+
+	<script>
+		//<![CDATA[  <script src="channels/france24fr/--chart.js">
+		// déclaration de la charte graphique propre à france 24
+		style='\
+					body {  background : rgba(0 , 127 , 255 , 0.5) ; color : white;  }    \
+					';
+		body='\
+					<h1>France 24, l\'information à la demande</h1>							\
+					<p>Un instant...</p>   													\
+					';
+		
+		populate = function()
+		{
+			// à partir de menu , j'insère les éléments récupérés dans le jsonp
+		
+		};
+		
+		
+		//<script src="channels/france24fr/--chart.js"> ]]>
+	</script>
+	
+	
+	
+	<script>
+		//<![CDATA[  <script src="main.js">
+		// pour des raisons de lisibilité, je mets le main après
+
+		$(document).ready(function(){
+			$('head').append('<style>'+style+'</style>');
+			$('body').html(body);
+		});
+
+		//<script src="main.js"> ]]>
+	</script>
+
+</head>
+	<body />
+</html>

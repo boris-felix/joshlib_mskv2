@@ -59,7 +59,7 @@ test('Construction de l\'arbre',function(){
 	testee2.setData('kiddie','c-1');
 	testee2.goChildren(0);
 	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif au premier enfant');
-console.log(testee2);
+
 });
 
 var testee = new Joshlib.Menu();
@@ -67,17 +67,26 @@ var testee = new Joshlib.Menu();
 test('Chargement d\'un arbre',function(){
 	expect(1);
 	
+	
 	$.ajax({                                                                                      
 		url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
 		dataType: 'jsonp',                                                                          
 		success: function(data){
-console.log(data);
-			testee.setRootData(data);
+			
+			var data = data.result.f24fr.list;
+			for ( var i in data){
+
+				testee.setData(i,data[i]);
+			}
 		}                                                                                           
 	});
 	equals(testee.currentPath,'/','repositionnement relatif enfant');
-console.log(testee)
+
+	console.log(testee)
+	
 });
+
+
 
 test('UIElements',function(){
     
