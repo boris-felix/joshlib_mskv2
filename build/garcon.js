@@ -11,14 +11,14 @@ myApp = server.addApp({
   buildVersion:"HEAD"
 });
 
-// myApp needs SproutCore to run
-//myApp.addSproutcore();
-
-
 var jsFiles = {
     "js/libs/jquery":[
         "js/libs/jquery-1.4.4.js",
-        "js/libs/jquery.inherit-1.3.2.M.js"
+        "js/libs/jquery.inherit-1.3.2.M.js",
+        "js/libs/jquery.ui.slider.js",
+        "js/libs/jquery.flash.js",
+        
+        
     ],
     "js/josh":[
           'js/josh/main.js',

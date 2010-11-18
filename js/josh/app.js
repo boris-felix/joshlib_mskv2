@@ -26,6 +26,14 @@
 		
 		show:function() {
 		    //test
+		},
+		
+		
+		playMedia:function(media) {
+		    if (media.type=="video") {
+		        this.defaultVideoPlayer.play(media);
+		        return this.defaultVideoPlayer;
+		    }
 		}
 		
 	});
