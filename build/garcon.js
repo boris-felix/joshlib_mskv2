@@ -1,4 +1,4 @@
-var g = require('../../garcon/lib/garçon'),
+var g = require('../../garcon/lib/garcon.js'),
     server, myApp;
     
 // create a server which will listen on port 8000 by default
