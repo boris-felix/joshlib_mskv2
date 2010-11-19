@@ -25,7 +25,7 @@
 						this.add(that);
 						if (this.neighbours[from]!==undefined)
 						{
-							this.neighbours[from]['right']			= that;
+							this.neighbours[from]['right']		= that;
 							this.neighbours[that]['left']		= from;
 						}
 
@@ -35,7 +35,7 @@
 						this.add(that);
 						if (this.neighbours[from]!==undefined)
 						{
-							this.neighbours[from]['down']			= that;
+							this.neighbours[from]['down']		= that;
 							this.neighbours[that]['up']			= from;
 						}
 						
@@ -64,7 +64,7 @@
 			
 			moveLeft : function()
 					{
-						var to = this.neighbours[currentHighlight]['left'];
+						var to = this.neighbours[this.currentHighlight]['left'];
 						if (to !== undefined)
 						{
 							this.moveTo(to);
@@ -73,7 +73,7 @@
 			
 			moveRight : function()
 					{
-						var to = this.neighbours[currentHighlight]['right'];
+						var to = this.neighbours[this.currentHighlight]['right'];
 						if (to !== undefined)
 						{
 							this.moveTo(to);
@@ -81,7 +81,7 @@
 					},
 			moveUp : function()
 					{
-						var to = this.neighbours[currentHighlight]['up'];
+						var to = this.neighbours[this.currentHighlight]['up'];
 						if (to === undefined)
 						{
 							this.moveLeft();
@@ -91,7 +91,7 @@
 					},
 			moveDown : function()
 					{
-						var to = this.neighbours[currentHighlight]['down'];
+						var to = this.neighbours[this.currentHighlight]['down'];
 						if (to === undefined)
 						{
 							this.moveRight();

@@ -25,8 +25,10 @@
 						$('nav').slideDown();
 					break;
 					case 37:
-					case 38:
 						pane.moveLeft();
+					break;
+					case 38:
+						pane.moveUp();
 						
 						
 						//$('nav').slideDown();
@@ -35,8 +37,10 @@
 						//moveto(pre);
 					break;
 					case 39:
-					case 40:
 						pane.moveRight();
+					break;
+					case 40:
+						pane.moveDown();
 						
 						
 						//$('nav').slideDown();
