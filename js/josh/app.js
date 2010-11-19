@@ -20,8 +20,16 @@
 		    this.defaultVideoPlayer = video;
 		},
 		
+		setup:function(callback) {
+		    callback();
+		},
+		
 		insert:function() {
-		    this.baseUIElement.insert();
+		    var self=this;
+		    this.setup(function() {
+		        self.baseUIElement.insert();
+		    });
+		    
 		},
 		
 		show:function() {

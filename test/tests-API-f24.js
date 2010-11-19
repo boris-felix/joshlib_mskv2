@@ -116,7 +116,8 @@ test('UIElements',function(){
 			
 			
 			this.nav1 = new J.UI.List(this,"nav1",{
-				"parent":this.panelMain
+				"parent":this.panelMain,
+				"autoInsert":true
 			});
 			
 			this.nav2 = new J.UI.List(this,"nav2",{
@@ -134,12 +135,34 @@ test('UIElements',function(){
 			});
 			this.setDefaultVideoPlayer(this.player);
             
-			
+			this.nav1.setData([
+			    {
+					"id":"live",
+					"type":"video",
+					"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+					"label":"F24 Live",
+					"image":"http://"
+				},
+			    {
+					"id":"shows",
+					"type":"video",
+					"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+					"label":"Shows",
+					"image":"http://"
+				},    
+				{
+    				"id":"geo",
+    				"type":"video",
+    				"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+    				"label":"Geo",
+    				"image":"http://"
+    			}		    
+			]);
 			
 			this.setBaseHtmlId(baseHtmlId);
 			
 			this.setBaseUIElement(this.panelMain);
-
+            
             this.insert();
 		}
 		
