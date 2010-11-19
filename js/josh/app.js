@@ -28,6 +28,12 @@
 		    var self=this;
 		    this.setup(function() {
 		        self.baseUIElement.insert();
+		        console.log(self);
+		        $.each(self.controls,function(i,v) {
+		            
+		            J.Control.create(v).start();
+		        });
+		        
 		    });
 		    
 		},
@@ -42,7 +48,9 @@
 		        this.defaultVideoPlayer.play(media);
 		        return this.defaultVideoPlayer;
 		    }
-		}
+		},
+		
+		controls:[]
 		
 	});
 	

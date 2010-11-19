@@ -1,6 +1,6 @@
 (function(J,$) {
 	
-	J.Controls.Keyboard = J.Class({
+	J.Controls["keyboard"] = J.Class({
 		
 		__construct:function() {
 			

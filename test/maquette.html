@@ -100,14 +100,6 @@
 				});
 		}
 		
-		//var controles = new Joshlib.Controls();
-		
-		var uikeys = new Joshlib.Controls.Keyboard();
-		uikeys.start();
-		
-		var uimouse = new  Joshlib.Controls.Mouse();
-		uimouse.start();
-		
 		//<script src="channels/france24fr/--chart.js"> ]]>
 	</script>
 	
@@ -123,11 +115,26 @@
 			
 			populate();
 			console.log(menu);
+			
+			
+			var app = new Joshlib.App("testM");
+			app.setBaseHtmlId("dmain");
+			
+			var panelMain = new Joshlib.UI.Panel(app,"main",{});
+			app.setBaseUIElement(panelMain);
+			
+			console.log(app);
+			app.insert();
+			
 		});
+		
+		
 
 		//<script src="main.js"> ]]>
 	</script>
 
 </head>
-	<body />
+	<body>
+		<div id="dmain"></div>
+	</body>
 </html>

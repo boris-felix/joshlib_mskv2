@@ -32,6 +32,7 @@ var files = {
           'js/josh/menu.js',
           'js/josh/api.js',
           'js/josh/ui.js',
+          'js/josh/control.js',
           'js/josh/controls/keyboard.js',
 		  'js/josh/controls/mouse.js',
           'js/josh/uielements/panel.js',
@@ -69,6 +70,8 @@ myApp.addFrameworks(
     ], combineStylesheets: true },
   { path:'css/iphone',files:["css/sencha-touch/apple.css"], combineStylesheets: true },
   { path:'css/android',files:['css/sencha-touch/android.css'], combineStylesheets: true },
+  
+  { path:'js/libs/modernizr',files:["js/libs/modernizr-1.6.min.js"], combineScripts: true },
   
   { path:'js/josh/targets/10feet/googletv',files:[].concat(
       files['js/libs/jquery'],

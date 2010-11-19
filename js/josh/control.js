@@ -4,9 +4,13 @@
 		
 		__construct:function() {
 			
-		}
+		},
 		
 	});
+	
+	J.Control.create = function(type) {
+	    return new J.Controls[type];
+	}
 	
 	J.Controls = {};
 	

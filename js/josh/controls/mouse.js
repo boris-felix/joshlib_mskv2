@@ -1,6 +1,6 @@
 (function(J,$) {
 	
-	J.Controls.Mouse = J.Class({
+	J.Controls["mouse"] = J.Class({
 		
 		__construct:function() {
 			
