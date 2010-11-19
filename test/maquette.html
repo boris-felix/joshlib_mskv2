@@ -25,6 +25,96 @@
 		
 		var populate = function(){};
 		
+		
+		var videoplaythis = function()
+							{
+console.info($('#'+pane.currentHighlight).attr('data-mp4'));
+							
+								app.playMedia({
+									"url":$('#'+pane.currentHighlight).attr('data-mp4'),
+									"type":"video"
+								});
+							};
+		
+		
+			
+		var J=Joshlib;
+		J.basePath = "../";
+		var testApp = J.Class(J.App,{
+			start:function(baseHtmlId) {
+				
+				this.panelMain = new J.UI.Panel(this,"main",{
+				"onAfterInsert":function(elt) {
+					
+				}
+				});
+				
+				this.panelShows = new J.UI.Panel(this,"shows",{
+					
+				});
+				
+				this.panelGeo = new J.UI.Panel(this,"geo",{
+				
+				});
+				
+				/*
+				this.nav1 = new J.UI.List(this,"nav1",{
+					"parent":this.panelMain,
+					"autoInsert":true
+				});
+				
+				this.nav2 = new J.UI.List(this,"nav2",{
+					"parent":this.panelMain
+				});
+				
+				this.nav3 = new J.UI.List(this,"nav3",{
+					"parent":this.panelMain
+				});
+				*/
+				this.player = new J.UI.Video(this,"vplayer",{
+					"maximize":true,
+					"parent":this.panelMain,
+					"autoInsert":true
+				});
+				this.setDefaultVideoPlayer(this.player);
+				
+				/*
+				this.nav1.setData([
+					{
+						"id":"live",
+						"type":"video",
+						"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+						"label":"F24 Live",
+						"image":"http://"
+					},
+					{
+						"id":"shows",
+						"type":"video",
+						"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+						"label":"Shows",
+						"image":"http://"
+					},    
+					{
+						"id":"geo",
+						"type":"video",
+						"url":"rtmp//stream2.france24.yacast.net/france24_live/fr",
+						"label":"Geo",
+						"image":"http://"
+					}		    
+				]);*/
+				
+				this.setBaseHtmlId(baseHtmlId);
+				
+				this.setBaseUIElement(this.panelMain);
+				
+				this.insert();
+			}
+			
+		});
+	
+
+		
+		
 
 		//<script src="basics/--generic.js"> ]]>
 	</script>
@@ -44,7 +134,7 @@
 					';
 		body='\
 					<h1>France 24, l\'information à la demande</h1>							\
-					<p id="patienteur">Un instant...</p>   									\
+					<div id="patienteur">Un instant...</div>   									\
 					<ul id="testarbre" />													\
 					';
 		
@@ -75,18 +165,20 @@
 						{
 							menu.setData(i+'-'+j,editions[j]);
 							var emissionid='show-'+i+'-'+j;
-							$('<li />').attr('id',emissionid).text(editions[j].title).appendTo('#'+showid+' > ul');
+							$('<li />').attr('id',emissionid).text(editions[j].title).attr('data-mp4',editions[j]['video'][0]['mp4']).appendTo('#'+showid+' > ul');
 							pane.addRight(showid,emissionid);
+							pane.setAction(emissionid,'enter',videoplaythis);
+							
+							
 							//pane.addLeft(prev_emissionid===false?showid:prev_emissionid,emissionid);
 						}
-						
 						
 						prev_showid=showid;
 					}
 					
 					pane.moveTo($('li:first li:first').attr('id'));
 					
-					$('#patienteur').remove();
+					// $('#patienteur').html('');
 				}           
 			});
 
@@ -99,7 +191,7 @@
 					$('#video').play();
 				});
 		}
-		
+
 		//<script src="channels/france24fr/--chart.js"> ]]>
 	</script>
 	
@@ -114,18 +206,12 @@
 			$('body').html(body);
 			
 			populate();
-			console.log(menu);
-			
-			
-			var app = new Joshlib.App("testM");
-			app.setBaseHtmlId("dmain");
-			
-			var panelMain = new Joshlib.UI.Panel(app,"main",{});
-			app.setBaseUIElement(panelMain);
-			
-			console.log(app);
-			app.insert();
-			
+			app = new testApp("patienteur");
+			app.start("patienteur");
+			/*app.playMedia({
+				"url":"fixtures/video.mp4",
+				"type":"video"
+			});*/
 		});
 		
 		

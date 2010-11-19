@@ -6,14 +6,17 @@
 			
 			currentHighlight : undefined, // élément actuellement highlighté
 			/// NO USE positions  : [], // liste des éléments où l'on peut circuler
-			neighbours : [],   // par id puis mouvement : left right up down . 
-			enters : [],   
-			escapes : [],   
+			actions : [],   // par id puis 
+										// left right up down : (id) mouvement
+										// movein,moveout  : (function) triggers sur mouvements
+										// enter  : (function) si clic sur "enter" ou "space"
+										// escape  : (function) si clic "escape"
+										
 			
 			add		: function(that)
 					{
 						$('#'+that).addClass('panehere');
-						this.neighbours[that] = [];
+						this.actions[that] = [];
 						
 						// commençons quelque part nom didiou !
 						if (this.currentHighlight===undefined) this.currentHighlight=that;
@@ -23,48 +26,56 @@
 					{
 						
 						this.add(that);
-						if (this.neighbours[from]!==undefined)
+						if (this.actions[from]!==undefined)
 						{
-							this.neighbours[from]['right']		= that;
-							this.neighbours[that]['left']		= from;
+							this.actions[from]['right']		= that;
+							this.actions[that]['left']		= from;
 						}
 
 					},
 			addDown : function(from,that)
 					{
 						this.add(that);
-						if (this.neighbours[from]!==undefined)
+						if (this.actions[from]!==undefined)
 						{
-							this.neighbours[from]['down']		= that;
-							this.neighbours[that]['up']			= from;
+							this.actions[from]['down']		= that;
+							this.actions[that]['up']		= from;
 						}
 						
+					},
+			setAction : function(that,event,fx)
+					{
+						this.actions[that][event]		= fx;
 					},
 			
 			enter : function(that)
 					{
 						if (that===undefined) that = this.currentHighlight ;
-						
-						this.enters[that]();
+console.log('enter ',that);
+						if ((that!==undefined) && (typeof this.actions[that]['enter'] == 'function')) this.actions[that]['enter']();
 					},
 
 			escape : function(that)
 					{
 						if (that===undefined) that = this.currentHighlight ;
 						
-						this.escapes[that]();
+						if ((that!==undefined) && (typeof this.actions[that]['escape'] == 'function')) this.actions[that]['escape']();
 					},
 
 			moveTo  : function(to)
 					{
+						if ((this.currentHighlight!==undefined) && (typeof this.actions[this.currentHighlight]['moveout'] == 'function')) this.actions[this.currentHighlight]['moveout']();
+						
 						this.currentHighlight=to;
 						$('.focused').removeClass('focused');
 						$('#'+to).addClass('focused');
+						
+						if ((this.currentHighlight!==undefined) && (typeof this.actions[this.currentHighlight]['movein'] == 'function')) this.actions[this.currentHighlight]['movein']();
 					},
 			
 			moveLeft : function()
 					{
-						var to = this.neighbours[this.currentHighlight]['left'];
+						var to = this.actions[this.currentHighlight]['left'];
 						if (to !== undefined)
 						{
 							this.moveTo(to);
@@ -73,7 +84,7 @@
 			
 			moveRight : function()
 					{
-						var to = this.neighbours[this.currentHighlight]['right'];
+						var to = this.actions[this.currentHighlight]['right'];
 						if (to !== undefined)
 						{
 							this.moveTo(to);
@@ -81,7 +92,7 @@
 					},
 			moveUp : function()
 					{
-						var to = this.neighbours[this.currentHighlight]['up'];
+						var to = this.actions[this.currentHighlight]['up'];
 						if (to === undefined)
 						{
 							this.moveLeft();
@@ -91,7 +102,7 @@
 					},
 			moveDown : function()
 					{
-						var to = this.neighbours[this.currentHighlight]['down'];
+						var to = this.actions[this.currentHighlight]['down'];
 						if (to === undefined)
 						{
 							this.moveRight();
@@ -107,7 +118,7 @@
 						while (st!==undefined)
 						{
 							to=st;
-							st=this.neighbours[to]['left'];
+							st=this.actions[to]['left'];
 						}
 						this.moveTo(to);
 						
@@ -120,7 +131,7 @@
 						while (st!==undefined)
 						{
 							to=st;
-							st=this.neighbours[to]['right'];
+							st=this.actions[to]['right'];
 						}
 						this.moveTo(to);
 					},
@@ -132,7 +143,7 @@
 						while (st!==undefined)
 						{
 							to=st;
-							st=this.neighbours[to]['up'];
+							st=this.actions[to]['up'];
 						}
 						this.moveTo(to);
 					},
@@ -144,7 +155,7 @@
 						while (st!==undefined)
 						{
 							to=st;
-							st=this.neighbours[to]['down'];
+							st=this.actions[to]['down'];
 						}
 						this.moveTo(to);
 					},

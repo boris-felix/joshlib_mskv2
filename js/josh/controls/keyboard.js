@@ -15,21 +15,24 @@
 						//$('#cue'+pre).trigger('click');
 						
 						pane.enter();
+						return false;
 					break;
 					case 27 :
 						osdout();
-						
+						return false;
 						// Pane.escape();
 					break;
 					case 32 :
 						$('nav').slideDown();
+						return false;
 					break;
 					case 37:
 						pane.moveLeft();
+						return false;
 					break;
 					case 38:
 						pane.moveUp();
-						
+						return false;
 						
 						//$('nav').slideDown();
 						//pre--;
@@ -38,9 +41,11 @@
 					break;
 					case 39:
 						pane.moveRight();
+						return false;
 					break;
 					case 40:
 						pane.moveDown();
+						return false;
 						
 						
 						//$('nav').slideDown();
