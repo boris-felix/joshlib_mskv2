@@ -13,29 +13,30 @@
 			add		: function(that)
 					{
 						$('#'+that).addClass('panehere');
+						this.neighbours[that] = [];
 						
 						// commençons quelque part nom didiou !
 						if (this.currentHighlight===undefined) this.currentHighlight=that;
 					},
 			
-			addRight : function(that)
+			addRight : function(from,that)
 					{
 						
 						this.add(that);
-						if (this.neighbours[this.currentHighlight]!==undefined)
+						if (this.neighbours[from]!==undefined)
 						{
-							this.neighbours[this.currentHighlight]['right']	= that;
-							this.neighbours[that.id]['left']			= this.currentHighlight;
+							this.neighbours[from]['right']			= that;
+							this.neighbours[that]['left']		= from;
 						}
-						
+
 					},
-			addDown : function(that)
+			addDown : function(from,that)
 					{
 						this.add(that);
-						if (this.neighbours[this.currentHighlight]!==undefined)
+						if (this.neighbours[from]!==undefined)
 						{
-							this.neighbours[this.currentHighlight]['down']	= that;
-							this.neighbours[that.id]['up']				= this.currentHighlight;
+							this.neighbours[from]['down']			= that;
+							this.neighbours[that]['up']			= from;
 						}
 						
 					},

@@ -12,9 +12,9 @@
 				switch(e.keyCode)
 				{
 					case 13 :
-						$('#cue'+pre).trigger('click');
+						//$('#cue'+pre).trigger('click');
 						
-						// Pane.enter();
+						pane.enter();
 					break;
 					case 27 :
 						osdout();
@@ -26,23 +26,23 @@
 					break;
 					case 37:
 					case 38:
-						// Pane.moveLeft();
+						pane.moveLeft();
 						
 						
-						$('nav').slideDown();
-						pre--;
-						if (pre<1) pre=tot;
-						moveto(pre);
+						//$('nav').slideDown();
+						//pre--;
+						//if (pre<1) pre=tot;
+						//moveto(pre);
 					break;
 					case 39:
 					case 40:
-						// Pane.moveRight();
+						pane.moveRight();
 						
 						
-						$('nav').slideDown();
-						pre++;
-						if (pre>tot) pre=1;
-						moveto(pre);
+						//$('nav').slideDown();
+						//pre++;
+						//if (pre>tot) pre=1;
+						//moveto(pre);
 					break;
 				}
 			});

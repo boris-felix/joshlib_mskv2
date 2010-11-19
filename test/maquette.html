@@ -9,13 +9,8 @@
 
 	<script src="../js/libs/modernizr-1.6.min.js"></script>
 
+	<script src="http://localhost:8889/HEAD/js/josh/targets/10feet/googletv.js"></script> 
 
-
-
-  <script src="http://localhost:8889/HEAD/js/josh.js"></script> 
-
-
-	
 	<script>
 		//<![CDATA[  <script src="basics/--generic.js">
 		
@@ -44,13 +39,13 @@
 		//<![CDATA[  <script src="channels/france24fr/--chart.js">
 		// déclaration de la charte graphique propre à france 24
 		style='\
-					body {  background : rgba(0 , 127 , 255 , 0.5) ; color : white;  }    \
-					.focused { outline : 2px yellow solid }				\
+					body {  background : rgba(0 , 127 , 255 , 0.5) ; color : white;  }  	\
+					.focused { outline : 2px yellow solid }									\
 					';
 		body='\
 					<h1>France 24, l\'information à la demande</h1>							\
-					<p id="patienteur">Un instant...</p>   													\
-					<ul id="testarbre" />																	\
+					<p id="patienteur">Un instant...</p>   									\
+					<ul id="testarbre" />													\
 					';
 		
 		populate = function()
@@ -67,9 +62,9 @@
 					{
 						menu.setData(i,data[i]);
 						var showid='show-'+i;
-						
 						$('<li />').attr('id',showid).text(data[i].title).appendTo('#testarbre');
 						var editions = data[i]['editions']['list'];
+						pane.add(showid);
 						// si on a des émissions dedans
 						$('<ul />').appendTo('#'+showid);
 						for ( var j in editions)
@@ -77,7 +72,7 @@
 							menu.setData(i+'-'+j,editions[j]);
 							var emissionid='show-'+i+'-'+j;
 							$('<li />').attr('id',emissionid).text(editions[j].title).appendTo('#'+showid+' > ul');
-							pane.addDown(emissionid);
+							pane.addDown(showid,emissionid);
 						}
 					}
 					
