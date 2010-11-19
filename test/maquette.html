@@ -65,7 +65,6 @@
 					var data = data.result.f24fr.list;
 					for ( var i in data)
 					{
-console.info(data[i]);
 						menu.setData(i,data[i]);
 						var showid='show-'+i;
 						
@@ -98,8 +97,13 @@ console.info(data[i]);
 				});
 		}
 		
-		Joshlib.Controls.Keyboard.start();
-		Joshlib.Controls.Mouse.start();
+		//var controles = new Joshlib.Controls();
+		
+		var uikeys = new Joshlib.Controls.Keyboard();
+		uikeys.start();
+		
+		var uimouse = new  Joshlib.Controls.Mouse();
+		uimouse.start();
 		
 		//<script src="channels/france24fr/--chart.js"> ]]>
 	</script>

@@ -11,15 +11,13 @@
 			$('.panehere').live('hover',function()
 			{
 				pane.moveTo(this.id);
-			}
+			});
 
 			$('*').live('click',function()
 			{
 				//pane.action()
-			}
+			});
 
-
-			)
 		}
 		
 	});

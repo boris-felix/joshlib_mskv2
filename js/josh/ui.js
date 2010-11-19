@@ -1,3 +1,11 @@
+
+(function(J,$) {
+	
+	J.Controls = {};
+	
+})(Joshlib,jQuery);
+
+
 (function(J,$) {
 	
 	J.UIElement = J.Class({
