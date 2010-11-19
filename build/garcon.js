@@ -34,7 +34,6 @@ var files = {
           'js/josh/ui.js',
           'js/josh/controls/keyboard.js',
 		  'js/josh/controls/mouse.js',
-          'js/josh/uielements/video.js',
           'js/josh/uielements/panel.js',
           'js/josh/uielements/list/all.js'
     ],
