@@ -15,7 +15,7 @@
 
 			$('*').live('click',function()
 			{
-				//pane.action()
+				pane.enter();
 			});
 
 		}
