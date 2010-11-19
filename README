@@ -7,6 +7,7 @@ Dependencies
 
  - NodeJS for development & build system
  - https://github.com/joshfire/garcon checkouted/cloned in ../garcon
+ - SASS ( http://sass-lang.com/tutorial.html )
 
 How to run
 ----------
