@@ -22,6 +22,9 @@
 					break;
 					case 37:
 					case 38:
+						// Pane.moveLeft();
+						
+						
 						$('nav').slideDown();
 						pre--;
 						if (pre<1) pre=tot;
@@ -29,6 +32,9 @@
 					break;
 					case 39:
 					case 40:
+						// Pane.moveRight();
+						
+						
 						$('nav').slideDown();
 						pre++;
 						if (pre>tot) pre=1;

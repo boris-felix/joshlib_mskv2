@@ -4,25 +4,15 @@
 	<meta charset="utf-8"/>
 	<title>Maquette</title>
 
-	<script src="../js/libs/modernizr-1.6.min.js"></script>
-	
-	<script src="../js/libs/jquery-1.4.4.js"></script> 
-	<script src="../js/libs/jquery.inherit-1.3.2.M.js"></script> 
-	<script src="../js/josh/main.js"></script>  
-	<script src="../js/josh/api.js"></script>  
-	
-	
-	<script src="../js/plugins.js"></script> 
-	<script src="../js/script.js"></script> 
+	<link rel="stylesheet" href="../css/flarevideo/flarevideo.css" media="screen">
+	<link rel="stylesheet" href="../css/flarevideo/flarevideo.vimeo.css" media="screen">
 
-	<script src="../js/josh/main.js"></script> 
-	<script src="../js/josh/menu.js"></script>    
-	<script src="../js/josh/app.js"></script>    
-	
-	<script src="../js/josh/ui.js"></script>    
-	<script src="../js/josh/uielements/video.js"></script>    
-	<script src="../js/josh/uielements/panel.js"></script>  
-	<script src="../js/josh/uielements/list.js"></script>  
+	<script src="../js/libs/modernizr-1.6.min.js"></script>
+
+
+
+
+  <script src="http://localhost:8889/HEAD/js/josh.js"></script> 
 
 
 	
@@ -35,6 +25,84 @@
 		var menu = new Joshlib.Menu();
 		
 		var populate = function(){};
+		
+		(function(J,$){
+				J.Pane = J.Class(
+					{
+						currentHighlight : 0, // élément actuellement highlighté
+						positions  : [], // liste des éléments où l'on peut circuler
+						neighbours : [],   // par id puis mouvement : left right up down . 
+						
+						moveTo  : function()
+								{
+									
+								},
+						
+						moveLeft : function()
+								{
+									var to = this.neighbours[currentHighlight]['left'];
+									if (to !== undefined)
+									{
+										this.currentHighlight=to;
+									} 
+								},
+						
+						moveRight : function()
+								{
+									var to = this.neighbours[currentHighlight]['right'];
+									if (to !== undefined)
+									{
+										this.currentHighlight=to;
+									} 
+								},
+						moveUp : function()
+								{
+									var to = this.neighbours[currentHighlight]['up'];
+									if (to === undefined)
+									{
+										this.moveLeft();
+									} else {
+									}
+								},
+						moveDown : function()
+								{
+									var to = this.neighbours[currentHighlight]['down'];
+									if (to === undefined)
+									{
+										this.moveRight();
+									} else {
+									}
+								},
+						moveStart : function()
+								{
+									// va-t-on au dernier élément, ou le plus à gauche de celui actuel ?
+									var to=this.currentHighlight;
+									var st=this.currentHighlight;
+									while (st!==undefined)
+									{
+										lo=st;
+										st=this.neighbours[lo]['left'];
+									}
+									
+								},
+						moveEnd : function()
+								{
+									// va-t-on au dernier élément, ou le plus à droite de celui actuel ?
+								},
+						movePageUp : function()
+								{
+									// va-t-on au dernier élément, ou le plus en haut de celui actuel ?
+								},
+						movePageDown : function()
+								{
+									// va-t-on au dernier élément, ou le plus en bas de celui actuel ?
+								},
+					}
+				);
+	
+		})(Joshlib,jQuery);
+
+		
 		
 		//<script src="basics/--generic.js"> ]]>
 	</script>
@@ -54,6 +122,7 @@
 		body='\
 					<h1>France 24, l\'information à la demande</h1>							\
 					<p>Un instant...</p>   													\
+					<button id="play"></button>												\
 					';
 		
 		populate = function()
@@ -65,15 +134,25 @@
 				dataType: 'jsonp',                                                                          
 				success: function(data)
 				{
-			
+console.log(data);
 					var data = data.result.f24fr.list;
 					for ( var i in data)
 					{
-						testee.setData(i,data[i]);
+console.info(data[i]);
+						menu.setData(i,data[i]);
 					}
 				}           
 			});
+
 		};
+		
+		actions = function()
+		{
+			$('#play').live('click',function()
+				{
+					$('#video').play();
+				});
+		}
 		
 		
 		//<script src="channels/france24fr/--chart.js"> ]]>
@@ -90,6 +169,7 @@
 			$('body').html(body);
 			
 			populate();
+			console.log(menu);
 		});
 
 		//<script src="main.js"> ]]>

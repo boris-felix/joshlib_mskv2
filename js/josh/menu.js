@@ -7,6 +7,7 @@
 		
 		__construct:function() {
 			this.index = {};
+			this.index['/']['_child']=[];
 			this.currentPath = "/";
 		},
 		
@@ -26,10 +27,12 @@
 		buildIndex:function(path,data,recursive) {
 			if (this.index[path] === undefined) {
 				this.index[path] = {};
+				
 				if (path!='/') {
+
 					var parpath = path.substr(0,path.lastIndexOf('/'));
 					parpath = (parpath == '' )? '/' : parpath;
-					
+
 					if (this.index[parpath]['_child']===undefined) {
 						this.index[path]['_prev'] = false;
 						this.index[parpath]['_child'] = [path];
