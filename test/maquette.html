@@ -23,87 +23,14 @@
 		var body='<!-- Ceci est le HTML injecté -->';
 		
 		var menu = new Joshlib.Menu();
+		menu.__construct();    /// BUG ? je suis très surpris d'avoir à l'instancier manuellement
+		
+		var pane = new Joshlib.Pane();
+	//	pane.__construct();
 		
 		var populate = function(){};
 		
-		(function(J,$){
-				J.Pane = J.Class(
-					{
-						currentHighlight : 0, // élément actuellement highlighté
-						positions  : [], // liste des éléments où l'on peut circuler
-						neighbours : [],   // par id puis mouvement : left right up down . 
-						
-						moveTo  : function()
-								{
-									
-								},
-						
-						moveLeft : function()
-								{
-									var to = this.neighbours[currentHighlight]['left'];
-									if (to !== undefined)
-									{
-										this.currentHighlight=to;
-									} 
-								},
-						
-						moveRight : function()
-								{
-									var to = this.neighbours[currentHighlight]['right'];
-									if (to !== undefined)
-									{
-										this.currentHighlight=to;
-									} 
-								},
-						moveUp : function()
-								{
-									var to = this.neighbours[currentHighlight]['up'];
-									if (to === undefined)
-									{
-										this.moveLeft();
-									} else {
-									}
-								},
-						moveDown : function()
-								{
-									var to = this.neighbours[currentHighlight]['down'];
-									if (to === undefined)
-									{
-										this.moveRight();
-									} else {
-									}
-								},
-						moveStart : function()
-								{
-									// va-t-on au dernier élément, ou le plus à gauche de celui actuel ?
-									var to=this.currentHighlight;
-									var st=this.currentHighlight;
-									while (st!==undefined)
-									{
-										lo=st;
-										st=this.neighbours[lo]['left'];
-									}
-									
-								},
-						moveEnd : function()
-								{
-									// va-t-on au dernier élément, ou le plus à droite de celui actuel ?
-								},
-						movePageUp : function()
-								{
-									// va-t-on au dernier élément, ou le plus en haut de celui actuel ?
-								},
-						movePageDown : function()
-								{
-									// va-t-on au dernier élément, ou le plus en bas de celui actuel ?
-								},
-					}
-				);
-	
-		})(Joshlib,jQuery);
 
-		
-		
 		//<script src="basics/--generic.js"> ]]>
 	</script>
 	
@@ -118,11 +45,12 @@
 		// déclaration de la charte graphique propre à france 24
 		style='\
 					body {  background : rgba(0 , 127 , 255 , 0.5) ; color : white;  }    \
+					.focused { outline : 2px yellow solid }				\
 					';
 		body='\
 					<h1>France 24, l\'information à la demande</h1>							\
-					<p>Un instant...</p>   													\
-					<button id="play"></button>												\
+					<p id="patienteur">Un instant...</p>   													\
+					<ul id="testarbre" />																	\
 					';
 		
 		populate = function()
@@ -134,13 +62,29 @@
 				dataType: 'jsonp',                                                                          
 				success: function(data)
 				{
-console.log(data);
 					var data = data.result.f24fr.list;
 					for ( var i in data)
 					{
 console.info(data[i]);
 						menu.setData(i,data[i]);
+						var showid='show-'+i;
+						
+						$('<li />').attr('id',showid).text(data[i].title).appendTo('#testarbre');
+						var editions = data[i]['editions']['list'];
+						// si on a des émissions dedans
+						$('<ul />').appendTo('#'+showid);
+						for ( var j in editions)
+						{
+							menu.setData(i+'-'+j,editions[j]);
+							var emissionid='show-'+i+'-'+j;
+							$('<li />').attr('id',emissionid).text(editions[j].title).appendTo('#'+showid+' > ul');
+							pane.addDown(emissionid);
+						}
 					}
+					
+					pane.moveTo($('li:first li:first').attr('id'));
+					
+					$('#patienteur').remove();
 				}           
 			});
 
@@ -154,6 +98,8 @@ console.info(data[i]);
 				});
 		}
 		
+		Joshlib.Controls.Keyboard.start();
+		Joshlib.Controls.Mouse.start();
 		
 		//<script src="channels/france24fr/--chart.js"> ]]>
 	</script>

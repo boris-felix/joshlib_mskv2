@@ -24,6 +24,7 @@ var jsFiles = {
           'js/josh/main.js',
           'js/josh/app.js',
           'js/josh/menu.js',
+          'js/josh/api.js',
           'js/josh/ui.js',
           'js/josh/uielements/video.js',
           'js/josh/uielements/panel.js',

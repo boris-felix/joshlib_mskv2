@@ -13,9 +13,13 @@
 				{
 					case 13 :
 						$('#cue'+pre).trigger('click');
+						
+						// Pane.enter();
 					break;
 					case 27 :
 						osdout();
+						
+						// Pane.escape();
 					break;
 					case 32 :
 						$('nav').slideDown();

@@ -5,17 +5,22 @@
 		index : new Object(),
 		currentPath : "/",
 		
-		__construct:function() {
-			this.index = {};
-			this.index['/']['_child']=[];
+		__construct:function() 
+		{
+			/// NOTE à instancier manuellement. c'est rageant.
+			this.index['/'] = [];
+			this.index['/']['_child']=undefined;
 			this.currentPath = "/";
+
 		},
 		
-		setRootData:function(data) {
+		setRootData:function(data)
+		{
 			return this.setData("/",data);
 		},
 		
-		setData:function(path,data) {
+		setData:function(path,data) 
+		{
 			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
 			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 			
@@ -24,16 +29,20 @@
 		},
 		
 		
-		buildIndex:function(path,data,recursive) {
-			if (this.index[path] === undefined) {
+		buildIndex:function(path,data,recursive) 
+		{
+			if (this.index[path] === undefined) 
+			{
 				this.index[path] = {};
 				
-				if (path!='/') {
+				if (path!='/')
+				{
 
 					var parpath = path.substr(0,path.lastIndexOf('/'));
 					parpath = (parpath == '' )? '/' : parpath;
 
-					if (this.index[parpath]['_child']===undefined) {
+					if (this.index[parpath]['_child']===undefined)
+					{
 						this.index[path]['_prev'] = false;
 						this.index[parpath]['_child'] = [path];
 					} else {
@@ -45,7 +54,8 @@
 					this.index[path]['_next']=false;
 				}
 			}
-			if (typeof data === 'string'){
+			if (typeof data === 'string')
+			{
 				this.index[path][0]=data;
 			} else {
 				// on a un object
@@ -65,7 +75,8 @@
 			
 			if (path==this.currentPath) return true;
 					 
-			if (typeof path !== 'string') {
+			if (typeof path !== 'string') 
+			{
 console.error('goTo : OUCH '+path);
 				return false;
 			}
@@ -73,9 +84,11 @@ console.error('goTo : OUCH '+path);
 			var paths = path.split(/\//);
 			
 			var current = "/";
-			for (var i = 0; i < paths.length; i++) {
+			for (var i = 0; i < paths.length; i++) 
+			{
 				
-				if (typeof this.index[current]!=='undefined') {
+				if (typeof this.index[current]!=='undefined') 
+				{
 					current += (current!='/'?'/':'')+paths[i];
 				} else {
 					return false;
@@ -86,23 +99,28 @@ console.error('goTo : OUCH '+path);
 			return true;
 		},
 		
-		goNext:function() {
-			if (this.index[this.currentPath]['_next']===false) {
+		goNext:function() 
+		{
+			if (this.index[this.currentPath]['_next']===false) 
+			{
 				return false;
 			} else {
 				this.goTo(this.index[this.currentPath]['_next']);
 			}
 		},
 		
-		goPrev:function() {
-			if (this.index[this.currentPath]['_prev']===false) {
+		goPrev:function() 
+		{
+			if (this.index[this.currentPath]['_prev']===false) 
+			{
 				return false;
 			} else {
 				this.goTo(this.index[this.currentPath]['_prev']);
 			}
 		},
 		
-		goParent:function() {
+		goParent:function() 
+		{
 			var path=this.currentPath;
 
 			path = path.substr(0,path.lastIndexOf('/'));
@@ -111,8 +129,10 @@ console.error('goTo : OUCH '+path);
 			this.goTo(path);
 		},
 		
-		goChildren:function(id) {
-			if (id===undefined) {
+		goChildren:function(id) 
+		{
+			if (id===undefined) 
+			{
 				// TODO à définir ce que l'on va renvoyer. J'ai pas vraiment décidé
 				return this.index[this.currentPath]['_child'];
 			} else {
