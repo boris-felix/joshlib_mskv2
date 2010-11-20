@@ -20,6 +20,14 @@
 		
 		setData:function(data) {
 			this.data = data;
+			
+		},
+		
+		refreshHtml : function() {
+			// euh, en fait, c'est complètement xstupiude, ce que je fais ici....
+			
+			//console.log(this.getHtml());
+			//document.getElementById(this.htmlId).outerHTML=       this.getHtml();
 		}
 		
 	});

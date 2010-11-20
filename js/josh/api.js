@@ -51,7 +51,6 @@
 			enter : function(that)
 					{
 						if (that===undefined) that = this.currentHighlight ;
-console.log('enter ',that);
 						if ((that!==undefined) && (typeof this.actions[that]['enter'] == 'function')) this.actions[that]['enter']();
 					},
 

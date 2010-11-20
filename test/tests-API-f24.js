@@ -161,11 +161,125 @@ test('UIElements',function(){
     			}		    
 			]);
 			
+			// liste des émissions
+			this.shows=[];
+			// liste des numéros d'émissions
+			this.numeros=[];
+			
+			$.ajax({                                                                                      
+						url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
+						dataType: 'jsonp', 
+						retour : this,
+						success: function(data)
+								{
+									var data = data.result.f24fr.list;
+									var prev_showid;
+									this.retour.shows = new J.UI.List(this.retour,'shows',{
+																			"parent":this.retour.panelShows,
+																			"autoInsert":true
+																		});
+									var shows=[];
+									for ( var i in data)
+									{
+										//menu.setData(i,data[i]);
+										var showid='show-'+i;
+										//$('<li />').attr('id',showid).text(data[i].title).appendTo('#testarbre');
+										var editions = data[i]['editions']['list'];
+										//pane.addDown(prev_showid,showid);
+										// si on a des émissions dedans
+										//$('<ul />').appendTo('#'+showid);
+										
+										
+										this.retour.numeros[showid] = new J.UI.List(this.retour,showid,{
+																				"parent":this.retour.panelShows,
+																				"autoInsert":true
+																			});
+										
+										
+										var prev_emissionid=false;
+										
+										var shownr=[];
+										
+										for ( var j in editions)
+										{
+											//menu.setData(i+'-'+j,editions[j]);
+											var emissionid='show-'+i+'-'+j;
+											//$('<li />').attr('id',emissionid).text(editions[j].title).attr('data-mp4',editions[j]['video'][0]['mp4']).appendTo('#'+showid+' > ul');
+											pane.addRight(showid,emissionid);
+											//pane.setAction(emissionid,'enter',videoplaythis);
+
+											shownr.push({
+															"id"	: emissionid,
+															"type"	: "video",
+															"url"	: editions[j]['video'][0]['mp4'],
+															"label" : editions[j].title,
+															"image" : "http://"
+															});
+										}
+										
+										prev_showid=showid;
+
+										this.retour.numeros[showid].setData(shownr);
+										shows.push({
+															"id"	: showid,
+															"type"	: "video",
+															"url"	: '',
+															"label" : data[i].title,
+															"image" : "http://"
+															});
+
+									}
+									
+									
+									this.retour.shows.setData(shows);
+									
+									pane.add('testAppId_e_List_nav1_0');
+									pane.addDown('testAppId_e_List_nav1_0','testAppId_e_List_nav1_1');
+									pane.addDown('testAppId_e_List_nav1_1','testAppId_e_List_nav1_2');
+									
+									$('#testAppId_e_List_nav1_1').append(  this.retour.shows.getHtml());
+									
+									//pane.setAction('testAppId_e_List_nav1_1','right','testAppId_e_List_shows_0');
+									lastshowid='testAppId_e_List_nav1_1';
+									
+									pane.addRight('testAppId_e_List_nav1_1','testAppId_e_List_shows_0');
+									
+									for ( var i in data)
+									{
+									// maintenant, on insère les éditions
+									//	$('#testAppId_e_List_nav1_1').append(  this.retour.shows[showid].getHtml());
+										var showid='show-'+i;
+										$('#testAppId_e_List_shows_'+i).append(  this.retour.numeros[showid].getHtml());
+										if (i>0)
+										{
+											pane.addDown('testAppId_e_List_shows_'+(i-1),'testAppId_e_List_shows_'+i);
+										}
+										
+										pane.setAction('testAppId_e_List_shows_'+i,'left','testAppId_e_List_nav1_1');
+										pane.addRight('testAppId_e_List_shows_'+i,'testAppId_e_List_show-'+i+'_0');
+										// ensuite refaire la boucle pour l'ensemble des éditions
+										for ( var j in  data[i]['editions']['list'])
+										{
+											var emissionid='show-'+i+'-'+j;
+											pane.addDown('testAppId_e_List_show-'+i+'-'+(j-1),'testAppId_e_List_show-'+i+'-'+j);
+											
+										}
+									}
+									
+									//this.retour.panelShows.setData();
+									
+									// $('#patienteur').html('');
+								}           
+						});
+			
 			this.setBaseHtmlId(baseHtmlId);
 			
 			this.setBaseUIElement(this.panelMain);
             
             this.insert();
+			
+			// il faut bien commencer quelque part
+			$('.panehere').addClass('.focused');
 		}
 		
 	});
@@ -182,10 +296,11 @@ test('UIElements',function(){
 	
 	equals($("#testAppId_e_Video_vplayer").length,1);
     
+	/*
     app.playMedia({
         "url":"fixtures/video.mp4",
         "type":"video"
     });
-	
+	*/
     
 });
