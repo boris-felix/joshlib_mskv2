@@ -86,7 +86,7 @@ test('Chargement d\'un arbre',function(){
 	
 });
 
-
+var pane = new Joshlib.Pane();
 
 test('UIElements',function(){
     
@@ -94,6 +94,8 @@ test('UIElements',function(){
     
     var J=Joshlib;
     J.basePath = "../";
+	
+	
     
 	var testApp = J.Class(J.App,{
 		
