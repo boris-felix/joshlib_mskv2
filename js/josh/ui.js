@@ -2,18 +2,46 @@
 	
 	J.UIElement = J.Class({
 		
-		
+		defaultOptions:{},
 		
 		__constructor:function(app,id,options) {
 			this.app = app;
 			this.id = id;
-			this.options = options || {};
+			this.options = $.extend({},options || {},this.defaultOptions);
 			this.htmlId = this.getHtmlId();
 			this.children=[];
+			this._subscribed = [];
+			
+			this.hasFocus = false;
 			
 			if (options["parent"]) {
 			    options["parent"].registerChild(this);
 			}
+			
+			//Listen for any new menuData
+			
+			var self = this;
+			
+			if (this.options["menuRoot"]) {
+			    J.subscribe("menuData",function(ev,data) {
+
+			        //This menuData is about us!
+    			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
+    			        self.setData(data[0],data[1]);
+    			        self.onFocus();
+    			        
+    			        self.refresh();
+    			    }
+    			});
+			}
+			
+			
+			
+			this.init();
+		},
+		
+		init:function() {
+		    
 		},
 		
 		setLoading:function() {
@@ -22,6 +50,32 @@
 		
 		registerChild:function(elt) {
 		    this.children.push(elt);
+		},
+		
+		subscribes:function() {
+		    return [];
+		},
+		
+		onFocus:function() {
+		    
+		    this.hasFocus = true;
+		    
+		    var self=this;
+		    this.subscribes().forEach(function(s) {
+		        self._subscribed = J.subscribe(s[0],s[1]);
+		    });
+		},
+		onBlur:function() {
+		    console.log("blur");
+		    this.hasFocus = false;
+		    this._subscribed.forEach(function(s) {
+		        J.unsubscribe(s);
+		    });
+		},
+		
+		refresh:function() {
+		    $("#"+this.htmlId).remove();
+		    this.insert();
 		},
 		
 		insert:function() {

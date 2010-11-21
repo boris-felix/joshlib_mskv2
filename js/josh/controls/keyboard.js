@@ -12,46 +12,48 @@
 				switch(e.keyCode)
 				{
 					case 13 :
-						//$('#cue'+pre).trigger('click');
 						
-						pane.enter();
+						J.publish("control","enter");
+						
 						return false;
 					break;
 					case 27 :
-						osdout();
+					
+					    J.publish("control","exit");
+					
 						return false;
-						// Pane.escape();
 					break;
 					case 32 :
-						$('nav').slideDown();
+					
+					    J.publish("control","down");
+
 						return false;
 					break;
 					case 37:
-						pane.moveLeft();
+					
+					    J.publish("control","left");
+					    
 						return false;
 					break;
 					case 38:
-						pane.moveUp();
+					
+					    J.publish("control","up");
+					    
 						return false;
 						
-						//$('nav').slideDown();
-						//pre--;
-						//if (pre<1) pre=tot;
-						//moveto(pre);
 					break;
 					case 39:
-						pane.moveRight();
+					
+					    J.publish("control","right");
+					
 						return false;
 					break;
 					case 40:
-						pane.moveDown();
+					
+					    J.publish("control","down");
+					    
 						return false;
 						
-						
-						//$('nav').slideDown();
-						//pre++;
-						//if (pre>tot) pre=1;
-						//moveto(pre);
 					break;
 				}
 			});

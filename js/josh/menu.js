@@ -25,6 +25,8 @@
 			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 			
 			this.buildIndex(path,data,true);
+			
+			J.publish("menuData",[path,data]);
 		},
 		
 		

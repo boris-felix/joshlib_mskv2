@@ -65,8 +65,12 @@ myApp.addFrameworks(
   
   { path:'css/googletv',files:[
         'css/style.css',
+        
         'css/flarevideo/flarevideo.css',
-        'css/flarevideo/flarevideo.vimeo.scss'
+        'css/flarevideo/flarevideo.vimeo.scss',
+        
+        'css/targets/googletv.scss'
+        
     ], combineStylesheets: true },
   { path:'css/iphone',files:["css/sencha-touch/apple.css"], combineStylesheets: true },
   { path:'css/android',files:['css/sencha-touch/android.css'], combineStylesheets: true },
