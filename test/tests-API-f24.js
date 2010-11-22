@@ -84,11 +84,16 @@ lastMenuChange=[];
 	
 	J.publish("menuGo",["current","next"],true);
     
+<<<<<<< HEAD
     same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
 
 console.log(testee2);
 	
 	
+=======
+    equals(lastMenuChange,["current","/leaf4/leaf42"]);
+
+>>>>>>> aeb931311740d9465bb1bdebcc4358937f38a897
     
 	/*
 	
