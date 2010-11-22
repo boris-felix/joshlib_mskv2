@@ -7,7 +7,9 @@
 		index : [],
 		datas : [],
 		
-		__construct:function() 
+		registre  : { },
+		
+		__constructor:function() 
 		{
 		
 			/// NOTE à instancier manuellement. c'est rageant.
@@ -18,9 +20,47 @@
 				registre.currentPath = "/";
 				registre.focus = "/";
 			*/
-			
+			this.index['/']=[];
 			this.index['/']['_child']=[];
 			this.index['/']['_data']=[];
+			
+			var this_jmenu=this;
+			
+			J.subscribe("menuGoTo",function(ev,data) {
+				//data : [ 0 : nom du registre , 1 : chemin  ]
+console.log('about:: menuGoTo');
+console.log(this_jmenu.index);
+						var cle = data[0];
+						var goingto = data[1];
+						if (this_jmenu.index[goingto]===undefined)
+						{
+console.error(' AAAAAHHHHH ! MenuGoTo est nulle part ');
+							return false;
+						} else {
+							this_jmenu.registre[cle]=goingto;
+							return true;
+						}
+				});
+
+			J.subscribe("menuGo",function(ev,data) {
+				//data : [ 0 : nom du registre , 1 : chemin  ]
+console.log('about:: menuGo');
+console.log(this_jmenu.index);
+						var cle = data[0];
+						var goingnear = data[1];
+						this_jmenu.index[cle]['_'+goingnear];
+						
+						if (goingnear===undefined)
+						{
+console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
+							return false;
+						} else {
+							//this_jmenu.registre[cle]=goingnear;
+							J.publish("menuGoTo",["focus",goingnear],true);
+							return true;
+						}
+				});
+			
 		},
 		
 		setRootData:function(data)
@@ -56,7 +96,6 @@
 		
 		buildIndex:function(path,data,recursive) 
 		{
-console.log('buldindex',path);
 			if (this.index[path] === undefined) 
 			{
 				this.index[path] = {};
@@ -64,7 +103,6 @@ console.log('buldindex',path);
 				
 				if (path!='/')
 				{
-
 					var parpath = path.substr(0,path.lastIndexOf('/'));
 					parpath = (parpath == '' )? '/' : parpath;
 
@@ -76,7 +114,7 @@ console.log('buldindex',path);
 						var prevchild = this.index[parpath]['_child'][this.index[parpath]['_child'].length-1];
 						this.index[parpath]['_child'].push(path);
 						this.index[path]['_prev']=prevchild;
-						this.index[this.index[path]['_prev']]['_next']=path;
+						if (this.index[path]['_prev']!==undefined) this.index[this.index[path]['_prev']]['_next']=path;
 					}
 					this.index[path]['_next']=false;
 				}
@@ -135,9 +173,9 @@ console.info(this);
 			}
 		},
 		
-		goTo:function(path) {
+		goTo:function(registre,path) {
 			
-			if (path==this.currentPath) return true;
+			if (path==registre) return true;
 					 
 			if (typeof path !== 'string') 
 			{
@@ -159,22 +197,21 @@ console.error('goTo : OUCH '+path);
 				}
 			}
 			
-			this.currentPath=current;
-			J.publish("menuGoTo",[path,data]);
+			registre=current;
 			return true;
 		},
 		
-		goNext:function() 
+		goNext:function(registre) 
 		{
-			if (this.index[this.currentPath]['_next']===false) 
+			if (this.index[registre]['_next']===false) 
 			{
 				return false;
 			} else {
-				this.goTo(this.index[this.currentPath]['_next']);
+				this.goTo(registre,this.index[registre]['_next']);
 			}
 		},
 		
-		goPrev:function() 
+		goPrev:function(registre) 
 		{
 			if (this.index[this.currentPath]['_prev']===false) 
 			{
