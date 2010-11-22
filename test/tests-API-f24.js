@@ -29,7 +29,22 @@ test('Construction de l\'arbre',function(){
 	     ]
 	    },
         {'id':'leaf3'},
-        {'id':'leaf4'}
+        {
+            'id':'leaf4',
+            'label':'test1'
+        }
+	]);
+	
+	equals(J.menu.getData("/leaf4").label,"test1");
+	
+	//Change a leaf
+	testee2.setData('/leaf4',{"label":"test2"});
+    equals(J.menu.getData("/leaf4").label,"test2");
+	
+	//Change a tree
+	testee2.setData('/leaf4/',[
+	    {'id':'leaf41'},
+	    {'id':'leaf42'}
 	]);
 	
 	var lastMenuChange = null;
@@ -37,7 +52,9 @@ test('Construction de l\'arbre',function(){
 	    lastMenuChange = data;
 	});
 	
-	J.publish("menuGoTo",["current","/leaf4"],true);
+	
+	
+	
 	J.publish("menuGoTo",["focus","/leaf1"],true);
     
     equals(lastMenuChange,["focus","/leaf1"]);
@@ -54,6 +71,17 @@ test('Construction de l\'arbre',function(){
 	
 	equals(lastMenuChange,["focus","/leaf2"]);
 	
+	
+	J.publish("menuGoTo",["current","/leaf4"],true);
+	
+	equals(lastMenuChange,["current","/leaf4"]);
+	
+	J.publish("menuGo",["current","down"],true);
+	J.publish("menuGo",["current","next"],true);
+    
+    equals(lastMenuChange,["current","/leaf4/leaf42"]);
+    
+    
 	/*
 	
 	
