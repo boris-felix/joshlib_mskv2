@@ -34,24 +34,27 @@ test('Construction de l\'arbre',function(){
             'label':'test1'
         }
 	]);
+	equals(testee2.getData("/leaf4").label,"test1");
 	
-	equals(J.menu.getData("/leaf4").label,"test1");
 	
 	//Change a leaf
 	testee2.setData('/leaf4',{"label":"test2"});
-    equals(J.menu.getData("/leaf4").label,"test2");
+    equals(testee2.getData("/leaf4").label,"test2");
+	
 	
 	//Change a tree
 	testee2.setData('/leaf4/',[
 	    {'id':'leaf41'},
 	    {'id':'leaf42'}
 	]);
+
+console.log(testee2);
+var J=Joshlib;
 	
 	var lastMenuChange = null;
 	J.subscribe("menuChange",function(ev,data) {
 	    lastMenuChange = data;
 	});
-	
 	
 	
 	
@@ -95,7 +98,7 @@ test('Construction de l\'arbre',function(){
 	testee2.setRootData('babebibobu-2');
 	equals(testee2.data,'babebibobu-2','setRootData');
 
-	testee2.setData('/leaf',{'babebi':'bobu'});
+	testee2.setData('/leaf',(path!=='/'?path:'')+{'babebi':'bobu'});
 	equals(testee2.index['/leaf']['babebi'],'bobu','setData index');
 	
 	
@@ -140,7 +143,7 @@ var testee = new Joshlib.Menu();
 test('Chargement d\'un arbre',function(){
 	expect(1);
 	
-	
+	/*
 	$.ajax({                                                                                      
 		url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
 		dataType: 'jsonp',                                                                          
@@ -156,7 +159,7 @@ test('Chargement d\'un arbre',function(){
 	equals(testee.currentPath,'/','repositionnement relatif enfant');
 
 	console.log(testee)
-	
+	*/
 });
 
 var pane = new Joshlib.Pane();
@@ -358,16 +361,16 @@ test('UIElements',function(){
 	});
 	
 	$("#qunit-fixture2").append($("<div id='testApp1'>Loading!</div>"));
-	equals("Loading!",$("#testApp1")[0].innerHTML);
+//	equals("Loading!",$("#testApp1")[0].innerHTML);
 	
-	app = new testApp("testAppId");
+//	app = new testApp("testAppId");
 
 	
-	app.start("testApp1");
+//	app.start("testApp1");
 	
-	equals($("#testAppId_e_Panel_main").length,1);
+//	equals($("#testAppId_e_Panel_main").length,1);
 	
-	equals($("#testAppId_e_Video_vplayer").length,1);
+//	equals($("#testAppId_e_Video_vplayer").length,1);
     
 	/*
     app.playMedia({
