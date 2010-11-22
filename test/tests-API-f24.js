@@ -1,13 +1,15 @@
 
 // documentation on writing tests here: http://docs.jquery.com/QUnit
 
-
 module("Joshlib tests");
+
+var testee2 = new Joshlib.Menu();
+
 
 test('Installation Joshlib',function(){
 	expect(2);
 	equals(typeof window.Joshlib,'object','Joshlib() déclaré');
-	var testee2 = new Joshlib.Menu();
+	
 	equals(typeof testee2,'object','Joshlib.Menu() instantié');
 	
 })  
@@ -16,7 +18,6 @@ test('Construction de l\'arbre',function(){
     
 	expect(12);
 	
-	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
 	
 	var J = Joshlib;
@@ -52,38 +53,42 @@ var J=Joshlib;
 	
 	var lastMenuChange = null;
 	J.subscribe("menuChange",function(ev,data) {
+console.log('menuchange ',data);
 	    lastMenuChange = data;
 	});
 	
-	
-console.info("menuGoTo ","focus ","/leaf1");
 	J.publish("menuGoTo",["focus","/leaf1"],true);
     
-    equals(lastMenuChange,["focus","/leaf1"]);
+    same(lastMenuChange,["focus","/leaf1"],'Menu Goto');
 	
-console.info("menuGo ","focus ","next");    
     J.publish("menuGo",["focus","next"],true);
     
-	equals(lastMenuChange,["focus","/leaf2"]);
+	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus next');
 	
 	J.publish("menuGo",["focus","down"],true);
 	
-	equals(lastMenuChange,["focus","/leaf2/leaf21"]);
+	same(lastMenuChange,["focus","/leaf2/leaf21"],'Menu Go focus down');
 	
 	J.publish("menuGo",["focus","up"],true);
 	
-	equals(lastMenuChange,["focus","/leaf2"]);
+	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
 	
-	
+lastMenuChange=[];
 	J.publish("menuGoTo",["current","/leaf4"],true);
 	
-	equals(lastMenuChange,["current","/leaf4"]);
+	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
 	
 	J.publish("menuGo",["current","down"],true);
+	
+    same(lastMenuChange,["current","/leaf4/leaf41"],'Menu Go current down+next');
+	
 	J.publish("menuGo",["current","next"],true);
     
-    equals(lastMenuChange,["current","/leaf4/leaf42"]);
-    >
+    same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
+
+console.log(testee2);
+	
+	
     
 	/*
 	
@@ -138,7 +143,7 @@ console.info("menuGo ","focus ","next");
 */
 });
 
-var testee = new Joshlib.Menu();
+//var testee = new Joshlib.Menu();
 
 test('Chargement d\'un arbre',function(){
 	expect(1);

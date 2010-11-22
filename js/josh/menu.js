@@ -28,35 +28,54 @@
 			
 			J.subscribe("menuGoTo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
-console.log('about:: menuGoTo');
-console.log(this_jmenu.index);
 						var cle = data[0];
 						var goingto = data[1];
+						
+console.log('about:: menuGoTo ',cle,'(',this_jmenu.registre[cle],')»',goingto);
 						if (this_jmenu.index[goingto]===undefined)
 						{
 console.error(' AAAAAHHHHH ! MenuGoTo est nulle part ');
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
+console.log('now at ',[cle,goingto] )
+							J.publish("menuChange",[cle,goingto],true);
 							return true;
 						}
 				});
 
 			J.subscribe("menuGo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
-console.log('about:: menuGo');
-console.log(this_jmenu.index);
 						var cle = data[0];
-						var goingnear = data[1];
-						this_jmenu.index[cle]['_'+goingnear];
 						
+						switch (data[1])
+						{
+							case 'prev' :
+							case 'next' :
+								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]];
+							break;
+							case 'up'   :
+								var path = this_jmenu.registre[data[0]];
+								path = path.substr(0,path.lastIndexOf('/'));
+								path = (path=='') ? '/' : path;
+								var goingnear = path;
+							break;
+							case 'down' :
+								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0];
+							break;
+						}
+						
+						
+						
+console.log('about:: menuGo ',cle,' ->(',data[1],')-> ',goingnear);
+// console.log(this_jmenu.index);
 						if (goingnear===undefined)
 						{
 console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 							return false;
 						} else {
 							//this_jmenu.registre[cle]=goingnear;
-							J.publish("menuGoTo",["focus",goingnear],true);
+							J.publish("menuGoTo",[cle,goingnear],true);
 							return true;
 						}
 				});
