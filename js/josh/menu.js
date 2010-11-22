@@ -33,6 +33,7 @@
 						
 						if (this_jmenu.index[goingto]===undefined)
 						{
+						    console.log("no such menu "+goingto);
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
@@ -96,7 +97,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 					}
 				}
 				
-				J.publish("menuData",[path,data]);
+				
 			} else {
 				
 				for (var key in data)
@@ -104,6 +105,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
 				}
 			}
+			J.publish("menuData",[path,data]);
 		},
 		
 		buildIndex:function(path,data,recursive) 

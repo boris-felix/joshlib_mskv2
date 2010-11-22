@@ -10,7 +10,7 @@
 	
 	J.UI.List = J.Class(J.UIElement,{
         type:"List",
-		data:[],
+
         defaultOptions:{
             //where is the tree unfolding to
             "orientation":"up"
@@ -19,15 +19,11 @@
 		
 		
         init:function() {
+
             this.focusedIndex=null;
             this.data = [];
         },
         
-		__constructor:function() {
-            this.focusedIndex=null;
-            this.data = [];
-        },
-		
 		getHtml:function() {
 			
 			var ret = ["<ul id='"+this.htmlId+"'>"];
@@ -46,6 +42,7 @@
 		    return this.__base().concat([
 		        ["control",function(ev,data) {
 		            //only supports orientation=="up" for now
+		            //console.log("got control",data);
 		            
 		            if (data=="left") {
 		                self.focusIndex(self.focusedIndex-1);
@@ -58,16 +55,20 @@
                         self.onBlur();
                         J.publish("menuGo",["focus","down"]);
                     } else if (data=="enter") {
-                        J.publish("menuGoTo",["current",self.menuRoot+"/"+self.data[self.focusedIndex]["id"]]);
+                        J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
                     }
 		        }]
 		    ]);
 		},
 		
 		focusIndex:function(index) {
-
+            console.log(index);
 		    if (this.focusedIndex!==null) {
 		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
+		        if ($(".focused").length>0) {
+		            $(".focused").remove();
+		            console.log("Lost some nav events?");
+		        }
 		    }
 		    
 		    this.focusedIndex=index;

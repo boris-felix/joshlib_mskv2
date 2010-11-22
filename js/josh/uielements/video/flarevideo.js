@@ -4,12 +4,14 @@
 		
 		play:function(options) {
 		    
+		    $("#"+this.htmlId)[0].innerHTML="";
+		    
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:J.basePath+"swf/FlareVideo.swf",
               //controls:true,
               autoplay:true
             });
-            
+            console.log("play",options["url"]);
             this.flare.load([
                     {
                       src:  options["url"],

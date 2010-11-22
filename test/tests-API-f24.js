@@ -244,6 +244,8 @@ test('UIElements',function(){
 			// liste des numéros d'émissions
 			this.numeros=[];
 			
+			var self = this;
+			
 			$.ajax({                                                                                      
 						url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
 						dataType: 'jsonp', 
@@ -353,20 +355,24 @@ test('UIElements',function(){
 										}
 									}
 									
+									
+									
+                        			self.setBaseHtmlId(baseHtmlId);
+
+                        			self.setBaseUIElement(self.panelMain);
+
+                                    self.insert();
+
+                        			// il faut bien commencer quelque part
+                        			$('.panehere').addClass('.focused');
+									
+									
 									//this.retour.panelShows.setData();
 									
 									// $('#patienteur').html('');
 								}           
 						});
 			
-			this.setBaseHtmlId(baseHtmlId);
-			
-			this.setBaseUIElement(this.panelMain);
-            
-            this.insert();
-			
-			// il faut bien commencer quelque part
-			$('.panehere').addClass('.focused');
 		}
 		
 	});

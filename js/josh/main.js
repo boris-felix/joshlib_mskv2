@@ -23,7 +23,7 @@
         publish:function( message, data, sync ){
             
             if (J.debugEvents) {
-                console.log([message,data,sync]);
+                console.log("debugEvents",[message,data,sync]);
             }
             
             // if there are no subscribers to this message, just return here

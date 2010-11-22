@@ -11,6 +11,7 @@
                 if (data[0]=="current") {
                     
                     if (self.app.menu.getData(data[1]).type=="video") {
+                        
                         self.play(self.app.menu.getData(data[1]));
                     }
                     

@@ -5,6 +5,7 @@
 		defaultOptions:{},
 		
 		__constructor:function(app,id,options) {
+
 			this.app = app;
 			this.id = id;
 			this.options = $.extend({},options || {},this.defaultOptions);
@@ -23,10 +24,11 @@
 			var self = this;
 			
 			if (this.options["menuRoot"]) {
+
 			    J.subscribe("menuData",function(ev,data) {
 
 			        //This menuData is about us!
-    			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
+    			    if (self.options["menuRoot"]==data[0] || (self.options["menuRoot"]+"/")==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
     			        self.setData(data[0],data[1]);
     			        
     			        self.refresh();
@@ -34,12 +36,13 @@
     			});
     			
     			J.subscribe("menuChange",function(ev,data) {
-
+                    
 			        //This menuData is about us!
-    			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
+    			    if (self.options["menuRoot"]==data[1] || (self.options["menuRoot"]+"/")==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
     			        
     			        if (data[0]=="focus") {
-    			            this.onFocus();
+    			            self.onFocus();
+    			            
     			        } else if (data[0]=="current") {
     			            //
     			        }
