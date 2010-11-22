@@ -2,36 +2,65 @@
 	
 	J.Menu = J.Class({
 		
-		__construct:function(registre) 
+		currentPath:'/',
+		focus :'/',
+		index : [],
+		datas : [],
+		
+		__construct:function() 
 		{
+		
 			/// NOTE à instancier manuellement. c'est rageant.
-			registre.index['/'] = [];
-			registre.index['/']['_child']=undefined;
-			registre.datas['/']=undefined;
-			registre.currentPath = "/";
-			registre.focus = "/";
+			/*
+				registre.index['/'] = [];
+				registre.index['/']['_child']=undefined;
+				registre.datas['/']=undefined;
+				registre.currentPath = "/";
+				registre.focus = "/";
+			*/
+			
+			this.index['/']['_child']=[];
+			this.index['/']['_data']=[];
 		},
 		
-		setRootData:function(registre,data)
+		setRootData:function(data)
 		{
-			return this.setData(registre,"/",data);
+			return this.setData("/",data);
 		},
 		
-		setData:function(registre,path,data) 
+		setData:function(path,data) 
 		{
 			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
-			if (path.charAt(0)!='/') path = (registre.currentPath=='/'?'':registre.currentPath)+'/'+path;
-			
-			this.buildIndex(registre,path,data,true);
-			
-			J.publish("menuData",[path,data]);
+			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
+					
+			if ( (path.charAt(path.length-1)!='/') || (path=='/') )
+			{
+				this.buildIndex(path,data,true);
+				if (typeof data === 'object')
+				{
+					for (var key in data)
+					{
+						if (typeof data[key] === 'object') this.buildIndex((path==='/'?'':path)+'/'+data[key]['id'],data[key],true);
+					}
+				}
+				
+				J.publish("menuData",[path,data]);
+			} else {
+				
+				for (var key in data)
+				{
+					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
+				}
+			}
 		},
 		
-		buildIndex:function(registre,path,data,recursive) 
+		buildIndex:function(path,data,recursive) 
 		{
-			if (registre.index[path] === undefined) 
+console.log('buldindex',path);
+			if (this.index[path] === undefined) 
 			{
-				registre.index[path] = {};
+				this.index[path] = {};
+				this.index[path]['_data'] = {};
 				
 				if (path!='/')
 				{
@@ -39,42 +68,71 @@
 					var parpath = path.substr(0,path.lastIndexOf('/'));
 					parpath = (parpath == '' )? '/' : parpath;
 
-					if (registre.index[parpath]['_child']===undefined)
+					if (this.index[parpath]['_child']===undefined)
 					{
-						registre.index[path]['_prev'] = false;
-						registre.index[parpath]['_child'] = [path];
+						this.index[path]['_prev'] = false;
+						this.index[parpath]['_child'] = [path];
 					} else {
-						var prevchild = registre.index[parpath]['_child'][registre.index[parpath]['_child'].length-1];
-						registre.index[parpath]['_child'].push(path);
-						registre.index[path]['_prev']=prevchild;
-						registre.index[registre.index[path]['_prev']]['_next']=path;
+						var prevchild = this.index[parpath]['_child'][this.index[parpath]['_child'].length-1];
+						this.index[parpath]['_child'].push(path);
+						this.index[path]['_prev']=prevchild;
+						this.index[this.index[path]['_prev']]['_next']=path;
 					}
-					registre.index[path]['_next']=false;
+					this.index[path]['_next']=false;
 				}
 			}
+			
+			if (this.index[path]['_data'] === undefined)
+			{
+				this.index[path]['_data'] = {};
+			}
+			
 			if (typeof data === 'string')
 			{
-				registre.index[path][0]=data;
+				this.index[path]['_data'][0]=data;
 			} else {
 				// on a un object
 				for (var key in data) {
-					registre.index[path][key]=data[key];
+					
+					if (typeof data[key] !== 'object') 
+					{
+						this.index[path]['_data'][key]=data[key];
+					} else {
+//						 if (recursive && data[key]["id"])
+//						{
+//							this.buildIndex((path!=='/'?path:'')+"/"+data[key]["id"],data[key],true);
+//						}
+					}
 				}
 			}
 
 			var d=new Date();				
-			registre.index[path]['_when'] = d.getTime(); // ceci pour un usage futur qui permettrait de mettre à jour les données passé un certain temps.
-			if (recursive && data["children"]) {
-				this.buildIndex(registre,path+data[i]["id"]+"/",data["children"],true);
+			this.index[path]['_when'] = d.getTime(); // ceci pour un usage futur qui permettrait de mettre à jour les données passé un certain temps.
+
+			
+			if (recursive && data["children"])
+			{
+				for (var i in data["children"])
+				{
+					this.buildIndex((path!=='/'?path:'')+"/"+data["children"][i]["id"],data["children"],true);
+				}
 			}
 		},
 
-		getData:function(registre,path) 
+		getData:function(path) 
 		{
 			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
-			if (path.charAt(0)!='/') path = (registre.currentPath=='/'?'':registre.currentPath)+'/'+path;
+			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 			
-			return registre.index['/leaf']['data'];
+			// aud cas où, je blinde
+			if (this.index[path]===undefined)
+			{
+console.error('getData : données inexistantes pour'+path);
+console.info(this);
+				return false;
+			} else {
+				return this.index[path]['_data'];
+			}
 		},
 		
 		goTo:function(path) {
