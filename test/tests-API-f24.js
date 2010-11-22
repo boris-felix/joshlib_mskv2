@@ -19,6 +19,7 @@ test('Construction de l\'arbre',function(){
 	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
 	
+	var J = Joshlib;
 	
 	testee2.setData('/',[
 	    {'id':'leaf1'},
@@ -36,12 +37,10 @@ test('Construction de l\'arbre',function(){
 	]);
 	equals(testee2.getData("/leaf4").label,"test1");
 	
-	
 	//Change a leaf
 	testee2.setData('/leaf4',{"label":"test2"});
     equals(testee2.getData("/leaf4").label,"test2");
-	
-	
+
 	//Change a tree
 	testee2.setData('/leaf4/',[
 	    {'id':'leaf41'},
@@ -84,7 +83,7 @@ console.info("menuGo ","focus ","next");
 	J.publish("menuGo",["current","next"],true);
     
     equals(lastMenuChange,["current","/leaf4/leaf42"]);
-    
+    >
     
 	/*
 	
@@ -212,8 +211,7 @@ test('UIElements',function(){
 				"parent":this.panelMain,
 				"autoInsert":true
 			});
-			this.setDefaultVideoPlayer(this.player);
-            
+			
 			this.nav1.setData([
 			    {
 					"id":"live",

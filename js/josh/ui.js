@@ -28,9 +28,21 @@
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
     			        self.setData(data[0],data[1]);
-    			        self.onFocus();
     			        
     			        self.refresh();
+    			    }
+    			});
+    			
+    			J.subscribe("menuChange",function(ev,data) {
+
+			        //This menuData is about us!
+    			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
+    			        
+    			        if (data[0]=="focus") {
+    			            this.onFocus();
+    			        } else if (data[0]=="current") {
+    			            //
+    			        }
     			    }
     			});
 			}
@@ -66,7 +78,6 @@
 		    });
 		},
 		onBlur:function() {
-		    console.log("blur");
 		    this.hasFocus = false;
 		    this._subscribed.forEach(function(s) {
 		        J.unsubscribe(s);
@@ -74,6 +85,8 @@
 		},
 		
 		refresh:function() {
+		    
+		    //This is a bit rough but works for now
 		    $("#"+this.htmlId).remove();
 		    this.insert();
 		},

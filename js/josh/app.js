@@ -16,10 +16,6 @@
 			this.baseUIElement = elt;
 		},
 		
-		setDefaultVideoPlayer:function(video) {
-		    this.defaultVideoPlayer = video;
-		},
-		
 		setup:function(callback) {
 		    callback();
 		},
@@ -42,13 +38,6 @@
 		    //test
 		},
 		
-		
-		playMedia:function(media) {
-		    if (media.type=="video") {
-		        this.defaultVideoPlayer.play(media);
-		        return this.defaultVideoPlayer;
-		    }
-		},
 		
 		controls:[]
 		
