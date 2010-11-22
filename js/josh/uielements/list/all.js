@@ -45,12 +45,12 @@
 		                self.focusIndex(self.focusedIndex+1);
 	                } else if (data=="down" || data=="exit") {
 	                    self.onBlur();
-	                    J.publish("menuFocus","back");
+	                    J.publish("menuGo",["focus","up"]);
                     } else if (data=="up") {
                         self.onBlur();
-                        J.publish("menuFocus","forward");
+                        J.publish("menuGo",["focus","down"]);
                     } else if (data=="enter") {
-                        J.publish("menuSelect",self.menuRoot+"/"+self.data[self.focusedIndex]["id"]);
+                        J.publish("menuGoTo",["current",self.menuRoot+"/"+self.data[self.focusedIndex]["id"]]);
                     }
 		        }]
 		    ]);
@@ -70,15 +70,7 @@
 		setData:function(menuRoot,data) {
 		    this.menuRoot = menuRoot;
 			this.data = data;
-		},
-		
-		refreshHtml : function() {
-			// euh, en fait, c'est complètement xstupiude, ce que je fais ici....
-			
-			//console.log(this.getHtml());
-			//document.getElementById(this.htmlId).outerHTML=       this.getHtml();
 		}
-		
 	});
 	
 	

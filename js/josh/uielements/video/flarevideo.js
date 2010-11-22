@@ -1,7 +1,6 @@
 (function(J,$) {
 	
-	J.UI.Video = J.Class(J.UIElement,{
-		type:"Video",
+	J.UI.Video = J.Class(J.UI.Video,{
 		
 		play:function(options) {
 		    
