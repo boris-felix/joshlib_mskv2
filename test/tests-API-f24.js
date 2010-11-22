@@ -56,11 +56,12 @@ var J=Joshlib;
 	});
 	
 	
-	
+console.info("menuGoTo ","focus ","/leaf1");
 	J.publish("menuGoTo",["focus","/leaf1"],true);
     
     equals(lastMenuChange,["focus","/leaf1"]);
-    
+	
+console.info("menuGo ","focus ","next");    
     J.publish("menuGo",["focus","next"],true);
     
 	equals(lastMenuChange,["focus","/leaf2"]);
