@@ -82,7 +82,7 @@ var J=Joshlib;
 	J.publish("menuGo",["current","next"],true);
     
     equals(lastMenuChange,["current","/leaf4/leaf42"]);
-    >
+
     
 	/*
 	
