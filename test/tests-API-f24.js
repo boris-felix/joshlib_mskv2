@@ -16,7 +16,7 @@ test('Installation Joshlib',function(){
 
 test('Construction de l\'arbre',function(){
     
-	expect(12);
+	expect(9);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
@@ -143,12 +143,10 @@ console.log(testee2);
 */
 });
 
-//var testee = new Joshlib.Menu();
-
 test('Chargement d\'un arbre',function(){
 	expect(1);
 	
-	/*
+	
 	$.ajax({                                                                                      
 		url: "http://jsonpify.heroku.com/?resource=http://api.france24.com/fr/services/json-rpc/emission_list%3Fdatabases%3Df24fr%26key%3DXXX&format=json",  
 		dataType: 'jsonp',                                                                          
@@ -157,14 +155,14 @@ test('Chargement d\'un arbre',function(){
 			var data = data.result.f24fr.list;
 			for ( var i in data){
 
-				testee.setData(i,data[i]);
+				testee2.setData(i,data[i]);
 			}
 		}                                                                                           
 	});
-	equals(testee.currentPath,'/','repositionnement relatif enfant');
+	equals(testee2.currentPath,'/','repositionnement relatif enfant');
 
-	console.log(testee)
-	*/
+	console.log(testee2)
+	
 });
 
 var pane = new Joshlib.Pane();
@@ -301,12 +299,12 @@ test('UIElements',function(){
 
 										this.retour.numeros[showid].setData(shownr);
 										shows.push({
-															"id"	: showid,
-															"type"	: "video",
-															"url"	: '',
-															"label" : data[i].title,
-															"image" : "http://"
-															});
+													"id"	: showid,
+													"type"	: "video",
+													"url"	: '',
+													"label" : data[i].title,
+													"image" : "http://"
+													});
 
 									}
 									
@@ -317,18 +315,27 @@ test('UIElements',function(){
 									pane.addDown('testAppId_e_List_nav1_0','testAppId_e_List_nav1_1');
 									pane.addDown('testAppId_e_List_nav1_1','testAppId_e_List_nav1_2');
 									
-									$('#testAppId_e_List_nav1_1').append(  this.retour.shows.getHtml());
+									//	$('#testAppId_e_List_nav1_1').append(  this.retour.shows.getHtml() );
 									
 									//pane.setAction('testAppId_e_List_nav1_1','right','testAppId_e_List_shows_0');
 									lastshowid='testAppId_e_List_nav1_1';
 									
 									pane.addRight('testAppId_e_List_nav1_1','testAppId_e_List_shows_0');
 									
+									
+//console.log('retour ',this.retour.numeros);
+//this.retour.numeros.data=this.retour.numeros.menuRoot;
+
+
 									for ( var i in data)
 									{
 									// maintenant, on insère les éditions
 									//	$('#testAppId_e_List_nav1_1').append(  this.retour.shows[showid].getHtml());
 										var showid='show-'+i;
+//console.log('numéros showid ',showid,' - ',this.retour.numeros[showid]);
+
+
+
 										$('#testAppId_e_List_shows_'+i).append(  this.retour.numeros[showid].getHtml());
 										if (i>0)
 										{
@@ -365,16 +372,16 @@ test('UIElements',function(){
 	});
 	
 	$("#qunit-fixture2").append($("<div id='testApp1'>Loading!</div>"));
-//	equals("Loading!",$("#testApp1")[0].innerHTML);
+	equals("Loading!",$("#testApp1")[0].innerHTML);
 	
-//	app = new testApp("testAppId");
+	app = new testApp("testAppId");
 
 	
-//	app.start("testApp1");
+	app.start("testApp1");
 	
-//	equals($("#testAppId_e_Panel_main").length,1);
+	equals($("#testAppId_e_Panel_main").length,1);
 	
-//	equals($("#testAppId_e_Video_vplayer").length,1);
+	equals($("#testAppId_e_Video_vplayer").length,1);
     
 	/*
     app.playMedia({

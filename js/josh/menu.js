@@ -31,14 +31,11 @@
 						var cle = data[0];
 						var goingto = data[1];
 						
-console.log('about:: menuGoTo ',cle,'(',this_jmenu.registre[cle],')»',goingto);
 						if (this_jmenu.index[goingto]===undefined)
 						{
-console.error(' AAAAAHHHHH ! MenuGoTo est nulle part ');
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
-console.log('now at ',[cle,goingto] )
 							J.publish("menuChange",[cle,goingto],true);
 							return true;
 						}
@@ -65,10 +62,6 @@ console.log('now at ',[cle,goingto] )
 							break;
 						}
 						
-						
-						
-console.log('about:: menuGo ',cle,' ->(',data[1],')-> ',goingnear);
-// console.log(this_jmenu.index);
 						if (goingnear===undefined)
 						{
 console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
