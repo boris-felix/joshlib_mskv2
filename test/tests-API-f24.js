@@ -13,9 +13,54 @@ test('Installation Joshlib',function(){
 })  
 
 test('Construction de l\'arbre',function(){
+    
 	expect(12);
+	
 	var testee2 = new Joshlib.Menu();
 	//equals(testee2.index,{},'index d\'origine');
+	
+	
+	testee2.setData('/',[
+	    {'id':'leaf1'},
+	    {'id':'leaf2',
+	     'children':[
+	      {'id':'leaf21'},
+	      {'id':'leaf22'}
+	     ]
+	    },
+        {'id':'leaf3'},
+        {'id':'leaf4'}
+	]);
+	
+	var lastMenuChange = null;
+	J.subscribe("menuChange",function(ev,data) {
+	    lastMenuChange = data;
+	});
+	
+	J.publish("menuGoTo",["current","/leaf4"],true);
+	J.publish("menuGoTo",["focus","/leaf1"],true);
+    
+    equals(lastMenuChange,["focus","/leaf1"]);
+    
+    J.publish("menuGo",["focus","next"],true);
+    
+	equals(lastMenuChange,["focus","/leaf2"]);
+	
+	J.publish("menuGo",["focus","down"],true);
+	
+	equals(lastMenuChange,["focus","/leaf2/leaf21"]);
+	
+	J.publish("menuGo",["focus","up"],true);
+	
+	equals(lastMenuChange,["focus","/leaf2"]);
+	
+	/*
+	
+	
+	
+	
+	
+	
 	equals(testee2.currentPath,'/','chemin d\'origine');
 
 	
@@ -59,7 +104,7 @@ test('Construction de l\'arbre',function(){
 	testee2.setData('kiddie','c-1');
 	testee2.goChildren(0);
 	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif au premier enfant');
-
+*/
 });
 
 var testee = new Joshlib.Menu();
