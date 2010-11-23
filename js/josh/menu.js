@@ -37,6 +37,14 @@
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
+							
+							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="current") {
+							    this_jmenu.index[goingto]["_data"]["getChildren"](function(children) {
+							        this_jmenu.setData(goingto+"/",children);
+							    });
+							}
+							
+							
 							J.publish("menuChange",[cle,goingto],true);
 							return true;
 						}
