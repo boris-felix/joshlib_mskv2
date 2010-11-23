@@ -16,7 +16,7 @@ test('Installation Joshlib',function(){
 
 test('Construction de l\'arbre',function(){
     
-	expect(9);
+	expect(18);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
@@ -30,11 +30,30 @@ test('Construction de l\'arbre',function(){
 	      {'id':'leaf22'}
 	     ]
 	    },
-        {'id':'leaf3'},
+        {'id':'leaf3',
+         'getChildren':function(callback) {
+                 callback([
+                     {"id":"leaf31"},
+                     {"id":"leaf32"}
+                    ]);
+         }
+        },
         {
             'id':'leaf4',
             'label':'test1'
-        }
+        },
+        {
+            'id':'leaf5',
+            'getChildren':function(callback) {
+                 setTimeout(function() {
+                     callback([
+                         {"id":"leaf51"},
+                         {"id":"leaf52"}
+                        ]);
+                    },500);
+             }
+        },
+        
 	]);
 	equals(testee2.getData("/leaf4").label,"test1");
 	
@@ -57,6 +76,24 @@ console.log('menuchange ',data);
 	    lastMenuChange = data;
 	});
 	
+	
+lastMenuChange=[];
+	J.publish("menuGoTo",["current","/leaf4"],true);
+	
+	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
+	
+	J.publish("menuGo",["current","down"],true);
+	
+    same(lastMenuChange,["current","/leaf4/leaf41"],'Menu Go current down+next');
+	
+	J.publish("menuGo",["current","next"],true);
+    
+    same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
+
+lastMenuChange=[];	
+	
+	console.log(testee2);
+	
 	J.publish("menuGoTo",["focus","/leaf1"],true);
     
     same(lastMenuChange,["focus","/leaf1"],'Menu Goto');
@@ -73,21 +110,50 @@ console.log('menuchange ',data);
 	
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
 	
-lastMenuChange=[];
-	J.publish("menuGoTo",["current","/leaf4"],true);
+	J.publish("menuGo",["focus","up"],true);
 	
-	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
+	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up - the same.');
 	
-	J.publish("menuGo",["current","down"],true);
+	J.publish("menuGo",["focus","next"],true);
 	
-    same(lastMenuChange,["current","/leaf4/leaf41"],'Menu Go current down+next');
-	
-	J.publish("menuGo",["current","next"],true);
+	same(lastMenuChange,["focus","/leaf3"],'Menu Go focus next');
     
-    same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
-
-console.log(testee2);
+    J.publish("menuGo",["focus","down"],true);
 	
+	same(lastMenuChange,["focus","/leaf3/leaf31"],'Menu Go focus down');
+    
+    J.publish("menuGo",["focus","up"],true);
+    
+    same(lastMenuChange,["focus","/leaf3"],'Menu Go up next ');
+    
+	J.publish("menuGo",["focus","next"],true);
+	
+	same(lastMenuChange,["focus","/leaf4"],'Menu Go up next ');
+	
+	J.publish("menuGo",["focus","next"],true);
+	
+	same(lastMenuChange,["focus","/leaf5"],'Menu Go up next next');
+    
+    //Todo: later.
+    //J.publish("menuGo",["focus","down"],true);
+    
+    //should not be loaded right away
+    same(lastMenuChange,["focus","/leaf5"],'Async!');
+    
+    stop();
+    
+    setTimeout(function() {
+        J.publish("menuGo",["focus","down"],true);
+        same(lastMenuChange,["focus","/leaf5/leaf51"],'Down Async');
+        
+        J.publish("menuGo",["focus","up"],true);
+        same(lastMenuChange,["focus","/leaf5"],'Up');
+        
+        
+        start();  
+    },600)
+    
+    
 	
     
 	/*
@@ -143,6 +209,7 @@ console.log(testee2);
 */
 });
 
+/*
 test('Chargement d\'un arbre',function(){
 	expect(1);
 	
@@ -389,11 +456,5 @@ test('UIElements',function(){
 	
 	equals($("#testAppId_e_Video_vplayer").length,1);
     
-	/*
-    app.playMedia({
-        "url":"fixtures/video.mp4",
-        "type":"video"
-    });
-	*/
-    
 });
+*/

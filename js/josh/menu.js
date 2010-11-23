@@ -33,11 +33,10 @@ console.log('menuGoTo',cle,goingto);
 							{
 							    this_jmenu.index[goingto]["_data"]["getChildren"](function(children) {
 							        this_jmenu.setData(goingto+"/",children);
-									J.publish("menuChange",[cle,goingto],true);
 							    });
-							} else {
-								J.publish("menuChange",[cle,goingto],true);
 							}
+							J.publish("menuChange",[cle,goingto],true);
+							
 							return true;
 						}
 				});
@@ -59,7 +58,9 @@ console.log('menuGoTo',cle,goingto);
 							case 'up'   :
 								var path = this_jmenu.registre[data[0]];
 								path = path.substr(0,path.lastIndexOf('/'));
-								path = (path=='') ? '/' : path;
+								if (path=='') {
+								    return;
+								}
 								var goingnear = path;
 							break;
 							case 'down' :
@@ -247,9 +248,12 @@ console.error('goTo : OUCH '+path);
 			var path=this.currentPath;
 
 			path = path.substr(0,path.lastIndexOf('/'));
-			path = (path=='') ? '/' : path;
 			
-			this.goTo(path);
+			if (path!='') {
+			   this.goTo(path); 
+			}
+			
+			
 		},
 		
 		goChildren:function(id) 

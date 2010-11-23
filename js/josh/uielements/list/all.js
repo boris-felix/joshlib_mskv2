@@ -16,7 +16,7 @@
             //where is the tree unfolding to
             "orientation":"up",
             "itemTemplate":function(self,htmlId,data) {
-                return "<li id='"+htmlId+"'><img src='"+data["image"]+"' />"+data["label"]+"</li>";
+                return "<li id='"+htmlId+"'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
         },
         
@@ -53,11 +53,13 @@
 				   {
 						case 'left':
 						{
+						    //J.publish("menuGo",["focus","left"]);
 							self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
 						}
 						break; // left
 						case 'right':
 						{
+						    //J.publish("menuGo",["focus","right"]);
 							self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
 						}
 						break; // right
