@@ -21,7 +21,7 @@
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
-						
+console.log('menuGoTo',cle,goingto);
 						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
 						    console.log("no such menu "+goingto);

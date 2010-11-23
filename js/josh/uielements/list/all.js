@@ -88,7 +88,7 @@
 		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
 		        if ($(".focused").length>0)
 				{
-		            $(".focused").remove();
+		            $(".focused").removeClass('focused');
 console.info("Lost some nav events?");
 		        }
 		    }

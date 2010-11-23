@@ -71,9 +71,10 @@
 		},
 		
 		onFocus:function() {
-		    
 		    this.hasFocus = true;
-		    
+			
+			$('.focused').removeClass('focused');
+			
 		    var self=this;
 		    this.subscribes().forEach(function(s) {
 				self._subscribed.push(J.subscribe(s[0],s[1]));
