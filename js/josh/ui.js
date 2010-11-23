@@ -83,20 +83,29 @@
 				self._subscribed.push(J.subscribe(s[0],s[1]));
 		    });
 		    
-		    if (this.options["showOnFocus"]) {
+		    if (this.options["showOnFocus"]===true) {
 		        
 		        this.show();
 		    }
+		    if (typeof this.options["showOnFocus"]==='function') {
+		        
+		        this.options["showOnFocus"]();
+		    }
+		    
 		},
+		
 		onBlur:function() {
-		    if (this.options["showOnFocus"]) {
+		    if (this.options["hideOnBlur"]===true) {
 		        this.hide();
+		    }
+		    if (typeof this.options["hideOnBlur"]==='function') {
+		        
+		        this.options["hideOnBlur"]();
 		    }
 		    this.hasFocus = false;
 		    this._subscribed.forEach(function(s) {
 		        J.unsubscribe(s);
 		    });
-		    
 		},
 		
 		refresh:function() {
