@@ -14,7 +14,10 @@
 
         defaultOptions:{
             //where is the tree unfolding to
-            "orientation":"up"
+            "orientation":"up",
+            "itemTemplate":function(self,htmlId,data) {
+                return "<li id='"+htmlId+"'><img src='"+data["image"]+"' />"+data["label"]+"</li>";
+            }
         },
         
 		
@@ -27,13 +30,15 @@
 
 		getHtml:function() {
 			
-			var ret = ["<ul id='"+this.htmlId+"'>"];
+			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
 			var prev_showid;
+            
 
 			for (var i=0;i<this.data.length;i++)
 			{
-			    ret.push("<li id='"+this.htmlId+"_"+i+"'>"+this.data[i]["label"]+"</li>");
+			    ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
 			}
+			
 			ret.push("</ul>");
 			return ret.join("");
 		},

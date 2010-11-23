@@ -8,11 +8,10 @@
 
 			this.app = app;
 			this.id = id;
-			this.options = $.extend({},options || {},this.defaultOptions);
+			this.options = $.extend({},this.defaultOptions,options || {});
 			this.htmlId = this.getHtmlId();
 			this.children=[];
 			this._subscribed = [];
-			
 			this.hasFocus = false;
 			
 			if (options["parent"]) {
@@ -39,13 +38,17 @@
                     
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[1] || (self.options["menuRoot"]+"/")==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
-    			        
+
     			        if (data[0]=="focus") {
     			            self.onFocus();
     			            
     			        } else if (data[0]=="current") {
     			            //
     			        }
+    			        
+    			    //Was a focus on another element: blur us
+    			    } else if (data[0]=="focus" && self.hasFocus) {
+    			        self.onBlur();
     			    }
     			});
 			}
@@ -79,12 +82,21 @@
 		    this.subscribes().forEach(function(s) {
 		        self._subscribed = J.subscribe(s[0],s[1]);
 		    });
+		    
+		    if (this.options["showOnFocus"]) {
+		        
+		        this.show();
+		    }
 		},
 		onBlur:function() {
+		    if (this.options["showOnFocus"]) {
+		        this.hide();
+		    }
 		    this.hasFocus = false;
 		    this._subscribed.forEach(function(s) {
 		        J.unsubscribe(s);
 		    });
+		    
 		},
 		
 		refresh:function() {
@@ -92,6 +104,14 @@
 		    //This is a bit rough but works for now
 		    $("#"+this.htmlId).remove();
 		    this.insert();
+		},
+		
+		show:function() {		    
+		    $("#"+this.htmlId).show();
+		},
+		
+		hide:function() {
+		    $("#"+this.htmlId).hide();
 		},
 		
 		insert:function() {
@@ -104,7 +124,13 @@
 			
 			parent.append(this.getHtml());
 			
-			if (this.options["onAfterInsert"]) this.options["onAfterInsert"](this);
+			if (this.options["autoShow"]) {
+			    this.show();
+			}
+			
+			if (this.options["onAfterInsert"]) {
+			    this.options["onAfterInsert"](this);
+			}
 			
 			// Insert children elements that have the autoInsert flag
 			for (var i=0;i<this.children.length;i++) {

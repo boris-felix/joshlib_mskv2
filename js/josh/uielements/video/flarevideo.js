@@ -19,6 +19,7 @@
                       
                     }
                   ]);
+            this.show();
 		},
 		
 		pause:function() {
@@ -26,7 +27,7 @@
 	    },
 	    
 	    getHtml:function() {
-			return "<div id='"+this.htmlId+"'></div>";
+			return "<div style='display:none;' id='"+this.htmlId+"'></div>";
 		}
 		
 	});

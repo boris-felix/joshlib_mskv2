@@ -4,7 +4,7 @@
 		type:"Panel",
 		
 		getHtml:function() {
-			return "<div id='"+this.htmlId+"'></div>";
+			return "<div style='display:none;' id='"+this.htmlId+"'>"+(this.options["content"]?this.options["content"]:"")+"</div>";
 		}
 	});
 	
