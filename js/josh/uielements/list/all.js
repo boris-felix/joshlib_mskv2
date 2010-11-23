@@ -10,6 +10,7 @@
 	
 	J.UI.List = J.Class(J.UIElement,{
         type:"List",
+		data:[],
 
         defaultOptions:{
             //where is the tree unfolding to
@@ -23,7 +24,7 @@
             this.focusedIndex=null;
             this.data = [];
         },
-        
+
 		getHtml:function() {
 			
 			var ret = ["<ul id='"+this.htmlId+"'>"];

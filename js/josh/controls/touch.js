@@ -7,7 +7,7 @@
 		},
 		
 		start:function() {
-			$('.panehere').live('MozTouchDown mousedown',function(e){
+			$('.panehere').live('mousedown MozTouchDown',function(e){
 				//$(this);
 				
 				pane.moveTo(this.id);
