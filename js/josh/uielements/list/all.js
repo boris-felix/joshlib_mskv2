@@ -44,36 +44,57 @@
 		},
 		
 		subscribes:function() {
+
 		    var self=this;
 		    return this.__base().concat([
 		        ["control",function(ev,data) {
 		            //only supports orientation=="up" for now
-		            //console.log("got control",data);
-		            
-		            if (data=="left") {
-		                self.focusIndex(self.focusedIndex-1);
-		            } else if (data=="right") {
-		                self.focusIndex(self.focusedIndex+1);
-	                } else if (data=="down" || data=="exit") {
-	                    self.onBlur();
-	                    J.publish("menuGo",["focus","up"]);
-                    } else if (data=="up") {
-                        self.onBlur();
-                        J.publish("menuGo",["focus","down"]);
-                    } else if (data=="enter") {
-                        J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
-                    }
+		           switch (data)
+				   {
+						case 'left':
+						{
+							self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
+						}
+						break; // left
+						case 'right':
+						{
+							self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
+						}
+						break; // right
+						case 'down':
+						case 'exit':
+						{
+							self.onBlur();
+							J.publish("menuGo",["focus","up"]);
+						}
+						break; // down , exit
+						case 'up':
+						{
+							self.onBlur();
+							J.publish("menuGo",["focus","down"]);
+							
+							/// faudrait en async J.publish("menuGo",["current","down"]);
+						}
+						break; // up
+						case 'enter':
+						{
+							J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+						}
+						break; // enter
+				   }
+		          
 		        }]
 		    ]);
 		},
 		
 		focusIndex:function(index) {
-            console.log(index);
-		    if (this.focusedIndex!==null) {
+		    if (this.focusedIndex!==null)
+			{
 		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
-		        if ($(".focused").length>0) {
-		            $(".focused").remove();
-		            console.log("Lost some nav events?");
+		        if ($(".focused").length>0)
+				{
+		            $(".focused").removeClass('focused');
+console.info("Lost some nav events?");
 		        }
 		    }
 		    

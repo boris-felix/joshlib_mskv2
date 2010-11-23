@@ -11,15 +11,6 @@
 		
 		__constructor:function() 
 		{
-		
-			/// NOTE à instancier manuellement. c'est rageant.
-			/*
-				registre.index['/'] = [];
-				registre.index['/']['_child']=undefined;
-				registre.datas['/']=undefined;
-				registre.currentPath = "/";
-				registre.focus = "/";
-			*/
 			this.index['/']=[];
 			this.index['/']['_child']=[];
 			this.index['/']['_data']=[];
@@ -30,22 +21,23 @@
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
-						
-						if (this_jmenu.index[goingto]===undefined)
+console.log('menuGoTo',cle,goingto);
+						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
 						    console.log("no such menu "+goingto);
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
 							
-							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="current") {
+							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus") 
+							{
 							    this_jmenu.index[goingto]["_data"]["getChildren"](function(children) {
 							        this_jmenu.setData(goingto+"/",children);
+									J.publish("menuChange",[cle,goingto],true);
 							    });
+							} else {
+								J.publish("menuChange",[cle,goingto],true);
 							}
-							
-							
-							J.publish("menuChange",[cle,goingto],true);
 							return true;
 						}
 				});
@@ -53,12 +45,16 @@
 			J.subscribe("menuGo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
+
+						goingnear = undefined;
 						
 						switch (data[1])
 						{
 							case 'prev' :
 							case 'next' :
-								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]];
+								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]]!==undefined ?
+												this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]]
+												:this_jmenu.registre[data[0]];
 							break;
 							case 'up'   :
 								var path = this_jmenu.registre[data[0]];
@@ -67,10 +63,13 @@
 								var goingnear = path;
 							break;
 							case 'down' :
-								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0];
+								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_child'].length>0 ?
+												this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0]:
+												this_jmenu.registre[data[0]];
+
 							break;
 						}
-						
+
 						if (goingnear===undefined)
 						{
 console.error(' AAAAAHHHHH ! MenuGo est nulle part ');

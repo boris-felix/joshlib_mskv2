@@ -25,7 +25,6 @@
 			if (this.options["menuRoot"]) {
 
 			    J.subscribe("menuData",function(ev,data) {
-
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[0] || (self.options["menuRoot"]+"/")==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
     			        self.setData(data[0],data[1]);
@@ -75,12 +74,13 @@
 		},
 		
 		onFocus:function() {
-		    
 		    this.hasFocus = true;
-		    
+			
+			$('.focused').removeClass('focused');
+			
 		    var self=this;
 		    this.subscribes().forEach(function(s) {
-		        self._subscribed = J.subscribe(s[0],s[1]);
+				self._subscribed.push(J.subscribe(s[0],s[1]));
 		    });
 		    
 		    if (this.options["showOnFocus"]) {
