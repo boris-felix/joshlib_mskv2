@@ -21,7 +21,7 @@
                   ]);
              */
              
-             $("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls autoplay autobuffer>";
+             $("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls width='500' height='300' >";  // 			  poster:  options["image"]
              
             this.show();
 		},
