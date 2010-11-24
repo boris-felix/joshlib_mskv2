@@ -48,7 +48,9 @@
 			if (typeof this.options[eventname] === 'function')
 			{
 				this.options[eventname](
-						eventname
+						this,		// la List en cours
+						eventname	// la clé de l'évènement appelant
+
 					// réfléchir sur la possibilité de proposer en retour d'autres parametres
 				);
 			}
