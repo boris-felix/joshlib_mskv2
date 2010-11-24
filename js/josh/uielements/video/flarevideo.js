@@ -3,12 +3,12 @@
 	J.UI.Video = J.Class(J.UI.Video,{
 		
 		play:function(options) {
-		    /*
+		    
 		    $("#"+this.htmlId)[0].innerHTML="";
 		    
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:J.basePath+"swf/FlareVideo.swf",
-              //controls:true,
+              controls:false,
               autoplay:true,
 			  poster:  options["image"]
             });
@@ -19,9 +19,9 @@
                       type: options["mime"] || 'video/mp4'
                     }
                   ]);
-             */
              
-             $("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls width='500' height='300' >";  // 			  poster:  options["image"]
+             
+             //$("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls width='500' height='300' >";  // 			  poster:  options["image"]
              
             this.show();
 		},
