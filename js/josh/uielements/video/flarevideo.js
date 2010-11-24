@@ -5,7 +5,7 @@
 		play:function(options) {
 		    
 		    $("#"+this.htmlId)[0].innerHTML="";
-		    
+		/*    
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:J.basePath+"swf/FlareVideo.swf",
               controls:false,
@@ -22,8 +22,8 @@
                     }
                   ]);
              
-             
-             //$("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls width='500' height='300' >";  // 			  poster:  options["image"]
+          */   
+             /$("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls autoplay autobuffer preload width='100%' height='100%' poster='"+options["image"]+"'  >";  // 			  
              
             this.show();
 		},
