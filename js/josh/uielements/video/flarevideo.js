@@ -9,15 +9,14 @@
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:J.basePath+"swf/FlareVideo.swf",
               //controls:true,
-              autoplay:true
+              autoplay:true,
+			  poster:  options["image"]
             });
             console.log("play",options["url"]);
             this.flare.load([
                     {
                       src:  options["url"],
-                      type: options["mime"] || 'video/mp4',
-					  poster:  options["image"],
-                      
+                      type: options["mime"] || 'video/mp4'
                     }
                   ]);
             this.show();
