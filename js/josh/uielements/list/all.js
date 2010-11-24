@@ -43,6 +43,17 @@
 			return ret.join("");
 		},
 		
+		event : function(eventname)
+		{
+			if (typeof this.options[eventname] === 'function')
+			{
+				this.options[eventname](
+						eventname
+					// réfléchir sur la possibilité de proposer en retour d'autres parametres
+				);
+			}
+		},
+		
 		subscribes:function() {
 
 		    var self=this;
@@ -53,34 +64,43 @@
 				   {
 						case 'left':
 						{
+							self.event('onPreviousMoving');
 						    //J.publish("menuGo",["focus","left"]);
 							self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
+							self.event('onPreviousMoved');
 						}
 						break; // left
 						case 'right':
 						{
+							self.event('onNextMoving');
 						    //J.publish("menuGo",["focus","right"]);
 							self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
+							self.event('onPreviousMoved');
 						}
 						break; // right
 						case 'down':
 						case 'exit':
 						{
+							self.event('onPanelExiting');
 							self.onBlur();
 							J.publish("menuGo",["focus","up"]);
+							self.event('onPanelExited');
 						}
 						break; // down , exit
 						case 'up':
 						{
+							self.event('onPanelChilding');
 							self.onBlur();
 							J.publish("menuGo",["focus","down"]);
-							
+							self.event('onPanelChilded');
 							/// faudrait en async J.publish("menuGo",["current","down"]);
 						}
 						break; // up
 						case 'enter':
 						{
+							self.event('onPanelActing');
 							J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+							self.event('onPanelActed');
 						}
 						break; // enter
 				   }
