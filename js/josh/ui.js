@@ -13,6 +13,7 @@
 			this.children=[];
 			this._subscribed = [];
 			this.hasFocus = false;
+			this.inserted = false;
 			
 			if (options["parent"]) {
 			    options["parent"].registerChild(this);
@@ -38,7 +39,7 @@
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
 
-    			        if (data[0]=="focus") {
+    			        if (data[0]=="focus" && !this.hasFocus) {
     			            self.onFocus();
     			            
     			        } else if (data[0]=="current") {
@@ -75,8 +76,6 @@
 		
 		onFocus:function() {
 		    this.hasFocus = true;
-			
-			$('.focused').removeClass('focused');
 			
 		    var self=this;
 		    this.subscribes().forEach(function(s) {
@@ -132,6 +131,7 @@
 			}
 			
 			parent.append(this.getHtml());
+			this.inserted=true;
 			
 			if (this.options["autoShow"]) {
 			    this.show();
