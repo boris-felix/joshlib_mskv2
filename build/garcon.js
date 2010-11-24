@@ -2,7 +2,7 @@ var g = require('../../garcon/lib/garcon.js'),
     server, myApp;
     
 // create a server which will listen on port 8000 by default
-server = new g.Server({port:8889});
+server = new g.Server({port:40000});
 
 // adding an application named 'myapp' tells the server to respond to
 // the /myapp url and to create a myapp.html file when saving
