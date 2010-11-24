@@ -10,7 +10,10 @@
               flashSrc:J.basePath+"swf/FlareVideo.swf",
               controls:false,
               autoplay:true,
-				preload:  "auto",
+			  
+              autobuffer:true,
+			
+			  preload:  "auto",
 			  poster:  options["image"]
             });
             console.log("play",options["url"]);
