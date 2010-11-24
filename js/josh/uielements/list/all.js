@@ -75,7 +75,7 @@
 							self.event('onNextMoving');
 						    //J.publish("menuGo",["focus","right"]);
 							self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
-							self.event('onPreviousMoved');
+							self.event('onNextMoved');
 						}
 						break; // right
 						case 'down':
