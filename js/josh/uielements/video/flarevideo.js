@@ -15,7 +15,8 @@
             this.flare.load([
                     {
                       src:  options["url"],
-                      type: options["mime"] || 'video/mp4'
+                      type: options["mime"] || 'video/mp4',
+					  poster:  options["image"],
                       
                     }
                   ]);
