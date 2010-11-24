@@ -3,7 +3,7 @@
 	J.UI.Video = J.Class(J.UI.Video,{
 		
 		play:function(options) {
-		    
+		    /*
 		    $("#"+this.htmlId)[0].innerHTML="";
 		    
 			this.flare = $("#"+this.htmlId).flareVideo({
@@ -19,6 +19,10 @@
                       type: options["mime"] || 'video/mp4'
                     }
                   ]);
+             */
+             
+             $("#"+this.htmlId)[0].innerHTML = "<video src='"+options["url"]+"' controls autoplay autobuffer>";
+             
             this.show();
 		},
 		
