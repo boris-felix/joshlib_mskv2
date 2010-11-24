@@ -111,7 +111,14 @@
 		    ]);
 		},
 		
+		
+		onFocus:function() {
+		    this.__base();
+		    this.focusIndex(0);
+		},
+		
 		focusIndex:function(index) {
+
 		    if (this.focusedIndex!==null)
 			{
 		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
