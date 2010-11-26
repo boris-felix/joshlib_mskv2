@@ -1,3 +1,89 @@
+* {
+	padding : 0;
+	margin : 0;
+	border : 0;
+	outline : 0;
+	font-family : 'Droid Sans', sans-serif;
+	vertical-align: baseline;
+	background: transparent;
+
+}
+
+blockquote, q
+{
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: inherit;
+}
+
+:focus {
+	outline: 0;
+}
+
+
+html {
+    background : black;
+}
+
+body {
+	background-color:white;
+	height:1080px;
+	width :1920px;
+	font-size:100%;
+	margin : auto;
+	line-height: 1;
+	zoom : 1;
+}
+
+html,#main,#container {
+    height:100%;
+    width:100%;
+}
+
+input, select	
+{
+	font-size:inherit;
+	/* ou sinon font-size:100%; */
+} 
+
+@media (max-height: 720px)
+{
+	body {
+		font-size:67%;
+		height : 720px;
+		width : 1280px;
+	}
+	
+}
+
+@media (max-height: 576px)  {
+	body {
+		font-size:53%;
+		height : 576px;
+		width : 1024px;
+	}
+}
+
+
+@media (max-height: 480px)  {
+	body {
+		font-size:44%;
+		height : 480px;
+		width : 854px;
+	}
+}
+
+
 .focused { 
-	border: 2px solid red;
+	outline: 2px solid red;
 }		
