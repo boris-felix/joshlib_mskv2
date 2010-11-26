@@ -56,7 +56,7 @@ input, select
 	/* ou sinon font-size:100%; */
 } 
 
-@media (max-height: 720px)
+@media (max-height: 972px)
 {
 	body {
 		font-size:67%;
@@ -66,7 +66,7 @@ input, select
 	
 }
 
-@media (max-height: 576px)  {
+@media (max-height: 648px)  {
 	body {
 		font-size:53%;
 		height : 576px;
@@ -75,7 +75,7 @@ input, select
 }
 
 
-@media (max-height: 480px)  {
+@media (max-height: 520px)  {
 	body {
 		font-size:44%;
 		height : 480px;
