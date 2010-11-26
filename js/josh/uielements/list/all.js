@@ -16,6 +16,8 @@
             //where is the tree unfolding to
             "orientation":"up",
             "itemTemplate":function(self,htmlId,data) {
+				/** TODO itemTemplate comme étant un string*/
+				
                 return "<li id='"+htmlId+"'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
         },

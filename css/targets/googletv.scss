@@ -37,20 +37,17 @@ html {
 
 body {
 	background-color:white;
+	height:1080px;
+	width :1920px;
 	font-size:100%;
 	margin : auto;
 	line-height: 1;
 	zoom : 1;
 }
 
-html, body, #main{
+html,#main,#container {
 	height:100%;
     width:100%;
-}
-
-#container {
-	height:1080px;
-	width :1920px;
 }
 
 input, select	
@@ -59,9 +56,9 @@ input, select
 	/* ou sinon font-size:100%; */
 } 
 
-@media (max-height: 972px)
+@media (max-height: /*972*/1026px)
 {
-	#container {
+	body {
 		font-size:67%;
 		height : 720px;
 		width : 1280px;
@@ -69,8 +66,8 @@ input, select
 	
 }
 
-@media (max-height: 648px)  {
-	#container {
+@media (max-height: /*648*/684px)  {
+	body {
 		font-size:53%;
 		height : 576px;
 		width : 1024px;
@@ -78,8 +75,8 @@ input, select
 }
 
 
-@media (max-height: 520px)  {
-	#container {
+@media (max-height: 548px)  {
+	body {
 		font-size:44%;
 		height : 480px;
 		width : 854px;
