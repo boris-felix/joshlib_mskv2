@@ -3,9 +3,15 @@
 	/**
      * @class
      */
-	J.UIElement = J.Class({
+	J.UIElement = J.Class(
+	    
+	    /**
+            @lends J.UIElement.prototype
+        */
+	    {
 		
 		defaultOptions:{},
+		
 		
 		__constructor:function(app,id,options) {
 

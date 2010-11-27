@@ -1,5 +1,8 @@
 (function(J,$) {
 	
+	/**
+     * @class
+     */
 	J.App = J.Class({
 		
 		__constructor:function(appId) {

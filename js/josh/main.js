@@ -3,11 +3,15 @@
 
     var lastUid = -1;
 
+
+    /** @namespace */
 	var J = {
 	    basePath:"",
 	    Class:$.inherit,
 	    
-	    
+	    /**
+         * @static
+         */
 	    debugEvents:true,
 	    
 	    // https://github.com/mroderick/PubSubJS

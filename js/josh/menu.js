@@ -1,5 +1,8 @@
 (function(J,$) {
 	
+	/**
+     * @class
+     */
 	J.Menu = J.Class({
 		
 		currentPath:'/',

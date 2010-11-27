@@ -1,5 +1,8 @@
 (function(J,$) {
 	
+	/**
+     * @class
+     */
 	J.Control = J.Class({
 		
 		__construct:function() {
