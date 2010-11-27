@@ -8,6 +8,12 @@
 	    "right":"left"
 	};
 	
+	
+	/**
+     * Class description
+     * @class
+     * @augments J.UIElement
+     */
 	J.UI.List = J.Class(J.UIElement,{
         type:"List",
 		data:[],
