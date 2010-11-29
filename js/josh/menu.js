@@ -67,7 +67,7 @@ console.log('menuGoTo',cle,goingto);
 								var goingnear = path;
 							break;
 							case 'down' :
-								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_child'].length>0 ?
+								var goingnear = ((typeof this_jmenu.index[this_jmenu.registre[data[0]]]['_child'] != 'undefined') && this_jmenu.index[this_jmenu.registre[data[0]]]['_child'].length>0 ) ?
 												this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0]:
 												this_jmenu.registre[data[0]];
 
