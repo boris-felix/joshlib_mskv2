@@ -22,7 +22,15 @@
             //where is the tree unfolding to
             "orientation":"up",
             "itemTemplate":function(self,htmlId,data) {
-				/** TODO itemTemplate comme étant un string*/
+				/** TODO itemTemplate comme étant un string . Principalement pour simplifer le bousin pour les pas trop développeurs
+						if (typeof itemTemplate==='string')
+						{
+							
+							this.forEach{
+								this.replace('<<'+tag'>>',data[tag])
+							}
+						}
+				 **/
 				
                 return "<li id='"+htmlId+"'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
@@ -133,7 +141,7 @@
 		        if ($(".focused").length>0)
 				{
 		            $(".focused").removeClass('focused');
-console.info("Lost some nav events?");
+console.error("Lost some nav events?");
 		        }
 		    }
 		    
