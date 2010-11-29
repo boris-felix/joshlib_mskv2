@@ -6,12 +6,12 @@ Dependencies
 ------------
 
  - NodeJS for development & build system
- - https://github.com/joshfire/garcon checkouted/cloned in ../garcon
+ - https://github.com/joshfire/solder checkouted/cloned in ../solder
  - SASS ( http://sass-lang.com/tutorial.html )
 
 How to run
 ----------
 
-$ node build/garcon.js
+$ node build/solder.js
 
 Then browse to joshlib/test/index-f24.html
