@@ -25,7 +25,13 @@
           */   
              $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay autobuffer preload width='100%' height='100%' poster='"+options["image"]+"' />";			  
              
-             
+			if (options["url"]===undefined)
+			{
+				//console.log('video bug sur ',this.htmlId);
+				// obligado de le lancaro à la mano por il señor chromero
+ 				//	document.getElementById(this.htmlId+'_video').error = 4;
+				//$("#"+this.htmlId+'_video').trigger("error");
+			}
              
             this.show();
             $("#"+this.htmlId+"_video")[0].play();
