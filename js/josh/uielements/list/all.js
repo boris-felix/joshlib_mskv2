@@ -35,9 +35,7 @@
                 return "<li id='"+htmlId+"'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
         },
-        
-		
-		
+
         init:function() {
 
             this.focusedIndex=null;
@@ -53,13 +51,10 @@
 			
 			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
 			var prev_showid;
-            
-
 			for (var i=0;i<this.data.length;i++)
 			{
 			    ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
 			}
-			
 			ret.push("</ul>");
 			return ret.join("");
 		},
@@ -132,8 +127,9 @@
 		    ]);
 		},
 		
-		onFocus:function(path) {
-		    
+		onFocus:function(path)
+		{
+		    this.event('onFocusing');
 		    //todo use menuentry.fullId() to get the index
 		    
 		    var id = path.split("/").pop();
@@ -146,23 +142,26 @@
 		    
 		    
 		    this.__base();
+			this.event('onFocused');
 		},
 		
-		focusIndex:function(index) {
-
+		focusIndex:function(index)
+		{
+			this.event('onFocusIndexing');
 		    if (this.focusedIndex!==null)
 			{
 		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
 		        if ($(".focused").length>0)
 				{
+					console.debug("There was more than one .focused! Lost some nav events?",$(".focused"));
 		            $(".focused").removeClass('focused');
-                    console.debug("There was two .focused! Lost some nav events?");
 		        }
 		    }
 		    
 		    this.focusedIndex=index;
 		    
 		    $("#"+this.htmlId+'_'+index).addClass("focused");
+			this.event('onFocusIndexed');
 		},
 		
 		setData:function(menuRoot,data) {

@@ -24,7 +24,6 @@
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
-console.log('menuGoTo',cle,goingto);
 						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
 						    console.log("no such menu "+goingto);
@@ -190,8 +189,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 			// aud cas où, je blinde
 			if (this.index[path]===undefined)
 			{
-console.error('getData : données inexistantes pour'+path);
-console.info(this);
+console.error('getData : données inexistantes pour'+path,this);
 				return false;
 			} else {
 				return this.index[path]['_data'];
