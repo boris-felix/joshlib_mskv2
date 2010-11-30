@@ -32,11 +32,11 @@ console.log('menuGoTo',cle,goingto);
 						} else {
 							this_jmenu.registre[cle]=goingto;
 							
-							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus") 
+							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus" && !this_jmenu.index[goingto]["_data"]["children"]) 
 							{
 							    this_jmenu.index[goingto]["_data"]["getChildren"](function(children) {
 							        this_jmenu.setData(goingto+"/",children);
-							    });
+							    },this_jmenu.index[goingto]["_data"]);
 							}
 							J.publish("menuChange",[cle,goingto],true);
 							
@@ -116,7 +116,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
 				}
 			}
-			J.publish("menuData",[path,data]);
+			J.publish("menuData",[path,data],true);
 		},
 		
 		buildIndex:function(path,data,recursive) 

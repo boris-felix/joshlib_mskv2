@@ -47,16 +47,6 @@ exports.config = {
   // If you reference remote URLs, Solder will attempt to cache them according
   // to any HTTP cache headers.
   components: {
-    'yui-3.1.2': {
-      js: [
-        'http://yui.yahooapis.com/3.1.2/build/yui/yui.js',
-        'http://yui.yahooapis.com/3.1.2/build/oop/oop-min.js',
-        'http://yui.yahooapis.com/3.1.2/build/event-custom/event-custom-min.js',
-        'http://yui.yahooapis.com/3.1.2/build/event/event-min.js',
-        'http://yui.yahooapis.com/3.1.2/build/dom/dom-min.js',
-        'http://yui.yahooapis.com/3.1.2/build/node/node-min.js'
-      ]
-    },
 
     'modernizr': {
       requires: [ ],
@@ -74,6 +64,7 @@ exports.config = {
         "js/libs/jquery.inherit-1.3.2.M.js",
         "js/libs/jquery.ui.slider.js",
         "js/libs/jquery.flash.js"
+        
       ]
     },
     
@@ -97,6 +88,7 @@ exports.config = {
         'js/josh/api.js',
         'js/josh/ui.js',
         'js/josh/control.js',
+        'js/josh/datasource.js',
         'js/josh/controls/keyboard.js',
         'js/josh/controls/mouse.js',
         'js/josh/uielements/panel.js',

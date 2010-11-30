@@ -48,8 +48,8 @@
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
 
-    			        if (data[0]=="focus" && !this.hasFocus) {
-    			            self.onFocus();
+    			        if (data[0]=="focus") {
+    			            self.onFocus(data[1]);
     			            
     			        } else if (data[0]=="current") {
     			            //
@@ -57,7 +57,7 @@
     			        
     			    //Was a focus on another element: blur us
     			    } else if (data[0]=="focus" && self.hasFocus) {
-    			        self.onBlur();
+    			        self.onBlur(data[1]);
     			    }
     			});
 			}
@@ -83,26 +83,30 @@
 		    return [];
 		},
 		
-		onFocus:function() {
-		    this.hasFocus = true;
-			
-		    var self=this;
-		    this.subscribes().forEach(function(s) {
-				self._subscribed.push(J.subscribe(s[0],s[1]));
-		    });
+		onFocus:function(path) {
 		    
-		    if (this.options["showOnFocus"]===true) {
+		    if (!this.hasFocus) {
 		        
-		        this.show();
-		    }
-		    if (typeof this.options["showOnFocus"]==='function') {
+    		    var self=this;
+    		    this.subscribes().forEach(function(s) {
+    				self._subscribed.push(J.subscribe(s[0],s[1]));
+    		    });
+		    
+    		    if (this.options["showOnFocus"]===true) {
 		        
-		        this.options["showOnFocus"]();
-		    }
+    		        this.show();
+    		    }
+    		    if (typeof this.options["showOnFocus"]==='function') {
+		        
+    		        this.options["showOnFocus"]();
+    		    }
+		    
+    	    }
+		    this.hasFocus = true;
 		    
 		},
 		
-		onBlur:function() {
+		onBlur:function(path) {
 		    if (this.options["hideOnBlur"]===true) {
 		        this.hide();
 		    }

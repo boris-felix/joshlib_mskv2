@@ -43,6 +43,11 @@
             this.focusedIndex=null;
             this.data = [];
         },
+        
+        insert:function() {
+            this.__base();
+            this.focusIndex(this.focusedIndex);
+        },
 
 		getHtml:function() {
 			
@@ -83,16 +88,16 @@
 						case 'left':
 						{
 							self.event('onPreviousMoving');
-						    //J.publish("menuGo",["focus","left"]);
-							self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
+						    J.publish("menuGo",["focus","prev"]);
+							//self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
 							self.event('onPreviousMoved');
 						}
 						break; // left
 						case 'right':
 						{
 							self.event('onNextMoving');
-						    //J.publish("menuGo",["focus","right"]);
-							self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
+						    J.publish("menuGo",["focus","next"]);
+							//self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
 							self.event('onNextMoved');
 						}
 						break; // right
@@ -127,10 +132,20 @@
 		    ]);
 		},
 		
-		
-		onFocus:function() {
+		onFocus:function(path) {
+		    
+		    //todo use menuentry.fullId() to get the index
+		    
+		    var id = path.split("/").pop();
+		    
+		    for (var i=0;i<this.data.length;i++) {
+		        if (id==this.data[i].id) {
+		            this.focusIndex(i);
+		        }
+		    }
+		    
+		    
 		    this.__base();
-		    this.focusIndex(0);
 		},
 		
 		focusIndex:function(index) {
@@ -141,7 +156,7 @@
 		        if ($(".focused").length>0)
 				{
 		            $(".focused").removeClass('focused');
-console.error("Lost some nav events?");
+                    console.debug("There was two .focused! Lost some nav events?");
 		        }
 		    }
 		    
