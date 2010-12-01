@@ -85,22 +85,21 @@
 		
 		onFocus:function(path) {
 		    
-		    if (!this.hasFocus) {
-		        
+		    if (!this.hasFocus)
+			{   
     		    var self=this;
     		    this.subscribes().forEach(function(s) {
     				self._subscribed.push(J.subscribe(s[0],s[1]));
     		    });
 		    
-    		    if (this.options["showOnFocus"]===true) {
-		        
+    		    if (this.options["showOnFocus"]===true)
+				{
     		        this.show();
     		    }
-    		    if (typeof this.options["showOnFocus"]==='function') {
-		        
+    		    if (typeof this.options["showOnFocus"]==='function')
+				{
     		        this.options["showOnFocus"]();
     		    }
-		    
     	    }
 		    this.hasFocus = true;
 		    
@@ -110,29 +109,57 @@
 		    if (this.options["hideOnBlur"]===true) {
 		        this.hide();
 		    }
-		    if (typeof this.options["hideOnBlur"]==='function') {
-		        
+		    
+		    if (typeof this.options["hideOnBlur"]==='function')
+			{
 		        this.options["hideOnBlur"]();
 		    }
+		    
 		    this.hasFocus = false;
 		    this._subscribed.forEach(function(s) {
 		        J.unsubscribe(s);
 		    });
 		},
 		
-		refresh:function() {
-		    
-		    //This is a bit rough but works for now
-		    $("#"+this.htmlId).remove();
-		    this.insert();
+		refresh:function()
+		{
+			var continuous = true;
+			if (typeof this.options["refresh"]==='function')
+			{
+				// il se trouve que dans certains cas, on préfère manuellement rafraichir les données, notamment pour éviter le flicking désagréable pour le renouvellement chez France 24
+				continuous = this.options["refresh"](this);
+			} 
+			
+			if (continuous)
+			{
+				//This is a bit rough but works for now
+				$("#"+this.htmlId).remove();
+				this.insert();
+			}
 		},
 		
 		show:function() {		    
-		    $("#"+this.htmlId).show();
+			var continuous = true;
+			if (typeof this.options["show"]==='function')
+			{
+				continuous = this.options["show"](this);
+			} 
+			if (continuous)
+			{
+				$("#"+this.htmlId).show();
+			}
 		},
 		
 		hide:function() {
-		    $("#"+this.htmlId).hide();
+			var continuous = true;
+			if (typeof this.options["hide"]==='function')
+			{
+				continuous = this.options["hide"](this);
+			} 
+			if (continuous)
+			{
+				$("#"+this.htmlId).hide();
+			}
 		},
 		
 		insert:function() {
@@ -160,7 +187,6 @@
 			        this.children[i].insert();
 			    }
 			}
-			
 		},
 		
 		getHtmlId:function() {

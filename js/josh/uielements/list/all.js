@@ -18,11 +18,13 @@
         type:"List",
 		data:[],
 		placeholder:'',
+		HtmlTag:'ul style="display:none;"',
 
         defaultOptions:{
             //where is the tree unfolding to
             "orientation":"up",
-            "itemTemplate":function(self,htmlId,data) {
+            "itemTemplate":function(self,htmlId,data)
+			{
 				/** TODO itemTemplate comme étant un string . Principalement pour simplifer le bousin pour les pas trop développeurs
 						if (typeof itemTemplate==='string')
 						{
@@ -51,29 +53,61 @@
 			this.focusedIndex=0;
 			//$("#"+this.htmlId+'_0').addClass("focused");
         },
+		
+		getHtmlOpeningTag:function()
+		{
+			return '<'+this.HtmlTag+' id="'+this.htmlId+'">';
+		},
 
-		getHtml:function() {
-
-			
-			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
+		getHtmlClosingTag:function()
+		{
+			return '</'+this.HtmlTag.split(/\s/,2)[0]+'>';
+		},
+		
+		getHtmlInner:function()
+		{
 			if (this.data.length==0)
 			{
 				console.info('Data de la List actuellement vide ',this);
 				if (typeof this.placeholder=='function')
 				{
-					ret.push(this.placeholder());
+					return this.placeholder();
 				} else {
-					ret.push(this.placeholder);
+					return this.placeholder;
 				}
 			} else {
-			
+				var ret =[];
 				for (var i=0;i<this.data.length;i++)
 				{
 					ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
 				}
+				return ret.join("");
 			}
-			ret.push("</ul>");
-			return ret.join("");
+		},
+
+		getHtml:function()
+		{
+			return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
+			
+// 			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
+// 			if (this.data.length==0)
+// 			{
+// 				console.info('Data de la List actuellement vide ',this);
+// 				if (typeof this.placeholder=='function')
+// 			 	{
+// 					ret.push(this.placeholder());
+// 				} else {
+// 					ret.push(this.placeholder);
+// 				}
+// 			} else {
+// 			
+// 				for (var i=0;i<this.data.length;i++)
+// 				{
+// 					ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
+// 				}
+// 			}
+// 			ret.push("</ul>");
+// 			return ret.join("");
 		},
 		
 		event : function(eventname)
@@ -185,8 +219,6 @@
 			this.data = data;
 		}
 	});
-	
-	
 	
 	
 })(Joshlib,jQuery);
