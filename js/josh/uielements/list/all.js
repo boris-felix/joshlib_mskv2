@@ -35,7 +35,7 @@
 						}
 				 **/
 				
-                return "<li id='"+htmlId+"'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
+                return "<li id='"+htmlId+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
         },
 
@@ -130,27 +130,36 @@
 		    return this.__base().concat([
 		        ["control",function(ev,data) {
 		            //only supports orientation=="up" for now
-		           switch (data)
+		           switch (data[0])
 				   {
+				        case 'hover':
+						{
+						    //todo merge previous/nextmoving
+							self.event('onPreviousMoving');
+							J.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							self.event('onPreviousMoved');
+						}
+						break; // left
 						case 'left':
 						{
+						    if (!self.hasFocus) return;
 							self.event('onPreviousMoving');
 						    J.publish("menuGo",["focus","prev"]);
-							//self.focusIndex((self.focusedIndex==0)?0:(self.focusedIndex-1));
 							self.event('onPreviousMoved');
 						}
 						break; // left
 						case 'right':
 						{
+						    if (!self.hasFocus) return;
 							self.event('onNextMoving');
 						    J.publish("menuGo",["focus","next"]);
-							//self.focusIndex((self.focusedIndex==(self.data.length-1))?self.focusedIndex:(self.focusedIndex+1));
 							self.event('onNextMoved');
 						}
 						break; // right
 						case 'down':
 						case 'exit':
 						{
+						    if (!self.hasFocus) return;
 							self.event('onPanelExiting');
 							self.onBlur();
 							J.publish("menuGo",["focus","up"]);
@@ -159,6 +168,7 @@
 						break; // down , exit
 						case 'up':
 						{
+						    if (!self.hasFocus) return;
 							self.event('onPanelChilding');
 							self.onBlur();
 							J.publish("menuGo",["focus","down"]);
@@ -168,8 +178,14 @@
 						break; // up
 						case 'enter':
 						{
+						    if (!self.hasFocus && !data[1]) return;
 							self.event('onPanelActing');
-							J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+							if (data[1]) {
+							    J.publish("menuGoTo",["current",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							} else {
+							    J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+							}
+							
 							self.event('onPanelActed');
 						}
 						break; // enter

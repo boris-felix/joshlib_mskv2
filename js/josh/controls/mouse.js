@@ -1,21 +1,21 @@
 (function(J,$) {
 	
-	J.Controls["mouse"] = J.Class({
-		
-		__construct:function() {
-			
-		},
+	J.Controls["mouse"] = J.Class(J.Control,{
 		
 		start:function()
 		{
-			$('.panehere').live('hover',function()
+			$('.joshover',this.app.baseHtml[0]).live('hover click',function(event)
 			{
-				pane.moveTo(this.id);
-			});
-
-			$('*').live('click',function()
-			{
-				pane.enter();
+			    //console.log(event);
+			    if (event.type=="mouseenter") {
+			        J.publish("control",["hover",event.currentTarget.id]);
+			        return false;
+			    } else if (event.type=="mouseleave") {
+			        
+			    } else if (event.type=="click") {
+			        J.publish("control",["enter",event.currentTarget.id]);
+			        return false;
+			    }
 			});
 
 		}

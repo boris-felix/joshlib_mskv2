@@ -5,14 +5,14 @@
      */
 	J.Control = J.Class({
 		
-		__construct:function() {
-			
+		__constructor:function(app) {
+			this.app = app;
 		},
 		
 	});
 	
-	J.Control.create = function(type) {
-	    return new J.Controls[type];
+	J.Control.create = function(app,type) {
+	    return new J.Controls[type](app);
 	}
 	
 	J.Controls = {};
