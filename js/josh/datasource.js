@@ -17,6 +17,7 @@
 		    if (this.cache[hash]) {
 		        return args.success.apply(null,this.cache[hash]["result"]);
 		    } else {
+				
 		        var params = jQuery.extend(true, {}, args);
 		        var self = this;
 		        params["success"]=function() {
