@@ -17,6 +17,7 @@
 	J.UI.List = J.Class(J.UIElement,{
         type:"List",
 		data:[],
+		placeholder:'',
 
         defaultOptions:{
             //where is the tree unfolding to
@@ -44,16 +45,32 @@
         
         insert:function() {
             this.__base();
-            this.focusIndex(this.focusedIndex);
+			
+			// this.focusIndex(this.focusedIndex); // he's banned, because he's firing onFocus(ed|ng) events when we don't need them
+			
+			this.focusedIndex=0;
+			//$("#"+this.htmlId+'_0').addClass("focused");
         },
 
 		getHtml:function() {
+
 			
 			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
-			var prev_showid;
-			for (var i=0;i<this.data.length;i++)
+			if (this.data.length==0)
 			{
-			    ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
+				console.info('Data de la List actuellement vide ',this);
+				if (typeof this.placeholder=='function')
+				{
+					ret.push(this.placeholder());
+				} else {
+					ret.push(this.placeholder);
+				}
+			} else {
+			
+				for (var i=0;i<this.data.length;i++)
+				{
+					ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
+				}
 			}
 			ret.push("</ul>");
 			return ret.join("");
@@ -61,6 +78,7 @@
 		
 		event : function(eventname)
 		{
+			// détournement d'évènements
 			if (typeof this.options[eventname] === 'function')
 			{
 				this.options[eventname](
@@ -139,8 +157,6 @@
 		            this.focusIndex(i);
 		        }
 		    }
-		    
-		    
 		    this.__base();
 			this.event('onFocused');
 		},
