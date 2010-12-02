@@ -48,8 +48,8 @@
 		            self.cache[hash] = {
 		                "result":arguments
 		            };
-					if (typeof args["whilePrecached"]==='function') { args["whilePrecached"](); }
-		            args["success"].apply(null,arguments);
+					if (typeof args["whilePrecached"]==='function') { args["whilePrecached"](null,arguments); }
+		            //args["success"].apply(null,arguments);
 		        };
 		        return $.ajax(params);
 		    }
