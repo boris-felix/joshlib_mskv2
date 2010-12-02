@@ -135,7 +135,7 @@
 				//This is a bit rough but works for now
 				// $("#"+this.htmlId).remove();
 				// this.insert();
-console.log('uio.js :: refresh() ',"#"+this.htmlId,$("#"+this.htmlId).length)
+				
 				if ($("#"+this.htmlId).length==0)
 				{
 					if (this.options["autoInsert"]===true)

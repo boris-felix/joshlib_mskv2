@@ -5,14 +5,17 @@
 		play:function(options) {
 		    
 		    $("#"+this.htmlId)[0].innerHTML="";
-		/*    
+		
 			this.flare = $("#"+this.htmlId).flareVideo({
-              flashSrc:J.basePath+"swf/FlareVideo.swf",
-              controls:false,
+              flashSrc:  document.URL.replace(/[^\/]*$/,'')+"../joshlib/swf/FlareVideo.swf",      /// NOTE purement temporaire, sinon : J.basePath+"swf/FlareVideo.swf",
+              controls:true, //false,
               autoplay:true,
               autobuffer:true,
-			  preload:true,
-			  poster:  options["image"]
+			  preload:"auto",
+			  fullScreen:true,
+			  poster:  options["image"],
+			  width:'100%',
+			  height:'100%',
             });
             console.log("play",options["url"]);
             this.flare.load([
@@ -22,7 +25,7 @@
                     }
                   ]);
              
-          */   
+          /*  
              $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay autobuffer preload width='100%' height='100%' poster='"+options["image"]+"' />";			  
              
 			if (options["url"]===undefined)
@@ -32,9 +35,12 @@
  				//	document.getElementById(this.htmlId+'_video').error = 4;
 				//$("#"+this.htmlId+'_video').trigger("error");
 			}
-             
+    */      
+			this.flare.play();
+			
+		  
             this.show();
-            $("#"+this.htmlId+"_video")[0].play();
+	
 		},
 		
 		pause:function() {
@@ -42,6 +48,8 @@
 	    },
 	    
 	    getHtml:function() {
+			// BUG typiquement ce qui est royalement pénible : les styles embarqués. Je pense qu'il vaut mieux insérer le html, et ensuite utiliser hide()
+			// ça m'a quand même foutu en l'air une journée ces bétises.
 			return "<div style='display:none;' id='"+this.htmlId+"'></div>";
 		}
 		
