@@ -19,6 +19,7 @@
 		data:[],
 		placeholder:'',
 		HtmlTag:'ul ', // style="display:none;"
+						// associer un style en dur est une très mauvaise idée : elle m'a fait tourner en rond une journée complète. Vaut mieux utiliser les events pour forcer le style.
 
         defaultOptions:{
             //where is the tree unfolding to
@@ -160,6 +161,9 @@
 						case 'exit':
 						{
 						    if (!self.hasFocus) return;
+							// si on est pas au TOUT PREMIER NIVEAU (sinon on atteri nulle part)
+							//if (/^\/\w+\/$/.test(self.menuRoot)) return;
+							if (self.menuRoot=='/') return;
 							self.event('onPanelExiting');
 							self.onBlur();
 							J.publish("menuGo",["focus","up"]);

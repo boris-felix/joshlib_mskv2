@@ -8,20 +8,21 @@
 		
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:  document.URL.replace(/[^\/]*$/,'')+"../joshlib/swf/FlareVideo.swf",      /// NOTE purement temporaire, sinon : J.basePath+"swf/FlareVideo.swf",
-              controls:true, //false,
-              autoplay:true,
-              autobuffer:true,
-			  preload:"auto",
-			  fullScreen:true,
-			  poster:  options["image"],
-			  width:'100%',
-			  height:'100%',
+              controls		:true, //false,
+              autoplay		:true,
+              autobuffer	:true,
+			  preload		:true,
+			  fullScreen	:true,
+			  keyShortcut	:true,
+			  poster		:options["image"],
+			  width			:'100%',
+			  height		:'100%',
             });
-            console.log("play",options["url"]);
+            console.info("play",options["url"]);
             this.flare.load([
                     {
                       src:  options["url"],
-                      type: options["mime"] || 'video/mp4'
+                      type: ('video/'+options["mime"]) || 'video/mp4'
                     }
                   ]);
              
@@ -37,8 +38,6 @@
 			}
     */      
 			this.flare.play();
-			
-		  
             this.show();
 	
 		},

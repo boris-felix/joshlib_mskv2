@@ -24,6 +24,7 @@
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
+
 						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
 						    console.error("no such menu "+goingto);
@@ -47,8 +48,8 @@
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 
-						goingnear = undefined;
-						
+						var goingnear = undefined;
+
 						switch (data[1])
 						{
 							case 'prev' :
@@ -60,16 +61,17 @@
 							case 'up'   :
 								var path = this_jmenu.registre[data[0]];
 								path = path.substr(0,path.lastIndexOf('/'));
-								if (path=='') {
-								    return;
+								if ((path=='') || (path=='/'))
+								{
+								    goingnear = undefined;
+								} else {
+									goingnear = path;
 								}
-								var goingnear = path;
 							break;
 							case 'down' :
 								var goingnear = ((typeof this_jmenu.index[this_jmenu.registre[data[0]]]['_child'] != 'undefined') && this_jmenu.index[this_jmenu.registre[data[0]]]['_child'].length>0 ) ?
 												this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0]:
 												this_jmenu.registre[data[0]];
-
 							break;
 						}
 
