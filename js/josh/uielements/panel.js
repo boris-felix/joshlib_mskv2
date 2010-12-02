@@ -4,8 +4,8 @@
 		type:"Panel",
 		placeholder:"",
 		
-		getHtml:function() {
-			return "<div style='display:none;' id='"+this.htmlId+"'>"+(this.options["content"]?this.options["content"]:this.placeholder)+"</div>";
+		getHtml:function() { // style='display:none;'
+			return "<div  id='"+this.htmlId+"'>"+(this.options["content"]?this.options["content"]:this.placeholder)+"</div>";
 		}
 	});
 	

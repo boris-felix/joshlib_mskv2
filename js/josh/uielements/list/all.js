@@ -18,7 +18,7 @@
         type:"List",
 		data:[],
 		placeholder:'',
-		HtmlTag:'ul style="display:none;"',
+		HtmlTag:'ul ', // style="display:none;"
 
         defaultOptions:{
             //where is the tree unfolding to

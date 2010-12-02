@@ -26,7 +26,7 @@
 						var goingto = data[1];
 						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
-						    console.log("no such menu "+goingto);
+						    console.error("no such menu "+goingto);
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;
@@ -223,7 +223,7 @@ console.error('goTo : OUCH '+path);
 			registre=current;
 			return true;
 		},
-		
+		/*
 		goNext:function(registre) 
 		{
 			if (this.index[registre]['_next']===false) 
@@ -266,7 +266,7 @@ console.error('goTo : OUCH '+path);
 			} else {
 				this.goTo(this.index[this.currentPath]['_child'][id])
 			}
-		},
+		},*/
 		
 	});
 	

@@ -128,14 +128,28 @@
 			{
 				// il se trouve que dans certains cas, on préfère manuellement rafraichir les données, notamment pour éviter le flicking désagréable pour le renouvellement chez France 24
 				continuous = this.options["refresh"](this);
-			} 
+			}
 			
 			if (continuous)
 			{
 				//This is a bit rough but works for now
-				$("#"+this.htmlId).remove();
-				this.insert();
+				// $("#"+this.htmlId).remove();
+				// this.insert();
+				
+				if ($("#"+this.htmlId).length==0)
+				{
+					if (this.options["autoInsert"]===true)
+					{
+						// ok coco, en fait, ton élément a disparu ou n'existe pas encore.  Tu viens de rafraichir tes données. Mais comme on souhaite arbitrairement t'insérer, on va pas t'afficher en mode automatique si tu n'es pas encore présent.
+						this.insert();
+					}
+				} else {
+					$("#"+this.htmlId).html(this.getHtmlInner());
+				}
 			}
+			
+			// c'est pas que ça fait doublon, c'est surtout que ça permet de faire un post-traitement...
+			if (typeof this.options["onAfterRefresh"]==='function') { continuous = this.options["onAfterRefresh"](this); }
 		},
 		
 		show:function() {		    
@@ -172,7 +186,6 @@
 			
 			parent.append(this.getHtml());
 			this.inserted=true;
-			
 			if (this.options["autoShow"]) {
 			    this.show();
 			}
