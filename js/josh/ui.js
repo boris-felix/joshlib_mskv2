@@ -121,7 +121,7 @@
 		    });
 		},
 		
-		refresh:function()
+		refresh:function(callback)
 		{
 			var continuous = true;
 			if (typeof this.options["refresh"]==='function')
@@ -135,7 +135,7 @@
 				//This is a bit rough but works for now
 				// $("#"+this.htmlId).remove();
 				// this.insert();
-				
+console.log('uio.js :: refresh() ',"#"+this.htmlId,$("#"+this.htmlId).length)
 				if ($("#"+this.htmlId).length==0)
 				{
 					if (this.options["autoInsert"]===true)
@@ -150,6 +150,7 @@
 			
 			// c'est pas que ça fait doublon, c'est surtout que ça permet de faire un post-traitement...
 			if (typeof this.options["onAfterRefresh"]==='function') { continuous = this.options["onAfterRefresh"](this); }
+			if (typeof callback==='function') { callback(); }
 		},
 		
 		show:function() {		    
