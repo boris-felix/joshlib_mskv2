@@ -20,7 +20,7 @@
             });
             console.info("play",options["url"]);
 			
-			this.flare.bind(" onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange",function(){
+			this.flare.bind("onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange     error loadeddata canplay durationchange timeupdate pause play ended volumechange",function(){
 console.info('flare event');
 			}
 			)

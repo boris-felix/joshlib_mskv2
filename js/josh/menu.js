@@ -18,25 +18,24 @@
 			this.index['/']['_child']=[];
 			this.index['/']['_data']=[];
 			
-			var this_jmenu=this;
-			
+			var self=this;
 			J.subscribe("menuGoTo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
 
-						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
+						if ((self.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
 						    console.warn("no such menu "+goingto);
 							return false;
 						} else {
-							this_jmenu.registre[cle]=goingto;
+							self.registre[cle]=goingto;
 							
-							if (typeof this_jmenu.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus" && !this_jmenu.index[goingto]["_data"]["children"]) 
+							if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus" && !self.index[goingto]["_data"]["children"]) 
 							{
-							    this_jmenu.index[goingto]["_data"]["getChildren"](function(children) {
-							        this_jmenu.setData(goingto+"/",children);
-							    },this_jmenu.index[goingto]["_data"]);
+							    self.index[goingto]["_data"]["getChildren"](function(children) {
+							        self.setData(goingto+"/",children);
+							    },self.index[goingto]["_data"]);
 							}
 							J.publish("menuChange",[cle,goingto],true);
 							
@@ -54,12 +53,12 @@
 						{
 							case 'prev' :
 							case 'next' :
-								var goingnear = this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]]!==undefined ?
-												this_jmenu.index[this_jmenu.registre[data[0]]]['_'+data[1]]
-												:this_jmenu.registre[data[0]];
+								var goingnear = self.index[self.registre[data[0]]]['_'+data[1]]!==undefined ?
+												self.index[self.registre[data[0]]]['_'+data[1]]
+												:self.registre[data[0]];
 							break;
 							case 'up'   :
-								var path = this_jmenu.registre[data[0]];
+								var path = self.registre[data[0]];
 								path = path.substr(0,path.lastIndexOf('/'));
 								if ((path=='') || (path=='/'))
 								{
@@ -69,9 +68,9 @@
 								}
 							break;
 							case 'down' :
-								var goingnear = ((typeof this_jmenu.index[this_jmenu.registre[data[0]]]['_child'] != 'undefined') && this_jmenu.index[this_jmenu.registre[data[0]]]['_child'].length>0 ) ?
-												this_jmenu.index[this_jmenu.registre[data[0]]]['_child'][0]:
-												this_jmenu.registre[data[0]];
+								var goingnear = ((typeof self.index[self.registre[data[0]]]['_child'] != 'undefined') && self.index[self.registre[data[0]]]['_child'].length>0 ) ?
+												self.index[self.registre[data[0]]]['_child'][0]:
+												self.registre[data[0]];
 							break;
 						}
 

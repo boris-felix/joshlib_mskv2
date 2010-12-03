@@ -7,7 +7,6 @@
 			var self=this;
 			$('.joshover',this.app.baseHtml[0]).live('hover click',function(event)
 			{
-console.log('this.app',self)
 				var menuPath = $(this).attr('data-path');
 			    switch (event.type)
 				{
@@ -22,15 +21,14 @@ console.log('this.app',self)
 					break; // mouseleave
 					case 'click' :
 					{
-						self.app.publish("control",["enter",event.currentTarget.id]);
+						//  j'ai besoin de connaitre le retour , afin de savoir si je dois me rabattre sur "up"
+						var ret = self.app.publish("control",["enter",event.currentTarget.id]);
 						return false;
 					}
 					break; // click
 				}
 			});
-
 		}
-		
 	});
 	
 

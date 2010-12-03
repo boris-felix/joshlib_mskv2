@@ -25,26 +25,33 @@
          *  Publishes the the message, passing the data to it's subscribers
         **/
         publish:function( message, data, sync ){
+			
+			var retour = false;
             
             if (J.debugEvents) {
                 console.log("debugEvents",[message,data,sync]);
             }
             
             // if there are no subscribers to this message, just return here
-            if ( !J.subscribes.hasOwnProperty( message ) ){
+            if ( !J.subscribes.hasOwnProperty( message ) )
+			{
                 return false;
             }
         
-            var publish = function(){
+            var publish = function()
+				{
                 var subscribers = J.subscribes[message];
-                var throwException = function(e){
-                    return function(){
-                        throw e;
-                    };
-                }; 
+                var throwException = function(e)
+									{
+										return function()
+												{
+													throw e;
+												};
+									}; 
                 for ( var i = 0, j = subscribers.length; i < j; i++ ){
                     try {
-                        subscribers[i].func( message, data );
+						// théoriquement, dès que retour est à false, je devrais interrompre la chaîne, non ?
+                        retour = subscribers[i].func( message, data );
                     } catch( e ){
                         setTimeout( throwException(e), 0);
                     }
@@ -53,10 +60,12 @@
         
             if ( sync === true ){
                 publish();
+				return retour;
             } else {
                 setTimeout( publish, 0 );
+				return undefined; // en async, impossible de savoir ce que va raconter en retour le fonction
             }
-            return true;
+            
         },
         
         

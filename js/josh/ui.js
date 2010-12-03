@@ -33,7 +33,6 @@
 			var self = this;
 			
 			if (this.options["menuRoot"]) {
-
 			    J.subscribe("menuData",function(ev,data) {
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {

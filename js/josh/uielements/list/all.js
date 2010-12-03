@@ -116,9 +116,9 @@
 			// détournement d'évènements
 			if (typeof this.options[eventname] === 'function')
 			{
-				this.options[eventname](
-						this,		// la List en cours
-						eventname	// la clé de l'évènement appelant
+				return this.options[eventname](
+							this,		// la List en cours
+							eventname	// la clé de l'évènement appelant
 
 					// réfléchir sur la possibilité de proposer en retour d'autres parametres
 				);
@@ -137,57 +137,57 @@
 						{
 						    //todo merge previous/nextmoving
 							self.event('onPreviousMoving');
-							J.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
 							self.event('onPreviousMoved');
 						}
 						break; // left
 						case 'left':
 						{
-						    if (!self.hasFocus) return;
+						    if (!self.hasFocus) return false;
 							self.event('onPreviousMoving');
-						    J.publish("menuGo",["focus","prev"]);
+						    self.app.publish("menuGo",["focus","prev"]);
 							self.event('onPreviousMoved');
 						}
 						break; // left
 						case 'right':
 						{
-						    if (!self.hasFocus) return;
+						    if (!self.hasFocus) return false;
 							self.event('onNextMoving');
-						    J.publish("menuGo",["focus","next"]);
+						    self.app.publish("menuGo",["focus","next"]);
 							self.event('onNextMoved');
 						}
 						break; // right
 						case 'down':
 						case 'exit':
 						{
-						    if (!self.hasFocus) return;
+						    if (!self.hasFocus) return false;
 							// si on est pas au TOUT PREMIER NIVEAU (sinon on atteri nulle part)
 							//if (/^\/\w+\/$/.test(self.menuRoot)) return;
-							if (self.menuRoot=='/') return;
+							if (self.menuRoot=='/') return false;
 							self.event('onPanelExiting');
 							self.onBlur();
-							J.publish("menuGo",["focus","up"]);
+							self.app.publish("menuGo",["focus","up"]);
 							self.event('onPanelExited');
 						}
 						break; // down , exit
 						case 'up':
 						{
-						    if (!self.hasFocus) return;
+						    if (!self.hasFocus) return false;
 							self.event('onPanelChilding');
 							self.onBlur();
-							J.publish("menuGo",["focus","down"]);
+							self.app.publish("menuGo",["focus","down"]);
 							self.event('onPanelChilded');
 							/// faudrait en async J.publish("menuGo",["current","down"]);
 						}
 						break; // up
 						case 'enter':
 						{
-						    if (!self.hasFocus && !data[1]) return;
+						    if (!self.hasFocus && !data[1]) return false;
 							self.event('onPanelActing');
 							if (data[1]) {
-							    J.publish("menuGoTo",["current",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							    self.app.publish("menuGoTo",["current",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
 							} else {
-							    J.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+							    self.app.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
 							}
 							
 							self.event('onPanelActed');
