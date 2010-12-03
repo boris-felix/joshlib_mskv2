@@ -36,7 +36,7 @@
 						}
 				 **/
 				
-                return "<li id='"+htmlId+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
+                return "<li id='"+htmlId+"' data-path='"+self.menuRoot+data.id+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             }
         },
 

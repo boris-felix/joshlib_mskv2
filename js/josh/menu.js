@@ -27,7 +27,7 @@
 
 						if ((this_jmenu.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
 						{
-						    console.error("no such menu "+goingto);
+						    console.warn("no such menu "+goingto);
 							return false;
 						} else {
 							this_jmenu.registre[cle]=goingto;

@@ -19,6 +19,12 @@
 			  height		:'100%',
             });
             console.info("play",options["url"]);
+			
+			this.flare.bind(" onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange",function(){
+console.info('flare event');
+			}
+			)
+			
             this.flare.load([
                     {
                       src:  options["url"],
@@ -49,7 +55,7 @@
 	    getHtml:function() {
 			// BUG typiquement ce qui est royalement pénible : les styles embarqués. Je pense qu'il vaut mieux insérer le html, et ensuite utiliser hide()
 			// ça m'a quand même foutu en l'air une journée ces bétises.
-			return "<div style='display:none;' id='"+this.htmlId+"'></div>";
+			return "<div id='"+this.htmlId+"'></div>"; //style='display:none;' 
 		}
 		
 	});
