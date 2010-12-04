@@ -12,14 +12,16 @@
 		
 		registre  : { },
 		
-		__constructor:function() 
+		__constructor:function(app) 
 		{
+		    this.app = app;
+		    
 			this.index['/']=[];
 			this.index['/']['_child']=[];
 			this.index['/']['_data']=[];
 			
 			var self=this;
-			J.subscribe("menuGoTo",function(ev,data) {
+			this.app.subscribe("menuGoTo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 						var goingto = data[1];
@@ -37,13 +39,13 @@
 							        self.setData(goingto+"/",children);
 							    },self.index[goingto]["_data"]);
 							}
-							J.publish("menuChange",[cle,goingto],true);
+							self.app.publish("menuChange",[cle,goingto],true);
 							
 							return true;
 						}
 				});
 
-			J.subscribe("menuGo",function(ev,data) {
+			this.app.subscribe("menuGo",function(ev,data) {
 				//data : [ 0 : nom du registre , 1 : chemin  ]
 						var cle = data[0];
 
@@ -80,7 +82,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 							return false;
 						} else {
 							//this_jmenu.registre[cle]=goingnear;
-							J.publish("menuGoTo",[cle,goingnear],true);
+							self.app.publish("menuGoTo",[cle,goingnear],true);
 							return true;
 						}
 				});
@@ -116,7 +118,7 @@ console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
 					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
 				}
 			}
-			J.publish("menuData",[path,data],true);
+			this.app.publish("menuData",[path,data],true);
 		},
 		
 		buildIndex:function(path,data,recursive) 

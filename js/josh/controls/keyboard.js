@@ -4,50 +4,51 @@
 		
 
 		start:function() {
+		    var self=this;
 			$(window).bind('keydown',function(e){
 				if (!e) e=window.event;
 				switch(e.keyCode)
 				{
 					case 13 :
 						
-						J.publish("control",["enter"]);
+						self.app.publish("control",["enter"]);
 						
 						return false;
 					break;
 					case 27 :
 					
-					    J.publish("control",["exit"]);
+					    self.app.publish("control",["exit"]);
 					
 						return false;
 					break;
 					case 32 :
 					
-					    J.publish("control",["down"]);
+					    self.app.publish("control",["down"]);
 
 						return false;
 					break;
 					case 37:
 					
-					    J.publish("control",["left"]);
+					    self.app.publish("control",["left"]);
 					    
 						return false;
 					break;
 					case 38:
 					
-					    J.publish("control",["up"]);
+					    self.app.publish("control",["up"]);
 					    
 						return false;
 						
 					break;
 					case 39:
 					
-					    J.publish("control",["right"]);
+					    self.app.publish("control",["right"]);
 					
 						return false;
 					break;
 					case 40:
 					
-					    J.publish("control",["down"]);
+					    self.app.publish("control",["down"]);
 					    
 						return false;
 						
