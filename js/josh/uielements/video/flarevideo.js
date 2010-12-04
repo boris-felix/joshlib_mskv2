@@ -28,7 +28,7 @@ console.info('flare event');
             this.flare.load([
                     {
                       src:  options["url"],
-                      type: ('video/'+options["mime"]) || 'video/mp4'
+                      type: (options["mime"]) || 'video/mp4'
                     }
                   ]);
              

@@ -33,6 +33,16 @@
 			var self = this;
 			
 			if (this.options["menuRoot"]) {
+			    
+			    this.app.subscribe("menuDataLoading",function(ev,data) {
+			        console.log("load",data);
+			        //This menuData is about us!
+    			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
+    			        self.setLoading();
+    			        self.refresh();
+    			    }
+    			});
+                
 			    this.app.subscribe("menuData",function(ev,data) {
 			        //This menuData is about us!
     			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
@@ -71,7 +81,8 @@
 		},
 		
 		setLoading:function() {
-			this.elementId.innerHTML = "Loading...";
+
+			$("#"+this.htmlId).html("Loading...");
 		},
 		
 		registerChild:function(elt) {

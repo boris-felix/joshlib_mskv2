@@ -1,16 +1,23 @@
 (function(J,$) {
 	
+	
+    var lastUid = -1;
+
+
 	/**
      * @class
      */
 	J.App = J.Class({
 		
 		__constructor:function(appId) {
-			this.menu = new J.Menu(this);
-			this.id = appId;
-			
-    	    this.debugEvents=true;
+		    this.debugEvents=true;
     	    this.subscribes={};
+    	    this.id = appId;
+    	    
+			this.menu = new J.Menu(this);
+			
+			
+    	    
 		},
 		
 		
@@ -71,9 +78,10 @@
                 return false;
             }
         
+            var self=this;
             var publish = function()
 				{
-                var subscribers = this.subscribes[message];
+                var subscribers = self.subscribes[message];
                 var throwException = function(e)
 									{
 										return function()
@@ -148,6 +156,7 @@
 	});
 	
 	J.Apps = {};
+	J.Classes = {};
 	
 	
 	

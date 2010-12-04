@@ -22,71 +22,82 @@
 			
 			var self=this;
 			this.app.subscribe("menuGoTo",function(ev,data) {
-				//data : [ 0 : nom du registre , 1 : chemin  ]
-						var cle = data[0];
-						var goingto = data[1];
-
-						if ((self.index[goingto]===undefined) || (goingto===undefined) || (cle===undefined) )
-						{
-						    console.warn("no such menu "+goingto);
-							return false;
-						} else {
-							self.registre[cle]=goingto;
-							
-							if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && cle=="focus" && !self.index[goingto]["_data"]["children"]) 
-							{
-							    self.index[goingto]["_data"]["getChildren"](function(children) {
-							        self.setData(goingto+"/",children);
-							    },self.index[goingto]["_data"]);
-							}
-							self.app.publish("menuChange",[cle,goingto],true);
-							
-							return true;
-						}
-				});
+			    //data : [ 0 : nom du registre , 1 : chemin  ]
+				self.goAbsolute(data[0],data[1]);
+			});
 
 			this.app.subscribe("menuGo",function(ev,data) {
-				//data : [ 0 : nom du registre , 1 : chemin  ]
-						var cle = data[0];
-
-						var goingnear = undefined;
-
-						switch (data[1])
-						{
-							case 'prev' :
-							case 'next' :
-								var goingnear = self.index[self.registre[data[0]]]['_'+data[1]]!==undefined ?
-												self.index[self.registre[data[0]]]['_'+data[1]]
-												:self.registre[data[0]];
-							break;
-							case 'up'   :
-								var path = self.registre[data[0]];
-								path = path.substr(0,path.lastIndexOf('/'));
-								if ((path=='') || (path=='/'))
-								{
-								    goingnear = undefined;
-								} else {
-									goingnear = path;
-								}
-							break;
-							case 'down' :
-								var goingnear = ((typeof self.index[self.registre[data[0]]]['_child'] != 'undefined') && self.index[self.registre[data[0]]]['_child'].length>0 ) ?
-												self.index[self.registre[data[0]]]['_child'][0]:
-												self.registre[data[0]];
-							break;
-						}
-
-						if (goingnear===undefined)
-						{
-console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
-							return false;
-						} else {
-							//this_jmenu.registre[cle]=goingnear;
-							self.app.publish("menuGoTo",[cle,goingnear],true);
-							return true;
-						}
-				});
+			    //data : [ 0 : nom du registre , 1 : chemin  ]
+			    self.goRelative(data[0],data[1]);    
+			});
 			
+		},
+		
+		
+		goRelative:function(register,movement) {
+		    
+		    var self = this;
+			var goingnear = undefined;
+            
+			switch (movement)
+			{
+				case 'prev' :
+				case 'next' :
+					var goingnear = self.index[self.registre[register]]['_'+movement]!==undefined ?
+									self.index[self.registre[register]]['_'+movement]
+									:self.registre[register];
+				break;
+				case 'up'   :
+					var path = self.registre[register];
+					path = path.substr(0,path.lastIndexOf('/'));
+					if ((path=='') || (path=='/'))
+					{
+					    goingnear = undefined;
+					} else {
+						goingnear = path;
+					}
+				break;
+				case 'down' :
+					var goingnear = ((typeof self.index[self.registre[register]]['_child'] != 'undefined') && self.index[self.registre[register]]['_child'].length>0 ) ?
+									self.index[self.registre[register]]['_child'][0]:
+									self.registre[register];
+				break;
+			}
+            
+			if (goingnear===undefined)
+			{
+                console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
+				return false;
+			} else {
+				self.app.publish("menuGoTo",[register,goingnear],true);
+				return true;
+			}
+		    
+		},
+		
+		goAbsolute:function(register,goingto) {
+		    
+		    var self = this;
+		    
+			if ((self.index[goingto]===undefined) || (goingto===undefined) || (register===undefined) )
+			{
+			    console.warn("no such menu "+goingto);
+				return false;
+			} else {
+				self.registre[register]=goingto;
+				
+				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && register=="focus" && !self.index[goingto]["_data"]["children"]) 
+				{
+				    self.app.publish("menuDataLoading",[goingto+"/"],true);
+				    self.index[goingto]["_data"]["getChildren"](function(children) {
+				        self.setData(goingto+"/",children);
+				    },self.index[goingto]["_data"]);
+				}
+				self.app.publish("menuChange",[register,goingto],true);
+				
+				return true;
+			}
+		    
 		},
 		
 		setRootData:function(data)
@@ -197,79 +208,7 @@ console.error('getData : données inexistantes pour'+path,this);
 			} else {
 				return this.index[path]['_data'];
 			}
-		},
-		
-		goTo:function(registre,path) {
-			
-			if (path==registre) return true;
-					 
-			if (typeof path !== 'string') 
-			{
-console.error('goTo : OUCH '+path);
-				return false;
-			}
-			
-			var paths = path.split(/\//);
-			
-			var current = "/";
-			for (var i = 0; i < paths.length; i++) 
-			{
-				
-				if (typeof this.index[current]!=='undefined') 
-				{
-					current += (current!='/'?'/':'')+paths[i];
-				} else {
-					return false;
-				}
-			}
-			
-			registre=current;
-			return true;
-		},
-		/*
-		goNext:function(registre) 
-		{
-			if (this.index[registre]['_next']===false) 
-			{
-				return false;
-			} else {
-				this.goTo(registre,this.index[registre]['_next']);
-			}
-		},
-		
-		goPrev:function(registre) 
-		{
-			if (this.index[this.currentPath]['_prev']===false) 
-			{
-				return false;
-			} else {
-				this.goTo(this.index[this.currentPath]['_prev']);
-			}
-		},
-		
-		goParent:function() 
-		{
-			var path=this.currentPath;
-
-			path = path.substr(0,path.lastIndexOf('/'));
-			
-			if (path!='') {
-			   this.goTo(path); 
-			}
-			
-			
-		},
-		
-		goChildren:function(id) 
-		{
-			if (id===undefined) 
-			{
-				// TODO à définir ce que l'on va renvoyer. J'ai pas vraiment décidé
-				return this.index[this.currentPath]['_child'];
-			} else {
-				this.goTo(this.index[this.currentPath]['_child'][id])
-			}
-		},*/
+		}
 		
 	});
 	

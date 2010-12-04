@@ -5,8 +5,8 @@
 		
 		init:function() {
 		    var self=this;
-            J.subscribe("menuChange",function(ev,data) {
-                
+            this.app.subscribe("menuChange",function(ev,data) {
+              
                 //Filter only video menu items on the "current" register
                 if (data[0]=="current") {
                     
