@@ -131,7 +131,18 @@
 		    return this.__base().concat([
 		        ["control",function(ev,data) {
 		            //only supports orientation=="up" for now
-		           switch (data[0])
+		            var sens=data[0];
+					 /// sens arabe
+					if ((self.options.browsingSense=='locale') && (document.dir=='rtl'))
+					{
+						switch (sens)
+						{
+							case 'left': sens = 'right';	break;
+							case 'right': sens = 'left';	break;
+						}
+					}
+		            
+		           switch (sens)
 				   {
 				        case 'hover':
 						{
@@ -144,6 +155,7 @@
 						case 'left':
 						{
 						    if (!self.hasFocus) return false;
+										
 							self.event('onPreviousMoving');
 						    self.app.publish("menuGo",["focus","prev"]);
 							self.event('onPreviousMoved');
