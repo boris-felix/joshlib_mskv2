@@ -16,7 +16,7 @@
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:  J.basePath+"swf/FlareVideo.swf",
               controls		:true,
-              autoplay		:false, // issues https://github.com/maccman/flarevideo/issues#issue/8 et https://github.com/maccman/flarevideo/issues#issue/10 
+             // autoplay		:true, // issues https://github.com/maccman/flarevideo/issues#issue/8 et https://github.com/maccman/flarevideo/issues#issue/10 
               autobuffer	:true,
 			  preload		:true,
 			  //fullScreen	:true,
@@ -24,14 +24,14 @@
 			  poster		:options["image"],
 			  width			:'100%',
 			  height		:'100%',
-			  useNative		:true,
+			  //useNative		:true,
 			  srcs			:srcs
             });
 console.info("play",srcs);
 			
 			$('*',"#"+this.htmlId).live("onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange     error loadeddata canplay durationchange timeupdate pause play ended volumechange",function(e){ console.info('flare event',e.type,e); })
 
-            this.flare.load(srcs);
+            this.flare.load(/*srcs*/);
 			
 console.log('this.flare',this.flare)
 			
@@ -53,7 +53,7 @@ console.log('this.flare',this.flare)
 			} else {
 				// on est obligé de faire une délégation à cause du temps de chargement de l'applet flash. Et encore... !
 				var self=this;
-				this.flare.bind('loadeddata canplay onloadeddata oncanplay',function()
+				$('*',"#"+this.htmlId).live('loadeddata canplay onloadeddata oncanplay',function()
 				{ // Using this because autoplay doesn't work in FF 3.6 either
 console.log('loadeddata');
 					self.flare.play(); // Does nussing  
