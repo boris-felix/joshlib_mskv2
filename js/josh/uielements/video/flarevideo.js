@@ -14,7 +14,7 @@
 						];
 		
 			this.flare = $("#"+this.htmlId).flareVideo({
-              flashSrc:  document.URL.replace(/[^\/]*$/,'')+"../joshlib/swf/FlareVideo.swf",      /// NOTE purement temporaire, sinon : J.basePath+"swf/FlareVideo.swf",
+              flashSrc:  J.basePath+"swf/FlareVideo.swf",
               controls		:true,
               autoplay		:false, // issues https://github.com/maccman/flarevideo/issues#issue/8 et https://github.com/maccman/flarevideo/issues#issue/10 
               autobuffer	:true,
