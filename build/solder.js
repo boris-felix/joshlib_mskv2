@@ -78,6 +78,28 @@ exports.config = {
       ]
     },
     
+    'mediaelement': {
+        css:[
+            "css/mediaelement/mediaelementplayer.css",
+            "css/mediaelement/mejs-skins.css"
+        ],
+        js:[
+            "js/libs/mediaelement.js",
+            "js/libs/mediaelementplayer.js"
+        ]
+    },
+    
+    'flarevideo': {
+        css:[
+            'css/flarevideo/flarevideo.css',
+            'css/flarevideo/flarevideo.vimeo.scss'
+        ],
+        js:[
+
+        ]
+    },
+    
+    
     'joshlib': {
       requires: ["jquery"],
       css: [],
@@ -98,16 +120,14 @@ exports.config = {
     },
     
     'joshlib-googletv': {
-      requires: ["joshlib"],
+      requires: ["joshlib","mediaelement"],
       css: [
         'css/style.css',
-        'css/flarevideo/flarevideo.css',
-        'css/flarevideo/flarevideo.vimeo.scss',
         'css/targets/googletv.scss'
       ],
       js: [
         'js/josh/targets/10feet/googletv.js',
-        'js/josh/uielements/video/flarevideo.js'
+        'js/josh/uielements/video/mediaelement.js'
       ]
     },
     

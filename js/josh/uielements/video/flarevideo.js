@@ -15,26 +15,26 @@
 		
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:  J.basePath+"swf/FlareVideo.swf",
-              controls		:true,
+              controls		:false,
              // autoplay		:true, // issues https://github.com/maccman/flarevideo/issues#issue/8 et https://github.com/maccman/flarevideo/issues#issue/10 
               autobuffer	:true,
 			  preload		:true,
 			  //fullScreen	:true,
-			  keyShortcut	:true,
+			  keyShortcut	:false,
 			  poster		:options["image"],
 			  width			:'100%',
 			  height		:'100%',
-			  //useNative		:true,
+			  useNative		:true,
 			  srcs			:srcs
             });
 console.info("play",srcs);
 			
 			$('*',"#"+this.htmlId).live("onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange     error loadeddata canplay durationchange timeupdate pause play ended volumechange",function(e){ console.info('flare event',e.type,e); })
 
-            this.flare.load(/*srcs*/);
+            //this.flare.load(/*srcs*/);
 			
 console.log('this.flare',this.flare)
-			
+			window.flare = this.flare;
           /*  
              $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay autobuffer preload width='100%' height='100%' poster='"+options["image"]+"' />";			  
              
@@ -397,10 +397,10 @@ FlareVideo.fn.setupFlash = function(){
     src: this.options.flashSrc, 
     wmode: "opaque",
     flashvars: {flashID:flashID},
-    allowScriptAccess: "always", //allowScriptAccess: "sameDomain",
+    allowScriptAccess: "sameDomain",
     allowFullScreen: true,
-    width:  this.options.height,
-    height: this.options.width
+    width:  this.options.width,
+    height: this.options.height
   },{ 
     version: 9, 
     expressInstall: true
@@ -644,17 +644,18 @@ FlareVideo.fn.setupTiming = function(){
 FlareVideo.fn.setupControls = function(){
   // Use native controls
   if (this.options.controls) return;
-  
+
   this.controls = $("<div />");
   this.controls.addClass("controls");
   this.controls.addClass("disabled");
-  
+
   this.setupButtons();
   this.setupSeek();
   this.setupVolume();
   this.setupTiming();
-  
+
   this.element.append(this.controls);
+
 };
 
 FlareVideo.fn.fallbackToFlash = function(){
