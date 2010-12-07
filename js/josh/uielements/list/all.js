@@ -17,7 +17,6 @@
 	J.UI.List = J.Class(J.UIElement,{
         type:"List",
 		data:[],
-		placeholder:'',
 		HtmlTag:'ul ', // style="display:none;"
 						// associer un style en dur est une très mauvaise idée : elle m'a fait tourner en rond une journée complète. Vaut mieux utiliser les events pour forcer le style.
 
@@ -70,11 +69,11 @@
 			if (this.data.length==0)
 			{
 				console.info('Data de la List actuellement vide ',this);
-				if (typeof this.placeholder=='function')
+				if (typeof this.options['placeholder']=='function')
 				{
-					return this.placeholder();
+					return this.options['placeholder']();
 				} else {
-					return this.placeholder;
+					return this.options['placeholder'];
 				}
 			} else {
 				var ret =[];
