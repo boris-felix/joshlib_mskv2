@@ -132,7 +132,8 @@
 		        ["control",function(ev,data) {
 		            //only supports orientation=="up" for now
 		            var sens=data[0];
-					 /// sens arabe
+					
+					 /// rtl langages for arabic, hebrew, hindi and japanese
 					if ((self.options.browsingSense=='locale') && (document.dir=='rtl'))
 					{
 						switch (sens)

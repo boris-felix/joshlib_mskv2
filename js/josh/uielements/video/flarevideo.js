@@ -5,33 +5,36 @@
 		play:function(options) {
 		    
 		    $("#"+this.htmlId)[0].innerHTML="";
+			
+			var srcs = [
+							{
+								src:  options["url"],
+								type: (options["mime"]) || 'video/mp4'
+							}
+						];
 		
 			this.flare = $("#"+this.htmlId).flareVideo({
               flashSrc:  document.URL.replace(/[^\/]*$/,'')+"../joshlib/swf/FlareVideo.swf",      /// NOTE purement temporaire, sinon : J.basePath+"swf/FlareVideo.swf",
-              controls		:true, //false,
-              autoplay		:true,
+              controls		:true,
+              autoplay		:false, // issues https://github.com/maccman/flarevideo/issues#issue/8 et https://github.com/maccman/flarevideo/issues#issue/10 
               autobuffer	:true,
 			  preload		:true,
-			  fullScreen	:true,
+			  //fullScreen	:true,
 			  keyShortcut	:true,
 			  poster		:options["image"],
 			  width			:'100%',
 			  height		:'100%',
+			  useNative		:true,
+			  srcs			:srcs
             });
-            console.info("play",options["url"]);
+console.info("play",srcs);
 			
-			this.flare.bind("onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange     error loadeddata canplay durationchange timeupdate pause play ended volumechange",function(){
-console.info('flare event');
-			}
-			)
+			$('*',"#"+this.htmlId).live("onerror onloadeddata oncanplay ondurationchange ontimeupdate onpause onplay onended onvolumechange     error loadeddata canplay durationchange timeupdate pause play ended volumechange",function(e){ console.info('flare event',e.type,e); })
+
+            this.flare.load(srcs);
 			
-            this.flare.load([
-                    {
-                      src:  options["url"],
-                      type: (options["mime"]) || 'video/mp4'
-                    }
-                  ]);
-             
+console.log('this.flare',this.flare)
+			
           /*  
              $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay autobuffer preload width='100%' height='100%' poster='"+options["image"]+"' />";			  
              
@@ -43,8 +46,22 @@ console.info('flare event');
 				//$("#"+this.htmlId+'_video').trigger("error");
 			}
     */      
-			this.flare.play();
-            this.show();
+			if (typeof this.flare.play =='function')
+			{
+				// issue https://github.com/maccman/flarevideo/issues#issue/10 
+				this.flare.play();
+			} else {
+				// on est obligé de faire une délégation à cause du temps de chargement de l'applet flash. Et encore... !
+				var self=this;
+				this.flare.bind('loadeddata canplay onloadeddata oncanplay',function()
+				{ // Using this because autoplay doesn't work in FF 3.6 either
+console.log('loadeddata');
+					self.flare.play(); // Does nussing  
+					self.show();
+				});
+			}
+			
+            
 	
 		},
 		
@@ -62,7 +79,6 @@ console.info('flare event');
 	
 	
 })(Joshlib,jQuery);
-
 
 (function($){
 
@@ -381,10 +397,10 @@ FlareVideo.fn.setupFlash = function(){
     src: this.options.flashSrc, 
     wmode: "opaque",
     flashvars: {flashID:flashID},
-    allowScriptAccess: "sameDomain",
+    allowScriptAccess: "always", //allowScriptAccess: "sameDomain",
     allowFullScreen: true,
-    width:  this.options.width,
-    height: this.options.height
+    width:  this.options.height,
+    height: this.options.width
   },{ 
     version: 9, 
     expressInstall: true
