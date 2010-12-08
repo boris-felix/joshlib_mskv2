@@ -3,14 +3,15 @@
 	J.UI.Video = J.Class(J.UI.Video,{
 		
 		play:function(options) {
-		    
-		    $("#"+this.htmlId)[0].innerHTML="";
+
+		    $("#"+this.htmlId)/*[0]*/.innerHTML="";
+				// ça ne devrait même pas exister : on cherche une id, on a qu'un seul élément en ertour.
 			
-			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";			  // width='100%' height='100%' 
+			$("#"+this.htmlId)/*[0]*/.innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";			  // NON ! Ne pas ! ne pas ! ne jamais ! width='100%' height='100%' 
             
-console.info('video elem ','#'+this.htmlId+"_video",$('#'+this.htmlId+"_video")[0])
+console.info('video elem ','#'+this.htmlId+"_video",$('#'+this.htmlId+"_video")/*[0]*/)
             
-            this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")[0],{
+            this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")/*[0]*/,{
                 pluginPath:"/swf/",
                 videoWidth:$('#'+this.htmlId+"_video").width()+1,
                 videoHeight:$('#'+this.htmlId+"_video").height(),
