@@ -21,7 +21,7 @@
 			$('#'+this.htmlId+'_video').css({
 				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
-				'z-index'   : -1
+				'z-index'   : 00
 			});
 	
 			//if (typeof this.options['height'] !== 'undefined') { $('#'+this.htmlId+'_video').css('height',this.options['height']); }
@@ -38,19 +38,22 @@ console.info('play',options["url"])
                     console.log("MED SUCCESS ",me);
 					/*$('.mejs-controls').remove();*/
 					that.delegated('success');
-                    that.mejs.media.play();
-					that.mejs.media.addEventListener('progress',function(ev){
+console.log('that',that);
+console.log('that.mejs',that.mejs);
+//console.log('that.mejs.media',that.mejs.media);
+                    me.play();
+					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
-						$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
-						$('.video-time-loaded').css('width',Math.round(100 * _mejs.media.bufferedBytes / _mejs.media.bytesTotal)+'%');
+						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
+						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
 					});
-					that.mejs.media.addEventListener('timeupdate',function(ev){
-						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(_mejs.media.currentTime));
-						$('.video-time-current').css('width',Math.round(100 * _mejs.media.currentTime / _mejs.media.duration)+'%');
+					me.addEventListener('timeupdate',function(ev){
+						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(me.currentTime));
+						$('.video-time-current').css('width',Math.round(100 * me.currentTime / me.duration)+'%');
 						that.delegated('timeupdate');
 					});
-					that.mejs.media.addEventListener('ended',function(ev){
+					me.addEventListener('ended',function(ev){
 						//$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
 						//REPLAY ?
 						$('.video-play , .video-play').hide();
@@ -58,7 +61,7 @@ console.info('play',options["url"])
 						that.delegated('ended');
 					});
 					
-					that.mejs.media.addEventListener('canplay',function(ev){
+					me.addEventListener('canplay',function(ev){
 						// théoriquement jamais atteint
 						
 					});
