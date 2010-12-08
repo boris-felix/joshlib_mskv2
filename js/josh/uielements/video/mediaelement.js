@@ -1,5 +1,5 @@
 (function(J,$) {
-	
+
 	J.UI.Video = J.Class(J.UI.Video,{
 		
 		play:function(options) {
@@ -19,6 +19,7 @@
 			//if (typeof this.options['height'] !== 'undefined') { $('#'+this.htmlId+'_video').css('height',this.options['height']); }
 console.info('video elem ',this)
             
+			var that=this;
             this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")[0],{
                 pluginPath:"/swf/",
                 videoWidth: $('#'+this.htmlId+"_video").width() /*+1*/,
@@ -26,15 +27,27 @@ console.info('video elem ',this)
                 //enablePluginDebug:true,
                 success:function(me) {
                     console.log("MED SUCCESS ",me);
+					/*$('.mejs-controls').remove();*/
                     //me.play();
+					that.mejs.media.addEventListener('progress',function(ev){
+						// 100 * _mejs.media.currentTime / _mejs.media.duration;
+						$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
+						$('.video-time-loaded').css('width',Math.round(100 * _mejs.media.bufferedBytes / _mejs.media.bytesTotal)+'%');
+					});
+					that.mejs.media.addEventListener('timeupdate',function(ev){
+						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(_mejs.media.currentTime));
+						$('.video-time-current').css('width',Math.round(100 * _mejs.media.currentTime / _mejs.media.duration)+'%');
+					});
+					that.mejs.media.addEventListener('ended',function(ev){
+
+					});
                 }
-            }).bind('progress',function(){
-console.info('progress',this)
-			}).bind('timeupdate',function(){
-console.info('timeupdate',this)
-			});
+            })
 			
             window._mejs = this.mejs;
+
+
+
 			
 			$('.video-controls').remove();
 			
@@ -46,9 +59,9 @@ console.info('timeupdate',this)
 						<span class="video-button video-pause">▌▌</span>\
 						<span class="video-button video-foward">▶▶</span>\
 						<span class="video-button video-next">▶▌</span>\
-						<span class="video-time"><span class="video-currenttime">08:10</span> / <span class="video-duration">08:13</span></span>\
+						<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
 					</div>\
-					<div class="video-time-rail"><span style="width:100%;" class="video-time-total"><span style="width: 80%;" class="video-time-loaded"></span><span style="width: 20%;" class="video-time-current"></span></div>\
+					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></div>\
 				</div>').appendTo('#main');
 				/* <span style="left: 827.157px;" class="video-time-handle"></span><span style="left: 827.157px;" class="video-time-float"><span class="video-time-float-current">08:10</span><span class="video-time-float-corner"></span></span></span> */
 			
@@ -59,6 +72,7 @@ console.info('timeupdate',this)
 			$('.video-reward').click(function(){
 				//_mejs.currentTime -= 10;
 				_mejs.setCurrentTime(_mejs.media.currentTime<10?0:(_mejs.media.currentTime-10));
+console.log(_mejs);
 			});
 			$('.video-play').click(function(){
 				_mejs.pause();
