@@ -6,9 +6,9 @@
 		    
 		    $("#"+this.htmlId)[0].innerHTML="";
 			
-			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload width='100%' height='100%' poster='"+options["image"]+"' />";			  
+			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";			  // width='100%' height='100%' 
             
-            
+console.info('video elem ','#'+this.htmlId+"_video",$('#'+this.htmlId+"_video")[0])
             
             this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")[0],{
                 pluginPath:"/swf/",
