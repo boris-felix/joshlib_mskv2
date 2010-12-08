@@ -32,12 +32,18 @@ console.info('video elem ',this)
 			
             window._mejs = this.mejs;
 			
-			$('.mejs-controls').remove();
+			$('.video-controls').remove();
 			
-			$('<div class="mejs-controls">\
-					<div class="mejs-button mejs-playpause-button mejs-play"><span></span></div>\
-					<div class="mejs-time"><span class="mejs-currenttime">08:10</span><span> | </span> <span class="mejs-duration">08:13</span></div>\
-					<div style="width: 100%;" class="mejs-time-rail"><span style="width: 100%;" class="mejs-time-total"><span style="width: 840px;" class="mejs-time-loaded"></span><span style="width: 834.157px;" class="mejs-time-current"></span><span style="left: 827.157px;" class="mejs-time-handle"></span><span style="left: 827.157px;" class="mejs-time-float"><span class="mejs-time-float-current">08:10</span><span class="mejs-time-float-corner"></span></span></span></div>\
+			$('<div class="video-controls">\
+					<div class="video-buttons">\
+						<span class="video-button video-previous"></span>\
+						<span class="video-button video-reward"></span>\
+						<span class="video-button video-play"></span>\
+						<span class="video-button video-foward"></span>\
+						<span class="video-button video-next"></span>\
+						<span class="video-button video-time"><span class="video-currenttime">08:10</span> / <span class="video-duration">08:13</span></span>\
+					</div>\
+					<div style="width: 100%;" class="video-time-rail"><span style="width: 100%;" class="video-time-total"><span style="width: 80%;" class="video-time-loaded"></span><span style="width: 20%;" class="video-time-current"></span><span style="left: 827.157px;" class="video-time-handle"></span><span style="left: 827.157px;" class="video-time-float"><span class="video-time-float-current">08:10</span><span class="video-time-float-corner"></span></span></span></div>\
 				</div>').appendTo('#main');
 			
 			

@@ -232,18 +232,18 @@
 }
 */
 /* End: Progress bar */
-
-/* Start: Fullscreen */
+/*
+/* Start: Fullscreen *
 .mejs-controls .mejs-fullscreen-button span {
 	background-position:-32px 0;
 }
 .mejs-controls .mejs-unfullscreen span {
 	background-position:-32px -16px;
 }
-/* End: Fullscreen */
+/* End: Fullscreen *
 
 
-/* Start: Mute/Volume */
+/* Start: Mute/Volume *
 .mejs-controls .mejs-volume-button {
 }
 
@@ -320,9 +320,9 @@
 	margin: 0;
 }
 
-/* End: Mute/Volume */
+/* End: Mute/Volume *
 
-
+*/
 
 
 /* Start: TRACK (Captions and Chapters) */
