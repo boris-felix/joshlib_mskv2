@@ -80,8 +80,8 @@ exports.config = {
     
     'mediaelement': {
         css:[
-            "css/mediaelement/mediaelementplayer.css",
-            "css/mediaelement/mejs-skins.css"
+            "css/mediaelement/mediaelementplayer.scss",
+            "css/mediaelement/mejs-skins.scss"
         ],
         js:[
             "js/libs/mediaelement.js",
