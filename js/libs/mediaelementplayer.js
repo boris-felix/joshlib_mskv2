@@ -108,11 +108,14 @@
 				.addClass(t.$media[0].className)
 				.insertBefore(t.$media);
 				
+				
+				//$('<div class="mejs-controls"></div>').insertBefore(t.$media);
+				
 			// move the <video/video> tag into the right spot
 			t.container.find('.mejs-mediaelement').append(t.$media);
 			
 			// find parts
-			t.controls = t.container.find('.mejs-controls');
+			t.controls = $('.mejs-controls');  //t.container.find('.mejs-controls'); 
 			t.layers = t.container.find('.mejs-layers');		
 			
 			// determine the size							
@@ -170,6 +173,7 @@
 			// controls fade
 			if (t.isVideo) {
 				// show/hide controls
+				/*
 				t.container
 					.bind('mouseenter', function () {
 						t.controls.css('visibility','visible');						
@@ -183,7 +187,7 @@
 							});						
 						}
 					});
-				
+				*/
 				// resizer
 				if (t.options.enableAutosize) {
 					t.media.addEventListener('loadedmetadata', function(e) {

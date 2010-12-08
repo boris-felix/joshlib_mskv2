@@ -66,6 +66,7 @@
 
 /* Start: CONTROL BAR */
 /* Oh nooon, on est condamnés à  être à la mauvaise position :( */
+/*
 .mejs-container .mejs-controls {
 	position: absolute;
 	background: none;
@@ -78,7 +79,7 @@
 	background: rgba(0, 0, 0, 0.7);
 	height: 30px;
 	width: 100%;	
-}
+}*/
 .mejs-container .mejs-controls  div {
 	list-style-type: none;
 	background-image: none;
