@@ -2,6 +2,13 @@
 
 	J.UI.Video = J.Class(J.UI.Video,{
 		
+		delegated : function(event,self) {
+			if (typeof this.options[event]=='function')
+			{
+				return this.options[event]();
+			}
+		},
+		
 		play:function(options) {
 
 		    $("#"+this.htmlId)[0].innerHTML="";
@@ -14,11 +21,13 @@
 			$('#'+this.htmlId+'_video').css({
 				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
+				'z-index'   : -1
 			});
 	
 			//if (typeof this.options['height'] !== 'undefined') { $('#'+this.htmlId+'_video').css('height',this.options['height']); }
-console.info('video elem ',this)
             
+console.info('play',options["url"])
+			
 			var that=this;
             this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")[0],{
                 pluginPath:"/swf/",
@@ -28,27 +37,36 @@ console.info('video elem ',this)
                 success:function(me) {
                     console.log("MED SUCCESS ",me);
 					/*$('.mejs-controls').remove();*/
-                    //me.play();
+					that.delegated('success');
+                    that.mejs.media.play();
 					that.mejs.media.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
 						$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
 						$('.video-time-loaded').css('width',Math.round(100 * _mejs.media.bufferedBytes / _mejs.media.bytesTotal)+'%');
+						that.delegated('progress');
 					});
 					that.mejs.media.addEventListener('timeupdate',function(ev){
 						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(_mejs.media.currentTime));
 						$('.video-time-current').css('width',Math.round(100 * _mejs.media.currentTime / _mejs.media.duration)+'%');
+						that.delegated('timeupdate');
 					});
 					that.mejs.media.addEventListener('ended',function(ev){
-
+						//$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
+						//REPLAY ?
+						$('.video-play , .video-play').hide();
+						$('.video-stop').show();
+						that.delegated('ended');
 					});
-                }
+					
+					that.mejs.media.addEventListener('canplay',function(ev){
+						// théoriquement jamais atteint
+						
+					});
+				}
             })
 			
             window._mejs = this.mejs;
 
-
-
-			
 			$('.video-controls').remove();
 			
 			$('<div class="video-controls">\
@@ -57,6 +75,7 @@ console.info('video elem ',this)
 						<span class="video-button video-reward">◀◀ </span>\
 						<span class="video-button video-play">▶</span>\
 						<span class="video-button video-pause">▌▌</span>\
+						<span class="video-button video-stop">▐▌</span>\
 						<span class="video-button video-foward">▶▶</span>\
 						<span class="video-button video-next">▶▌</span>\
 						<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
@@ -72,7 +91,6 @@ console.info('video elem ',this)
 			$('.video-reward').click(function(){
 				//_mejs.currentTime -= 10;
 				_mejs.setCurrentTime(_mejs.media.currentTime<10?0:(_mejs.media.currentTime-10));
-console.log(_mejs);
 			});
 			$('.video-play').click(function(){
 				_mejs.pause();
@@ -83,6 +101,12 @@ console.log(_mejs);
 				_mejs.play();
 				$('.video-play').show();
 				$('.video-pause').hide();
+			});
+			$('.video-stop').hide().click(function(){
+				_mejs.setCurrentTime(0);
+				_mejs.play();
+				$('.video-play').show();
+				$('.video-stop').hide();
 			});
 			$('.video-foward').click(function(){
 				_mejs.setCurrentTime(_mejs.media.currentTime+10);
