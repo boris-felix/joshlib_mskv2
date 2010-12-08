@@ -28,7 +28,11 @@ console.info('video elem ',this)
                     console.log("MED SUCCESS ",me);
                     //me.play();
                 }
-            });
+            }).bind('progress',function(){
+console.info('progress',this)
+			}).bind('timeupdate',function(){
+console.info('timeupdate',this)
+			});
 			
             window._mejs = this.mejs;
 			
@@ -36,18 +40,42 @@ console.info('video elem ',this)
 			
 			$('<div class="video-controls">\
 					<div class="video-buttons">\
-						<span class="video-button video-previous"></span>\
-						<span class="video-button video-reward"></span>\
-						<span class="video-button video-play"></span>\
-						<span class="video-button video-foward"></span>\
-						<span class="video-button video-next"></span>\
-						<span class="video-button video-time"><span class="video-currenttime">08:10</span> / <span class="video-duration">08:13</span></span>\
+						<span class="video-button video-previous">▐◀</span>\
+						<span class="video-button video-reward">◀◀ </span>\
+						<span class="video-button video-play">▶</span>\
+						<span class="video-button video-pause">▌▌</span>\
+						<span class="video-button video-foward">▶▶</span>\
+						<span class="video-button video-next">▶▌</span>\
+						<span class="video-time"><span class="video-currenttime">08:10</span> / <span class="video-duration">08:13</span></span>\
 					</div>\
-					<div style="width: 100%;" class="video-time-rail"><span style="width: 100%;" class="video-time-total"><span style="width: 80%;" class="video-time-loaded"></span><span style="width: 20%;" class="video-time-current"></span><span style="left: 827.157px;" class="video-time-handle"></span><span style="left: 827.157px;" class="video-time-float"><span class="video-time-float-current">08:10</span><span class="video-time-float-corner"></span></span></span></div>\
+					<div class="video-time-rail"><span style="width:100%;" class="video-time-total"><span style="width: 80%;" class="video-time-loaded"></span><span style="width: 20%;" class="video-time-current"></span></div>\
 				</div>').appendTo('#main');
+				/* <span style="left: 827.157px;" class="video-time-handle"></span><span style="left: 827.157px;" class="video-time-float"><span class="video-time-float-current">08:10</span><span class="video-time-float-corner"></span></span></span> */
 			
-			
-	
+			$('.video-previous').click(function(){
+				//_mejs.currentTime = 0; // eeeeeh oui, ils ont dû tricher avec la spec HTML5 pour lkes plugins flash/silverlight
+				_mejs.setCurrentTime(0);
+			});
+			$('.video-reward').click(function(){
+				//_mejs.currentTime -= 10;
+				_mejs.setCurrentTime(_mejs.media.currentTime<10?0:(_mejs.media.currentTime-10));
+			});
+			$('.video-play').click(function(){
+				_mejs.pause();
+				$('.video-play').hide();
+				$('.video-pause').show();
+			});
+			$('.video-pause').hide().click(function(){
+				_mejs.play();
+				$('.video-play').show();
+				$('.video-pause').hide();
+			});
+			$('.video-foward').click(function(){
+				_mejs.setCurrentTime(_mejs.media.currentTime+10);
+			});
+			$('.video-next').click(function(){
+				_mejs.setCurrentTime(_mejs.media.currentTime+60);
+			});
 		},
 		
 		pause:function() {
