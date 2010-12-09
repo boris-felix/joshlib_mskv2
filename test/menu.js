@@ -3,14 +3,19 @@
 
 module("Joshlib tests");
 
-var testee2 = new Joshlib.Menu();
+var J = Joshlib;
+
+J.Apps.Test = J.Class(J.App,{
+    
+});
+var myapp = new J.Apps.Test();
 
 
 test('Installation Joshlib',function(){
 	expect(2);
 	equals(typeof window.Joshlib,'object','Joshlib() déclaré');
 	
-	equals(typeof testee2,'object','Joshlib.Menu() instantié');
+	equals(typeof myapp.menu,'object','Joshlib.Menu() instantié');
 	
 })  
 
@@ -22,7 +27,7 @@ test('Construction de l\'arbre',function(){
 	
 	var J = Joshlib;
 	
-	testee2.setData('/',[
+	myapp.menu.setData('/',[
 	    {'id':'leaf1'},
 	    {'id':'leaf2',
 	     'children':[
@@ -55,87 +60,82 @@ test('Construction de l\'arbre',function(){
         },
         
 	]);
-	equals(testee2.getData("/leaf4").label,"test1");
+	equals(myapp.menu.getData("/leaf4").label,"test1");
 	
 	//Change a leaf
-	testee2.setData('/leaf4',{"label":"test2"});
-    equals(testee2.getData("/leaf4").label,"test2");
+	myapp.menu.setData('/leaf4',{"label":"test2"});
+    equals(myapp.menu.getData("/leaf4").label,"test2");
 
 	//Change a tree
-	testee2.setData('/leaf4/',[
+	myapp.menu.setData('/leaf4/',[
 	    {'id':'leaf41'},
 	    {'id':'leaf42'}
 	]);
 
-console.log(testee2);
-var J=Joshlib;
-	
 	var lastMenuChange = null;
-	J.subscribe("menuChange",function(ev,data) {
+	myapp.subscribe("menuChange",function(ev,data) {
 console.log('menuchange ',data);
 	    lastMenuChange = data;
 	});
 	
 	
 lastMenuChange=[];
-	J.publish("menuGoTo",["current","/leaf4"],true);
+	myapp.publish("menuGoTo",["current","/leaf4"],true);
 	
 	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
 	
-	J.publish("menuGo",["current","down"],true);
+	myapp.publish("menuGo",["current","down"],true);
 	
     same(lastMenuChange,["current","/leaf4/leaf41"],'Menu Go current down+next');
 	
-	J.publish("menuGo",["current","next"],true);
+	myapp.publish("menuGo",["current","next"],true);
     
     same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
 
 lastMenuChange=[];	
 	
-	console.log(testee2);
-	
-	J.publish("menuGoTo",["focus","/leaf1"],true);
+	myapp.publish("menuGoTo",["focus","/leaf1"],true);
     
     same(lastMenuChange,["focus","/leaf1"],'Menu Goto');
 	
-    J.publish("menuGo",["focus","next"],true);
+    myapp.publish("menuGo",["focus","next"],true);
     
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus next');
 	
-	J.publish("menuGo",["focus","down"],true);
+	myapp.publish("menuGo",["focus","down"],true);
 	
 	same(lastMenuChange,["focus","/leaf2/leaf21"],'Menu Go focus down');
 	
-	J.publish("menuGo",["focus","up"],true);
+	myapp.publish("menuGo",["focus","up"],true);
 	
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
 	
-	J.publish("menuGo",["focus","up"],true);
+	myapp.publish("menuGo",["focus","up"],true);
 	
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up - the same.');
 	
-	J.publish("menuGo",["focus","next"],true);
+	myapp.publish("menuGo",["focus","next"],true);
 	
 	same(lastMenuChange,["focus","/leaf3"],'Menu Go focus next');
     
-    J.publish("menuGo",["focus","down"],true);
+    myapp.publish("menuGo",["focus","down"],true);
 	
 	same(lastMenuChange,["focus","/leaf3/leaf31"],'Menu Go focus down');
     
-    J.publish("menuGo",["focus","up"],true);
+    myapp.publish("menuGo",["focus","up"],true);
     
     same(lastMenuChange,["focus","/leaf3"],'Menu Go up next ');
     
-	J.publish("menuGo",["focus","next"],true);
+	myapp.publish("menuGo",["focus","next"],true);
 	
 	same(lastMenuChange,["focus","/leaf4"],'Menu Go up next ');
 	
-	J.publish("menuGo",["focus","next"],true);
+	myapp.publish("menuGo",["focus","next"],true);
 	
 	same(lastMenuChange,["focus","/leaf5"],'Menu Go up next next');
     
     //Todo: later.
-    //J.publish("menuGo",["focus","down"],true);
+    //myapp.publish("menuGo",["focus","down"],true);
     
     //should not be loaded right away
     same(lastMenuChange,["focus","/leaf5"],'Async!');
@@ -143,10 +143,10 @@ lastMenuChange=[];
     stop();
     
     setTimeout(function() {
-        J.publish("menuGo",["focus","down"],true);
+        myapp.publish("menuGo",["focus","down"],true);
         same(lastMenuChange,["focus","/leaf5/leaf51"],'Down Async');
         
-        J.publish("menuGo",["focus","up"],true);
+        myapp.publish("menuGo",["focus","up"],true);
         same(lastMenuChange,["focus","/leaf5"],'Up');
         
         
@@ -239,44 +239,44 @@ test('UIElements',function(){
     expect(3);
     
     var J=Joshlib;
-    J.basePath = "../";
+    myapp.basePath = "../";
 	
 	
     
-	var testApp = J.Class(J.App,{
+	var testApp = myapp.Class(myapp.App,{
 		
 		
 		start:function(baseHtmlId) {
 			
-			this.panelMain = new J.UI.Panel(this,"main",{
+			this.panelMain = new myapp.UI.Panel(this,"main",{
 			   "onAfterInsert":function(elt) {
 			       
 			   }
 			});
 			
-			this.panelShows = new J.UI.Panel(this,"shows",{
+			this.panelShows = new myapp.UI.Panel(this,"shows",{
 			    
 			});
 			
-			this.panelGeo = new J.UI.Panel(this,"geo",{
+			this.panelGeo = new myapp.UI.Panel(this,"geo",{
 			  
 			});
 			
 			
-			this.nav1 = new J.UI.List(this,"nav1",{
+			this.nav1 = new myapp.UI.List(this,"nav1",{
 				"parent":this.panelMain,
 				"autoInsert":true
 			});
 			
-			this.nav2 = new J.UI.List(this,"nav2",{
+			this.nav2 = new myapp.UI.List(this,"nav2",{
 				"parent":this.panelMain
 			});
 			
-			this.nav3 = new J.UI.List(this,"nav3",{
+			this.nav3 = new myapp.UI.List(this,"nav3",{
 				"parent":this.panelMain
 			});
 			
-			this.player = new J.UI.Video(this,"vplayer",{
+			this.player = new myapp.UI.Video(this,"vplayer",{
 				"maximize":true,
 				"parent":this.panelMain,
 				"autoInsert":true
@@ -321,7 +321,7 @@ test('UIElements',function(){
 								{
 									var data = data.result.f24fr.list;
 									var prev_showid;
-									this.retour.shows = new J.UI.List(this.retour,'shows',{
+									this.retour.shows = new myapp.UI.List(this.retour,'shows',{
 																			"parent":this.retour.panelShows,
 																			"autoInsert":true
 																		});
@@ -337,7 +337,7 @@ test('UIElements',function(){
 										//$('<ul />').appendTo('#'+showid);
 										
 										
-										this.retour.numeros[showid] = new J.UI.List(this.retour,showid,{
+										this.retour.numeros[showid] = new myapp.UI.List(this.retour,showid,{
 																				"parent":this.retour.panelShows,
 																				"autoInsert":true
 																			});
