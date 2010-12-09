@@ -121,7 +121,7 @@ console.log('me.duration',me.duration);
 					me.addEventListener('ended',function(ev){
 						//$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
 						//REPLAY ?
-						$('.video-play , .video-play').hide();
+						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
 						that.delegated('ended');
 					});
@@ -169,21 +169,21 @@ console.log('me.duration',me.duration);
 				//_mejs.currentTime -= 10;
 				_mejs.setCurrentTime(_mejs.media.currentTime<10?0:(_mejs.media.currentTime-10));
 			});
-			$('.video-play').click(function(){
+			$('.video-pause').click(function(){
 				_mejs.pause();
-				$('.video-play').hide();
-				$('.video-pause').show();
-			});
-			$('.video-pause').hide().click(function(){
-				_mejs.play();
 				$('.video-play').show();
 				$('.video-pause').hide();
+			});
+			$('.video-play').hide().click(function(){
+				_mejs.play();
+				$('.video-play').hide();
+				$('.video-pause').show();
 			});
 			$('.video-stop').hide().click(function(){
 				_mejs.setCurrentTime(0);
 				_mejs.play();
-				$('.video-play').show();
-				$('.video-stop').hide();
+				$('.video-play').hide();
+				$('.video-stop').show();
 			});
 			$('.video-foward').click(function(){
 				_mejs.setCurrentTime(_mejs.media.currentTime+10);
@@ -199,11 +199,14 @@ console.log('me.duration',me.duration);
 		
 		remove:function()
 		{
-			this.mejs.stop();
-			this.mejs.src='';
-			this.mejs.unload();
-			$("#"+this.htmlId).remove();
-		}
+			if (typeof this.mejs != 'undefined')
+			{
+				this.mejs.stop();
+				this.mejs.src='';
+				this.mejs.unload();
+			}
+			$("#"+this.htmlId).html('');
+		},
 	    
 	    getHtml:function()
 		{
