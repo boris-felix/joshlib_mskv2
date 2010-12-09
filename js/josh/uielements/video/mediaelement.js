@@ -201,9 +201,11 @@ console.log('me.duration',me.duration);
 		{
 			if (typeof this.mejs != 'undefined')
 			{
-				this.mejs.stop();
+				try 
+				{
+					this.mejs.pause();
+				} catch (ev) {}
 				this.mejs.src='';
-				this.mejs.unload();
 			}
 			$("#"+this.htmlId).html('');
 		},
