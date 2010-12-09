@@ -40,12 +40,40 @@
 	*/
 	
 	J.UI.Video = J.Class(J.UI.Video,{
+		message : '', // pour la gerstion des messages d'erreurs, versions linguistiques
+		errorCode : 0, // pour la gerstion des messages d'erreurs, versions linguistiques
 		
 		delegated : function(event,self) {
 			if (typeof this.options[event]=='function')
 			{
 				return this.options[event]();
 			}
+		},
+		handleError : function(ev)
+		{
+			$('.video-buttons').hide();
+			$('.video-info').show();
+			this.errorCode=ev.target.error.code;
+			switch (this.errorCode)
+			{
+				case ev.target.error.MEDIA_ERR_ABORTED:
+					this.message='Vous avez annulé la lecture de la vidéo.';
+				break;
+				case ev.target.error.MEDIA_ERR_NETWORK:
+					this.message='Un incident réseau a interrompu la vidéo.';
+				break;
+				case ev.target.error.MEDIA_ERR_DECODE:
+					this.message='La vidéo est corrompue ou non-reconnue.';
+				break;
+				case ev.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+					this.message='La vidéo n’a pu être chargée à cause d’un problème serveur.';
+				break;
+				default:
+					this.message='Une erreur a eu lieue.';
+				break;
+			}
+			this.delegated('error'); // oui, l'évènement a lieu AVANT pour que vous puissiez le gérer à votre aise
+			$('.video-info').html(this.message);
 		},
 		
 		play:function(options) {
@@ -71,11 +99,13 @@ console.info('play',options["url"])
                 videoWidth: $('#'+this.htmlId+"_video").width() /*+1*/,
                 videoHeight: $('#'+this.htmlId+"_video").height(),
                 //enablePluginDebug:true,
+				error:this.handleError,
                 success:function(me) {
                     console.log("MED SUCCESS ",me);
-					/*$('.mejs-controls').remove();*/
+					$('.video-buttons').show();
+					$('.video-info').hide();
+
 					that.delegated('success');
-                    me.play();
 					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
@@ -97,8 +127,16 @@ console.info('play',options["url"])
 					
 					me.addEventListener('canplay',function(ev){
 						// théoriquement jamais atteint
-						
+						me.play();
+						$('.video-buttons').show();
+						$('.video-info').hide();
+						that.delegated('canplay');
 					});
+					
+					me.addEventListener('error',function(ev){
+						that.handleError(ev);
+					});
+					
 				}
             })
 			
@@ -107,6 +145,7 @@ console.info('play',options["url"])
 			$('.video-controls').remove();
 			
 			$('<div class="video-controls">\
+					<div class="video-info">'+((typeof this.options['pleaseWait'] !== 'undefined')?this.options['pleaseWait']:'Please wait&nbsp;⋅⋅⋅')+'</div>\
 					<div class="video-buttons">\
 						<span class="video-button video-previous">▐◀</span>\
 						<span class="video-button video-reward">◀◀ </span>\
@@ -119,6 +158,8 @@ console.info('play',options["url"])
 					</div>\
 					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></div>\
 				</div>').appendTo('#main');
+				
+			$('.video-buttons').hide();
 			
 			$('.video-previous').click(function(){
 				//_mejs.currentTime = 0; // eeeeeh oui, ils ont dû tricher avec la spec HTML5 pour les plugins flash/silverlight
