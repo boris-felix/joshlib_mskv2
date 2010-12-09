@@ -126,7 +126,6 @@ console.info('play',options["url"])
 					});
 					
 					me.addEventListener('canplay',function(ev){
-						// théoriquement jamais atteint
 						me.play();
 						$('.video-buttons').show();
 						$('.video-info').hide();
@@ -150,8 +149,8 @@ console.info('play',options["url"])
 						<span class="video-button video-previous">▐◀</span>\
 						<span class="video-button video-reward">◀◀ </span>\
 						<span class="video-button video-play">▶</span>\
-						<span class="video-button video-pause">▌▌</span>\
-						<span class="video-button video-stop">▐▌</span>\
+						<span class="video-button video-pause">▮▮</span>\
+						<span class="video-button video-stop">■</span>\
 						<span class="video-button video-foward">▶▶</span>\
 						<span class="video-button video-next">▶▌</span>\
 						<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
