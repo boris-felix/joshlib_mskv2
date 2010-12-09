@@ -1,5 +1,44 @@
 (function(J,$) {
 
+	/// TODO implémenter les gestions d'erreurs dans la box de controle
+	
+	// plus d'infos sur les events de la balise video : http://www.w3.org/2010/05/video/mediaevents.html
+	/*
+	$('video').live('onerror error',function(e){
+		$('#infobulle').stop().css(infobulleAspectLevel2);
+		// d'après http://www.w3.org/TR/html5/video.html
+			delayHidingPanel(false);
+			switch (e.target.error.code)
+			{
+				case e.target.error.MEDIA_ERR_ABORTED:
+					showbartitle('Lecture interrompue','Vous avez annulé la lecture de la vidéo.');
+				break;
+				case e.target.error.MEDIA_ERR_NETWORK:
+					showbartitle('Lecture interrompue','Un incident réseau a interrompu le flux vidéo.');
+				break;
+				case e.target.error.MEDIA_ERR_DECODE:
+					showbartitle('Lecture impossible','La lecture vidéo s’est interrompue soit parce que le document a été corrompu ou parce que la vidéo utilise des fonctionnalités trop avancées.');
+				break;
+				case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+					showbartitle('Lecture impossible','Cette vidéo n’a pu être chargée, soit à cause d’un problème sur notre serveur, sur internet ou que le format vidéo n’est pas reconnu.');
+				break;
+				default:
+					showbartitle('Lecture interrompue','Une erreur non répertoriée a eu lieue.');
+				break;
+			}
+	});
+	
+	$('video').live('play canplay buffer buffered',function(){
+		$('#infobulle , ul').stop().fadeOut();
+		$('.flareVideo > .controls').show();
+	});
+	
+	$('video').live('ended',function(){
+		delayHidingPanel(false);
+	});
+	// #france24_e_List_showbar img , 
+	*/
+	
 	J.UI.Video = J.Class(J.UI.Video,{
 		
 		delegated : function(event,self) {
@@ -12,9 +51,9 @@
 		play:function(options) {
 
 		    $("#"+this.htmlId)[0].innerHTML="";
-				// ça ne devrait même pas exister : on cherche une id, on a qu'un seul élément en rztour.
+				// ça ne devrait même pas exister : on cherche une id, on a qu'un seul élément en retour.
 			
-			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";			  
+			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";  
 				// width='100%' height='100%'  
 					/// NON ! Ne pas ! ne pas ! ne jamais ! le style doit se décider en css ou après coup dynamiquement. Jamais en dur de manière imparamétrable : on ne s'en sort jamais sinon.
             
@@ -23,8 +62,6 @@
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
 				'z-index'   : 00
 			});
-	
-			//if (typeof this.options['height'] !== 'undefined') { $('#'+this.htmlId+'_video').css('height',this.options['height']); }
             
 console.info('play',options["url"])
 			
@@ -38,9 +75,6 @@ console.info('play',options["url"])
                     console.log("MED SUCCESS ",me);
 					/*$('.mejs-controls').remove();*/
 					that.delegated('success');
-console.log('that',that);
-console.log('that.mejs',that.mejs);
-//console.log('that.mejs.media',that.mejs.media);
                     me.play();
 					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
@@ -85,10 +119,9 @@ console.log('that.mejs',that.mejs);
 					</div>\
 					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></div>\
 				</div>').appendTo('#main');
-				/* <span style="left: 827.157px;" class="video-time-handle"></span><span style="left: 827.157px;" class="video-time-float"><span class="video-time-float-current">08:10</span><span class="video-time-float-corner"></span></span></span> */
 			
 			$('.video-previous').click(function(){
-				//_mejs.currentTime = 0; // eeeeeh oui, ils ont dû tricher avec la spec HTML5 pour lkes plugins flash/silverlight
+				//_mejs.currentTime = 0; // eeeeeh oui, ils ont dû tricher avec la spec HTML5 pour les plugins flash/silverlight
 				_mejs.setCurrentTime(0);
 			});
 			$('.video-reward').click(function(){
@@ -123,10 +156,11 @@ console.log('that.mejs',that.mejs);
 		    this.mejs.pause();
 	    },
 	    
-	    getHtml:function() {
-			// BUG typiquement ce qui est royalement pénible : les styles embarqués. Je pense qu'il vaut mieux insérer le html, et ensuite utiliser hide()
+	    getHtml:function()
+		{
+			// BUG style='display:none;'  typiquement ce qui est royalement pénible : les styles embarqués. Je pense qu'il vaut mieux insérer le html, et ensuite utiliser hide()
 			// ça m'a quand même foutu en l'air une journée ces bétises.
-			return "<div id='"+this.htmlId+"'></div>"; //style='display:none;' 
+			return "<div id='"+this.htmlId+"'></div>"; 
 		}
 		
 	});
