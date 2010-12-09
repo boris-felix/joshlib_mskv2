@@ -109,6 +109,7 @@ console.info('play',options["url"])
 					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
+console.log('me.duration',me.duration);
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
 					});
@@ -195,6 +196,14 @@ console.info('play',options["url"])
 		pause:function() {
 		    this.mejs.pause();
 	    },
+		
+		remove:function()
+		{
+			this.mejs.stop();
+			this.mejs.src='';
+			this.mejs.unload();
+			$("#"+this.htmlId).remove();
+		}
 	    
 	    getHtml:function()
 		{
