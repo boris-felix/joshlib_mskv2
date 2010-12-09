@@ -5,20 +5,25 @@
      */
 	J.Menu = J.Class({
 		
-		currentPath:'/',
-		focus :'/',
-		index : [],
-		datas : [],
 		
-		registre  : { },
 		
 		__constructor:function(app) 
 		{
+		    console.log("CONSTR");
 		    this.app = app;
+		    
+		    this.currentPath='/';
+    		this.focus='/';
+    		this.index=[];
+    		this.datas=[];
+
+    		this.registre={};
 		    
 			this.index['/']=[];
 			this.index['/']['_child']=[];
 			this.index['/']['_data']=[];
+			
+			this.beingLoaded = {};
 			
 			var self=this;
 			this.app.subscribe("menuGoTo",function(ev,data) {
@@ -33,6 +38,11 @@
 			
 		},
 		
+		setRegister:function(register,position) {
+		    
+		    this.registre[register]=position;
+		    this.app.publish("menuChange",[register,position],true);
+		},
 		
 		goRelative:function(register,movement) {
 		    
@@ -43,9 +53,10 @@
 			{
 				case 'prev' :
 				case 'next' :
-					var goingnear = self.index[self.registre[register]]['_'+movement]!==undefined ?
+					goingnear = self.index[self.registre[register]]['_'+movement]!==undefined ?
 									self.index[self.registre[register]]['_'+movement]
 									:self.registre[register];
+
 				break;
 				case 'up'   :
 					var path = self.registre[register];
@@ -58,15 +69,23 @@
 					}
 				break;
 				case 'down' :
-					var goingnear = ((typeof self.index[self.registre[register]]['_child'] != 'undefined') && self.index[self.registre[register]]['_child'].length>0 ) ?
-									self.index[self.registre[register]]['_child'][0]:
-									self.registre[register];
+				
+				    if (register=="focus" && self.beingLoaded[self.registre[register]+"/"]) {
+				        self.setRegister(register,self.registre[register]+"/");
+				        return true;
+					} else if ((typeof self.index[self.registre[register]]['_child'] != 'undefined') && self.index[self.registre[register]]['_child'].length>0 ) {
+					    goingnear = self.index[self.registre[register]]['_child'][0];
+					} else {
+					    goingnear = self.registre[register];
+					}
+						
 				break;
 			}
             
 			if (goingnear===undefined)
 			{
-                console.error(' AAAAAHHHHH ! MenuGo est nulle part ');
+			    
+                console.log('Out-of-bounds move: ',register,movement);
 				return false;
 			} else {
 				self.app.publish("menuGoTo",[register,goingnear],true);
@@ -84,16 +103,38 @@
 			    console.warn("no such menu "+goingto);
 				return false;
 			} else {
-				self.registre[register]=goingto;
 				
 				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && register=="focus" && !self.index[goingto]["_data"]["children"]) 
 				{
 				    self.app.publish("menuDataLoading",[goingto+"/"],true);
+				    
+				    self.beingLoaded[goingto+"/"]=true;
+				    
 				    self.index[goingto]["_data"]["getChildren"](function(children) {
+				        
+				        delete self.beingLoaded[goingto+"/"];
+				        
 				        self.setData(goingto+"/",children);
+				        //if we're still waiting for the answer, focus on 1st element
+				        if (self.registre[register]==goingto+"/") {
+				            
+				            if (children.length>0) {
+				                
+				                self.setRegister(register,goingto+"/"+children[0]["id"]);
+				            } else {
+				                
+				                //back to parent if no children
+				                self.setRegister(register,goingto);
+				            }
+				            
+				        }
+				        
+				        
 				    },self.index[goingto]["_data"]);
 				}
-				self.app.publish("menuChange",[register,goingto],true);
+				
+				self.setRegister(register,goingto);
+				
 				
 				return true;
 			}

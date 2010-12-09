@@ -8,24 +8,29 @@ var J = Joshlib;
 J.Apps.Test = J.Class(J.App,{
     
 });
-var myapp = new J.Apps.Test();
+
 
 
 test('Installation Joshlib',function(){
 	expect(2);
+
+	var myapp = new J.Apps.Test();
+	
 	equals(typeof window.Joshlib,'object','Joshlib() déclaré');
 	
 	equals(typeof myapp.menu,'object','Joshlib.Menu() instantié');
 	
 })  
 
-test('Construction de l\'arbre',function(){
-    
+test('Menu navigation',function(){
+
 	expect(18);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
 	var J = Joshlib;
+	
+	var myapp = new J.Apps.Test();
 	
 	myapp.menu.setData('/',[
 	    {'id':'leaf1'},
@@ -74,12 +79,13 @@ test('Construction de l\'arbre',function(){
 
 	var lastMenuChange = null;
 	myapp.subscribe("menuChange",function(ev,data) {
-console.log('menuchange ',data);
+        console.log('menuchange ',data);
 	    lastMenuChange = data;
 	});
 	
 	
-lastMenuChange=[];
+    lastMenuChange=[];
+	
 	myapp.publish("menuGoTo",["current","/leaf4"],true);
 	
 	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
@@ -92,8 +98,8 @@ lastMenuChange=[];
     
     same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
 
-lastMenuChange=[];	
-	
+    lastMenuChange=[];	
+
 	myapp.publish("menuGoTo",["focus","/leaf1"],true);
     
     same(lastMenuChange,["focus","/leaf1"],'Menu Goto');
@@ -136,7 +142,7 @@ lastMenuChange=[];
     
     //Todo: later.
     //myapp.publish("menuGo",["focus","down"],true);
-    
+
     //should not be loaded right away
     same(lastMenuChange,["focus","/leaf5"],'Async!');
     
@@ -154,60 +160,151 @@ lastMenuChange=[];
     },600)
     
     
-	
-    
-	/*
-	
-	
-	
-	
-	
-	
-	equals(testee2.currentPath,'/','chemin d\'origine');
-
-	
-	testee2.setRootData('babebibobu-2');
-	equals(testee2.data,'babebibobu-2','setRootData');
-
-	testee2.setData('/leaf',(path!=='/'?path:'')+{'babebi':'bobu'});
-	equals(testee2.index['/leaf']['babebi'],'bobu','setData index');
-	
-	
-	testee2.goTo('/leaf');
-	equals(testee2.currentPath,'/leaf','repositionnement absolu');
-	
-	testee2.setData('/leaf/bourgeon1','b-1');
-	testee2.setData('/leaf/bourgeon2','b-2');
-	testee2.setData('/leaf/bourgeon3','b-3');
-
-	
-	testee2.goTo('/leaf');
-	
-	equals(testee2.currentPath,'/leaf','repositionnement absolu');
-
-	testee2.setData('bourgeon4','b-4');
-	testee2.goTo('/leaf/bourgeon4');
-	equals(testee2.data,'b-4','création de feuille relative');
-	
-	testee2.goParent();
-	equals(testee2.currentPath,'/leaf','repositionnement relatif parent');
-
-	testee2.goTo('/leaf/bourgeon1');
-	testee2.goParent();
-	equals(testee2.currentPath,'/leaf','repositionnement relatif parent sublevel');
-	
-	testee2.goTo('/leaf/bourgeon1');
-	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif de deux niveaux');
-	testee2.goNext();
-	equals(testee2.currentPath,'/leaf/bourgeon2','repositionnement relatif suivant');
-	testee2.goPrev();
-	equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif précédent');
-
-	testee2.setData('kiddie','c-1');
-	testee2.goChildren(0);
-	equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif au premier enfant');
-*/
 });
+
+
+
+test('Async Menu navigation',function(){
+
+    var doCb;
+    
+    var myapp;
+    
+    var lastMenuChange = null;
+    
+    var rst = function() {
+        
+        delete myapp;
+        
+        myapp = new J.Apps.Test();
+
+    	myapp.menu.setData('/',[
+    	    {'id':'leaf1'},
+
+    	    {
+              'id':'leaf2',
+              'getChildren':function(callback) {
+
+                   doCb = function() {
+                       callback([
+                        {"id":"leaf21"},
+                        {"id":"leaf22"}
+                       ]);
+                   };
+
+               }
+            }
+
+        ]);
+        
+        myapp.subscribe("menuChange",function(ev,data) {
+            console.log('menuchange ',data);
+    	    lastMenuChange = data;
+    	});
+    	
+    };
+    
+
+	rst();
+	
+
+	
+	
+	
+	
+	myapp.publish("menuGoTo",["focus","/leaf1"],true);
+    
+	same(lastMenuChange,["focus","/leaf1"],'Menu init');
+    
+    myapp.publish("menuGo",["focus","down"],true);
+    
+    same(lastMenuChange,["focus","/leaf1"],'Still');
+    
+    myapp.publish("menuGo",["focus","next"],true);
+    
+	same(lastMenuChange,["focus","/leaf2"],'Next');
+
+    myapp.publish("menuGo",["focus","down"],true);
+    
+	same(lastMenuChange,["focus","/leaf2/"],'Down');
+
+	doCb();
+	
+	same(lastMenuChange,["focus","/leaf2/leaf21"],'Loaded');
+    
+    
+    rst();
+    
+    myapp.publish("menuGoTo",["focus","/leaf1"],true);
+    same(lastMenuChange,["focus","/leaf1"],'Menu init');
+    
+    myapp.publish("menuGo",["focus","next"],true);
+	same(lastMenuChange,["focus","/leaf2"],'Next');
+    
+    myapp.publish("menuGo",["focus","down"],true);
+	same(lastMenuChange,["focus","/leaf2/"],'Down');
+	
+	myapp.publish("menuGo",["focus","up"],true);
+	same(lastMenuChange,["focus","/leaf2"],'Reup before CB');
+    
+    doCb();
+    
+    same(lastMenuChange,["focus","/leaf2"],'No change');
+    
+});
+
+
+/*
+
+
+
+
+
+
+equals(testee2.currentPath,'/','chemin d\'origine');
+
+
+testee2.setRootData('babebibobu-2');
+equals(testee2.data,'babebibobu-2','setRootData');
+
+testee2.setData('/leaf',(path!=='/'?path:'')+{'babebi':'bobu'});
+equals(testee2.index['/leaf']['babebi'],'bobu','setData index');
+
+
+testee2.goTo('/leaf');
+equals(testee2.currentPath,'/leaf','repositionnement absolu');
+
+testee2.setData('/leaf/bourgeon1','b-1');
+testee2.setData('/leaf/bourgeon2','b-2');
+testee2.setData('/leaf/bourgeon3','b-3');
+
+
+testee2.goTo('/leaf');
+
+equals(testee2.currentPath,'/leaf','repositionnement absolu');
+
+testee2.setData('bourgeon4','b-4');
+testee2.goTo('/leaf/bourgeon4');
+equals(testee2.data,'b-4','création de feuille relative');
+
+testee2.goParent();
+equals(testee2.currentPath,'/leaf','repositionnement relatif parent');
+
+testee2.goTo('/leaf/bourgeon1');
+testee2.goParent();
+equals(testee2.currentPath,'/leaf','repositionnement relatif parent sublevel');
+
+testee2.goTo('/leaf/bourgeon1');
+equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif de deux niveaux');
+testee2.goNext();
+equals(testee2.currentPath,'/leaf/bourgeon2','repositionnement relatif suivant');
+testee2.goPrev();
+equals(testee2.currentPath,'/leaf/bourgeon1','repositionnement relatif précédent');
+
+testee2.setData('kiddie','c-1');
+testee2.goChildren(0);
+equals(testee2.currentPath,'/leaf/bourgeon1/kiddie','repositionnement relatif au premier enfant');
+*/
 
 /*
 test('Chargement d\'un arbre',function(){
