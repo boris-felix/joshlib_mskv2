@@ -53,7 +53,7 @@
 		{
 			$('.video-buttons').hide();
 			$('.video-info').show();
-			this.errorCode=ev.target.error.code;
+			this.errorCode=ev.srcElement.error.code;
 			switch (this.errorCode)
 			{
 				case ev.target.error.MEDIA_ERR_ABORTED:
