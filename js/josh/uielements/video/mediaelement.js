@@ -108,14 +108,16 @@ console.info('play',options["url"])
 					that.delegated('success');
 					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
+						
+						// bug irreproductible 
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
-console.log('me.duration',me.duration);
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
 					});
 					me.addEventListener('timeupdate',function(ev){
 						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(me.currentTime));
 						$('.video-time-current').css('width',Math.round(100 * me.currentTime / me.duration)+'%');
+						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('timeupdate');
 					});
 					me.addEventListener('ended',function(ev){
@@ -156,7 +158,7 @@ console.log('me.duration',me.duration);
 						<span class="video-button video-next">▶▌</span>\
 						<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
 					</div>\
-					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></div>\
+					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
 				</div>').appendTo('#main');
 				
 			$('.video-buttons').hide();
@@ -182,14 +184,18 @@ console.log('me.duration',me.duration);
 			$('.video-stop').hide().click(function(){
 				_mejs.setCurrentTime(0);
 				_mejs.play();
-				$('.video-play').hide();
-				$('.video-stop').show();
+				$('.video-stop , .video-play').hide();
+				$('.video-pause').show();
 			});
 			$('.video-foward').click(function(){
 				_mejs.setCurrentTime(_mejs.media.currentTime+10);
 			});
 			$('.video-next').click(function(){
 				_mejs.setCurrentTime(_mejs.media.currentTime+60);
+			});
+			$('.video-time-rail').click(function(e){
+				var t=$('.video-time-rail');
+				_mejs.setCurrentTime(Math.floor(_mejs.media.duration*(e.pageX-t.offset().left)/t.width()));
 			});
 		},
 		
@@ -204,8 +210,11 @@ console.log('me.duration',me.duration);
 				try 
 				{
 					this.mejs.pause();
+					this.mejs.setSrc('');
 				} catch (ev) {}
-				this.mejs.src='';
+				//this.mejs.src='';
+				
+				
 			}
 			$("#"+this.htmlId).html('');
 		},
