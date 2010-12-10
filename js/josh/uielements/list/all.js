@@ -88,26 +88,6 @@
 		getHtml:function()
 		{
 			return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
-			
-// 			var ret = ["<ul id='"+this.htmlId+"' style='display:none;'>"];
-// 			if (this.data.length==0)
-// 			{
-// 				console.info('Data de la List actuellement vide ',this);
-// 				if (typeof this.placeholder=='function')
-// 			 	{
-// 					ret.push(this.placeholder());
-// 				} else {
-// 					ret.push(this.placeholder);
-// 				}
-// 			} else {
-// 			
-// 				for (var i=0;i<this.data.length;i++)
-// 				{
-// 					ret.push(this.options["itemTemplate"](this,this.htmlId+"_"+i,this.data[i]));
-// 				}
-// 			}
-// 			ret.push("</ul>");
-// 			return ret.join("");
 		},
 		
 		event : function(eventname)

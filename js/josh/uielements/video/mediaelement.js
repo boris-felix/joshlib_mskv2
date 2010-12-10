@@ -53,7 +53,7 @@
 		{
 			$('.video-buttons').hide();
 			$('.video-info').show();
-			this.errorCode=ev.srcElement.error.code;
+			this.errorCode=this.errorCode!=0?this.errorCode:ev.srcElement.error.code;
 			switch (this.errorCode)
 			{
 				case ev.target.error.MEDIA_ERR_ABORTED:
@@ -72,11 +72,13 @@
 					this.message='Une erreur a eu lieue.';
 				break;
 			}
+console.error('handleError',this.errorCode,this.message);
 			this.delegated('error'); // oui, l'évènement a lieu AVANT pour que vous puissiez le gérer à votre aise
 			$('.video-info').html(this.message);
 		},
 		
-		play:function(options) {
+		play:function(options)
+		{
 
 		    $("#"+this.htmlId)[0].innerHTML="";
 				// ça ne devrait même pas exister : on cherche une id, on a qu'un seul élément en retour.
@@ -84,7 +86,7 @@
 			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";  
 				// width='100%' height='100%'  
 					/// NON ! Ne pas ! ne pas ! ne jamais ! le style doit se décider en css ou après coup dynamiquement. Jamais en dur de manière imparamétrable : on ne s'en sort jamais sinon.
-            
+           
 			$('#'+this.htmlId+'_video').css({
 				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
@@ -108,7 +110,6 @@ console.info('play',options["url"])
 					that.delegated('success');
 					me.addEventListener('progress',function(ev){
 						// 100 * _mejs.media.currentTime / _mejs.media.duration;
-						
 						// bug irreproductible 
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
@@ -138,7 +139,6 @@ console.info('play',options["url"])
 					me.addEventListener('error',function(ev){
 						that.handleError(ev);
 					});
-					
 				}
             })
 			
@@ -160,6 +160,12 @@ console.info('play',options["url"])
 					</div>\
 					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
 				</div>').appendTo('#main');
+				
+			if (options["url"]===undefined)
+			{
+				this.errorCode=-1;
+				this.handleError('undefined');
+			}
 				
 			$('.video-buttons').hide();
 			
