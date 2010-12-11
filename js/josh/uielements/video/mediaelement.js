@@ -40,13 +40,25 @@
 	*/
 	
 	J.UI.Video = J.Class(J.UI.Video,{
-		message : '', // pour la gerstion des messages d'erreurs, versions linguistiques
-		errorCode : 0, // pour la gerstion des messages d'erreurs, versions linguistiques
 		
-		delegated : function(event,self) {
-			if (typeof this.options[event]=='function')
+		init:function() {
+		    this.message=''; // pour la gerstion des messages d'erreurs, versions linguistiques
+    		this.errorCode=0; // pour la gerstion des messages d'erreurs, versions linguistiques
+    		
+    		this.listeners = {};
+    		
+    		//Should have an HTML5 <video>-like API
+    		this.player = false;
+    		
+    		this.__base();
+		},
+		
+		delegated : function( /* eventName, [eventArguments] */ ) {
+		    var eventName = Array.prototype.slice.call(arguments);
+		    
+			if (typeof this.options[eventName]=='function')
 			{
-				return this.options[event]();
+				return this.options[eventName].apply(this,arguments);
 			}
 		},
 		handleError : function(ev)
@@ -77,16 +89,35 @@ console.error('handleError',this.errorCode,this.message);
 			$('.video-info').html(this.message);
 		},
 		
+		startListening:function(target,eventName,listener) {
+		    this.listeners[eventName] = listener;
+		    target.addEventListener(eventName,listener);
+		},
+		
+		stopListeningAll:function(target) {
+		    $.each(this.listeners,function(i,o) {
+		        target.removeEventListener(i,o);
+		    });
+		},
+		
 		play:function(options)
 		{
 
-		    $("#"+this.htmlId)[0].innerHTML="";
-				// ça ne devrait même pas exister : on cherche une id, on a qu'un seul élément en retour.
+            if (this.player) {
+                this.remove();
+            }
+            
+            window._vid = this;
+
+            if (options["url"].match(/\.flv$/) || options["mime"]=="video/flv") {
+
+                // No autoplay here because <video src='xxx.flv' autoplay> will start playing on a GoogleTV
+        		// even if video.canPlayType("video/flv")==""        		
+                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' poster='"+options["image"]+"' />";
+            } else {
+                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' autoplay='true' autobuffer preload poster='"+options["image"]+"' />";
+            }
 			
-			$("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' controls autoplay='true' autobuffer preload poster='"+options["image"]+"' />";  
-				// width='100%' height='100%'  
-					/// NON ! Ne pas ! ne pas ! ne jamais ! le style doit se décider en css ou après coup dynamiquement. Jamais en dur de manière imparamétrable : on ne s'en sort jamais sinon.
-           
 			$('#'+this.htmlId+'_video').css({
 				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
@@ -96,21 +127,66 @@ console.error('handleError',this.errorCode,this.message);
 console.info('play',options["url"])
 			
 			var that=this;
-            this.mejs = new MediaElementPlayer($('#'+this.htmlId+"_video")[0],{
+			
+			//Pull this in MediaElement later
+			mejs.HtmlMediaElementShim.myCreate = function(el, o) {			
+        		var
+        			options = mejs.MediaElementDefaults,
+        			htmlMediaElement = (typeof(el) == 'string') ? document.getElementById(el) : el,					
+        			isVideo = (htmlMediaElement.tagName.toLowerCase() == 'video'),			
+        			supportsMediaTag = (typeof(htmlMediaElement.canPlayType) != 'undefined'),
+        			playback = {method:'', url:''},
+        			poster = htmlMediaElement.getAttribute('poster'),
+        			autoplay =  htmlMediaElement.getAttribute('autoplay'),
+        			preload =  htmlMediaElement.getAttribute('preload'),
+        			prop;
+
+        		// extend options
+        		for (prop in o) {
+        			options[prop] = o[prop];
+        		}
+
+        		// check for real poster
+        		poster = (typeof poster == 'undefined' || poster === null) ? '' : poster;
+        		preload = true;
+        		autoplay = true;
+
+        		// test for HTML5 and plugin capabilities
+        		playback = this.determinePlayback(htmlMediaElement, options, isVideo, supportsMediaTag);
+
+        		if (playback.method == 'native') {
+        			// add methods to native HTMLMediaElement
+        			this.updateNative( htmlMediaElement, options, autoplay, preload, playback);				
+        		} else if (playback.method !== '') {
+        			// create plugin to mimic HTMLMediaElement
+        			this.createPlugin( htmlMediaElement, options, isVideo, playback.method, (playback.url !== null) ? mejs.Utility.absolutizeUrl(playback.url).replace('&','%26') : '', poster, autoplay, preload);
+        		} else {
+        			// boo, no HTML5, no Flash, no Silverlight.
+        			this.createErrorMessage( htmlMediaElement, options, (playback.url !== null) ? mejs.Utility.absolutizeUrl(playback.url) : '', poster );
+        		}			
+        	};
+			
+			
+            mejs.HtmlMediaElementShim.myCreate($('#'+this.htmlId+"_video")[0],{
                 pluginPath:"/swf/",
-                videoWidth: $('#'+this.htmlId+"_video").width() /*+1*/,
+                videoWidth: $('#'+this.htmlId+"_video").width(),
                 videoHeight: $('#'+this.htmlId+"_video").height(),
+                pluginWidth: $('#'+this.htmlId+"_video").width(),
+                pluginHeight: $('#'+this.htmlId+"_video").height(),
+                
+                //type:"native",
                 //enablePluginDebug:true,
 				error:this.handleError,
-                success:function(me) {
-                    console.log("MED SUCCESS ",me);
+                success:function(me,domNode) {
+                    
+                    that.player = me;
+                    window._mejs=me;
+                    
 					$('.video-buttons').show();
 					$('.video-info').hide();
-
+                    
 					that.delegated('success');
 					me.addEventListener('progress',function(ev){
-						// 100 * _mejs.media.currentTime / _mejs.media.duration;
-						// bug irreproductible 
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
@@ -122,8 +198,6 @@ console.info('play',options["url"])
 						that.delegated('timeupdate');
 					});
 					me.addEventListener('ended',function(ev){
-						//$('.video-duration').text(mejs.Utility.secondsToTimeCode(_mejs.media.duration));
-						//REPLAY ?
 						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
 						that.delegated('ended');
@@ -137,13 +211,13 @@ console.info('play',options["url"])
 					});
 					
 					me.addEventListener('error',function(ev){
+					    console.log(ev);    
 						that.handleError(ev);
 					});
+					
 				}
-            })
-			
-            window._mejs = this.mejs;
-
+            });
+            
 			$('.video-controls').remove();
 			
 			$('<div class="video-controls">\
@@ -170,56 +244,85 @@ console.info('play',options["url"])
 			$('.video-buttons').hide();
 			
 			$('.video-previous').click(function(){
-				//_mejs.currentTime = 0; // eeeeeh oui, ils ont dû tricher avec la spec HTML5 pour les plugins flash/silverlight
-				_mejs.setCurrentTime(0);
+				if (that.player) that.player.setCurrentTime(0);
 			});
 			$('.video-reward').click(function(){
-				//_mejs.currentTime -= 10;
-				_mejs.setCurrentTime(_mejs.media.currentTime<10?0:(_mejs.media.currentTime-10));
+				if (that.player) that.player.setCurrentTime(that.player.currentTime<10?0:(that.player.currentTime-10));
 			});
 			$('.video-pause').click(function(){
-				_mejs.pause();
+				if (that.player) that.player.pause();
 				$('.video-play').show();
 				$('.video-pause').hide();
 			});
 			$('.video-play').hide().click(function(){
-				_mejs.play();
+				if (that.player) that.player.play();
 				$('.video-play').hide();
 				$('.video-pause').show();
 			});
 			$('.video-stop').hide().click(function(){
-				_mejs.setCurrentTime(0);
-				_mejs.play();
+				if (that.player) {
+				    that.player.setCurrentTime(0);
+				    that.player.play();
+				}
 				$('.video-stop , .video-play').hide();
 				$('.video-pause').show();
 			});
 			$('.video-foward').click(function(){
-				_mejs.setCurrentTime(_mejs.media.currentTime+10);
+				if (that.player) that.player.setCurrentTime(that.player.currentTime+10);
 			});
 			$('.video-next').click(function(){
-				_mejs.setCurrentTime(_mejs.media.currentTime+60);
+				if (that.player)that.player.setCurrentTime(that.player.currentTime+60);
 			});
 			$('.video-time-rail').click(function(e){
 				var t=$('.video-time-rail');
-				_mejs.setCurrentTime(Math.floor(_mejs.media.duration*(e.pageX-t.offset().left)/t.width()));
+				if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration*(e.pageX-t.offset().left)/t.width()));
 			});
 		},
 		
 		pause:function() {
-		    this.mejs.pause();
+		    if (this.player) this.player.pause();
 	    },
 		
 		remove:function()
 		{
-			if (typeof this.mejs != 'undefined')
+			if (typeof this.player != 'undefined')
 			{
+			    try 
+				{
+					this.stopListeningAll(this.player);
+				} catch (e) {}
+                
 				try 
 				{
-					this.mejs.pause();
-					this.mejs.setSrc('');
-				} catch (ev) {}
-				//this.mejs.src='';
+					this.player.pause();
+				} catch (e) {}
 				
+				try 
+				{
+					this.player.stop();
+				} catch (e) {}
+				
+                try 
+				{
+					this.player.setSrc('http://imgjam.com/spacer.gif');
+					this.player.load();
+				} catch (e) {}
+				
+				try 
+				{
+					this.player.stop();
+				} catch (e) {}
+                
+				try 
+				{
+					$(this.player).remove();
+				} catch (e) {}
+				
+				try 
+				{
+					delete this.player;
+				} catch (e) {}
+                
 				
 			}
 			$("#"+this.htmlId).html('');

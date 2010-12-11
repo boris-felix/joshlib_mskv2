@@ -805,11 +805,12 @@ mejs.HtmlMediaElementShim = {
 		// hide original element
 		htmlMediaElement.style.display = 'none';
 		
+		
 		// FYI: options.success will be fired by the MediaPluginBridge
 	},
 	
 	updateNative: function(htmlMediaElement, options, autoplay, preload, playback) {
-		
+//		console.log("uN",htmlMediaElement, options, autoplay, preload, playback);
 		// add methods to video object to bring it into parity with Flash Object
 		for (var m in mejs.HtmlMediaElement) {
 			htmlMediaElement[m] = mejs.HtmlMediaElement[m];

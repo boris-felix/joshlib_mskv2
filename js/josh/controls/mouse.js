@@ -13,7 +13,7 @@
 					case 'mouseenter' :
 					{
 						self.app.publish("control",["hover",event.currentTarget.id]);
-						self.app.publish("menuGoTo",["focus",menuPath],true);
+						//self.app.publish("menuGoTo",["focus",menuPath],true);
 						return false;
 					}
 					break; // mouseenter
@@ -22,7 +22,7 @@
 					case 'click' :
 					{
 						//  j'ai besoin de connaitre le retour , afin de savoir si je dois me rabattre sur "up"
-						var ret = self.app.publish("control",["enter",event.currentTarget.id]);
+						self.app.publish("control",["enter",event.currentTarget.id]);
 						return false;
 					}
 					break; // click

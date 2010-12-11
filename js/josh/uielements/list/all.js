@@ -127,9 +127,11 @@
 				        case 'hover':
 						{
 						    //todo merge previous/nextmoving
-							self.event('onPreviousMoving');
-							self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
-							self.event('onPreviousMoved');
+						    // mouse hover is disabled for now
+							//self.event('onPreviousMoving');
+							//self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							//self.event('onPreviousMoved');
+							//
 						}
 						break; // left
 						case 'left':
