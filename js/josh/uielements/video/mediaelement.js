@@ -124,7 +124,7 @@ console.error('handleError',this.errorCode,this.message);
 				'z-index'   : 00
 			});
             
-console.info('play',options["url"])
+            console.info('play',options["url"])
 			
 			var that=this;
 			
