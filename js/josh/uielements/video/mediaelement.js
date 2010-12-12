@@ -220,17 +220,19 @@ console.error('handleError',this.errorCode,this.message);
             
 			$('.video-controls').remove();
 			
+			var buttonsHtml = (typeof this.options['buttonsHtml'] !== 'undefined') ? this.options['buttonsHtml'] : 
+								'<span class="video-button video-previous">▐◀</span>\
+								<span class="video-button video-reward">◀◀ </span>\
+								<span class="video-button video-play">▶</span>\
+								<span class="video-button video-pause">▮▮</span>\
+								<span class="video-button video-stop">■</span>\
+								<span class="video-button video-foward">▶▶</span>\
+								<span class="video-button video-next">▶▌</span>';
+			
 			$('<div class="video-controls">\
 					<div class="video-info">'+((typeof this.options['pleaseWait'] !== 'undefined')?this.options['pleaseWait']:'Please wait&nbsp;⋅⋅⋅')+'</div>\
-					<div class="video-buttons">\
-						<span class="video-button video-previous">▐◀</span>\
-						<span class="video-button video-reward">◀◀ </span>\
-						<span class="video-button video-play">▶</span>\
-						<span class="video-button video-pause">▮▮</span>\
-						<span class="video-button video-stop">■</span>\
-						<span class="video-button video-foward">▶▶</span>\
-						<span class="video-button video-next">▶▌</span>\
-						<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
+					<div class="video-buttons">'+buttonsHtml+
+						'<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
 					</div>\
 					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
 				</div>').appendTo('#main');
