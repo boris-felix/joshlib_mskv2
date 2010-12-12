@@ -107,7 +107,7 @@ exports.config = {
         'js/josh/main.js',
         'js/josh/app.js',
         'js/josh/menu.js',
-        'js/josh/api.js',
+        'js/josh/grid.js',
         'js/josh/ui.js',
         'js/josh/control.js',
         'js/josh/datasource.js',

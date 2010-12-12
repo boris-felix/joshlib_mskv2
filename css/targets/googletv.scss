@@ -37,8 +37,10 @@ html {
 
 body {
 	background-color:white;
-	height:1080px;
-	width :1920px;
+	/*height:1080px;
+	width :1920px;*/
+	height:100%;
+	width:100%;
 	font-size:100%;
 	margin : auto;
 	line-height: 1;
@@ -55,8 +57,8 @@ input, select
 	font-size:inherit;
 	/* ou sinon font-size:100%; */
 } 
-
-@media (max-height: /*972*/1026px)
+/*
+@media (max-height: 1026px)
 {
 	body {
 		font-size:66.67%;
@@ -66,7 +68,7 @@ input, select
 	
 }
 
-@media (max-height: /*648*/684px)  {
+@media (max-height: 684px)  {
 	body {
 		font-size:53.33%;
 		height : 576px;
@@ -82,7 +84,7 @@ input, select
 		width : 854px;
 	}
 }
-
+*/
 
 .focused { 
 	outline: 2px solid red;

@@ -9,7 +9,7 @@
 		
 		__constructor:function(app) 
 		{
-		    console.log("CONSTR");
+
 		    this.app = app;
 		    
 		    this.currentPath='/';
