@@ -108,9 +108,9 @@ console.error('handleError',this.errorCode,this.message);
             }
             
             window._vid = this;
-
-            if (options["url"].match(/\.flv$/) || options["mime"]=="video/flv") {
-
+			
+            if (options["url"].match(/\.flv$/) || options["mime"]=="video/flv")
+			{
                 // No autoplay here because <video src='xxx.flv' autoplay> will start playing on a GoogleTV
         		// even if video.canPlayType("video/flv")==""        		
                 $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' poster='"+options["image"]+"' />";
@@ -279,6 +279,7 @@ console.info('play',options["url"])
 				var t=$('.video-time-rail');
 				if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration*(e.pageX-t.offset().left)/t.width()));
 			});
+			
 		},
 		
 		pause:function() {
