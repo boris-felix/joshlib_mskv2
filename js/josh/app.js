@@ -84,7 +84,7 @@
                     
                     //try {
                         //console.log(message,data,subscribers.length,i,subscribers[i]);
-                        subscribers[i].func( message, data );
+                        if (subscribers[i]) subscribers[i].func( message, data );
                     //} catch( e ){
                     //    setTimeout( throwException(e), 0);
                     //}

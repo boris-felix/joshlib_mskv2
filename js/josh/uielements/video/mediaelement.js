@@ -50,7 +50,26 @@
     		//Should have an HTML5 <video>-like API
     		this.player = false;
     		
+    		
+    		var self=this;
+>     		this.grid = new J.Grid({
+    		    "grid":[
+    		        [{"id":"previous"}        ,{"id":"reward"}         ,{"id":"play"}     ,{"id":"foward"}         ,{"id":"next"}]
+    		    ],
+    		    "dimensions":2,
+                "onChange":function(coords,elem) {
+                  $(".video-"+elem.id).
+                },
+                "onExit":function(side) {
+                    if (side=="down") {
+                        self.app.publish("menuGo",["focus","up"]);
+                    }
+                },
+                "orientation":"up"
+    		});
+    		
     		this.__base();
+    		
 		},
 		
 		delegated : function( /* eventName, [eventArguments] */ ) {
@@ -98,6 +117,65 @@ console.error('handleError',this.errorCode,this.message);
 		    $.each(this.listeners,function(i,o) {
 		        target.removeEventListener(i,o);
 		    });
+		},
+		
+		onFocus:function() {
+		    var hadFocus = this.hasFocus;
+		    this.__base();
+		    if (!hadFocus) {
+		        self.grid.goTo([2,0]);
+		    }
+		}
+		
+		subscribes:function() {
+
+		    var self=this;
+		    return this.__base().concat([
+		        ["control",function(ev,data) {
+		            
+		            var sens = data[0];
+		            
+		            if (sens=="left" || sens=="right" || sens=="down" || sens=="up") {
+		                self.grid.go(sens);
+		            } else if (sens=="enter") {
+		                
+		                
+		                
+            			$('.video-previous').click(function(){
+            				if (that.player) that.player.setCurrentTime(0);
+            			});
+            			$('.video-reward').click(function(){
+            				if (that.player) that.player.setCurrentTime(that.player.currentTime<10?0:(that.player.currentTime-10));
+            			});
+            			$('.video-pause').click(function(){
+            				if (that.player) that.player.pause();
+            				$('.video-play').show();
+            				$('.video-pause').hide();
+            			});
+            			$('.video-play').hide().click(function(){
+            				if (that.player) that.player.play();
+            				$('.video-play').hide();
+            				$('.video-pause').show();
+            			});
+            			$('.video-stop').hide().click(function(){
+            				if (that.player) {
+            				    that.player.setCurrentTime(0);
+            				    that.player.play();
+            				}
+            				$('.video-stop , .video-play').hide();
+            				$('.video-pause').show();
+            			});
+            			$('.video-foward').click(function(){
+            				if (that.player) that.player.setCurrentTime(that.player.currentTime+10);
+            			});
+            			$('.video-next').click(function(){
+            				if (that.player)that.player.setCurrentTime(that.player.currentTime+60);
+            			});
+		                
+		            }
+		        }]
+		    ]);
+		    
 		},
 		
 		play:function(options)
@@ -221,13 +299,13 @@ console.error('handleError',this.errorCode,this.message);
 			$('.video-controls').remove();
 			
 			var buttonsHtml = (typeof this.options['buttonsHtml'] !== 'undefined') ? this.options['buttonsHtml'] : 
-								'<span class="video-button video-previous">▐◀</span>\
-								<span class="video-button video-reward">◀◀ </span>\
-								<span class="video-button video-play">▶</span>\
-								<span class="video-button video-pause">▮▮</span>\
-								<span class="video-button video-stop">■</span>\
-								<span class="video-button video-foward">▶▶</span>\
-								<span class="video-button video-next">▶▌</span>';
+								'<span id='+this.htmlId+'_button_0' class="video-button video-previous joshover">▐◀</span>\
+								<span id='+this.htmlId+'_button_1' class="video-button video-reward joshover">◀◀ </span>\
+								<span id='+this.htmlId+'_button_2.0' class="video-button video-play joshover">▶</span>\
+								<span id='+this.htmlId+'_button_2.1' class="video-button video-pause joshover">▮▮</span>\
+								<span id='+this.htmlId+'_button_2.2' class="video-button video-stop joshover">■</span>\
+								<span id='+this.htmlId+'_button_3' class="video-button video-foward joshover">▶▶</span>\
+								<span id='+this.htmlId+'_button_4' class="video-button video-next joshover">▶▌</span>';
 			
 			$('<div class="video-controls">\
 					<div class="video-info">'+((typeof this.options['pleaseWait'] !== 'undefined')?this.options['pleaseWait']:'Please wait&nbsp;⋅⋅⋅')+'</div>\
@@ -333,8 +411,6 @@ console.error('handleError',this.errorCode,this.message);
 	    
 	    getHtml:function()
 		{
-			// BUG style='display:none;'  typiquement ce qui est royalement pénible : les styles embarqués. Je pense qu'il vaut mieux insérer le html, et ensuite utiliser hide()
-			// ça m'a quand même foutu en l'air une journée ces bétises.
 			return "<div id='"+this.htmlId+"'></div>"; 
 		}
 		
