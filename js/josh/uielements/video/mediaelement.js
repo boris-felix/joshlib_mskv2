@@ -58,7 +58,7 @@
     		    ],
     		    "dimensions":2,
                 "onChange":function(coords,elem) {
-                  $(".video-"+elem.id).
+                  $(".video-"+elem.id).addClass("video-hover");
                 },
                 "onExit":function(side) {
                     if (side=="down") {
@@ -137,40 +137,54 @@ console.error('handleError',this.errorCode,this.message);
 		            
 		            if (sens=="left" || sens=="right" || sens=="down" || sens=="up") {
 		                self.grid.go(sens);
+		                
+		            } else if (sens=="hover") {
+		                var position = [parseInt(data[1].match(/\_([^\_]+)$/)[1].split(".")[0]),0];
+		                
+		                self.grid.goTo(position);
+		                
 		            } else if (sens=="enter") {
 		                
+		                var position = self.grid.currentCoords;
+		                if (data[1]) {
+		                    position = [parseInt(data[1].match(/\_([^\_]+)$/)[1].split(".")[0]),0];
+		                }
 		                
+		                if (position==0) { //previous
+		                    self.player.setCurrentTime(0);
+		                    
+		                } else if (position==1) { //reward
+		                    self.player.setCurrentTime(self.player.currentTime<10?0:(self.player.currentTime-10));
 		                
-            			$('.video-previous').click(function(){
-            				if (that.player) that.player.setCurrentTime(0);
-            			});
-            			$('.video-reward').click(function(){
-            				if (that.player) that.player.setCurrentTime(that.player.currentTime<10?0:(that.player.currentTime-10));
-            			});
-            			$('.video-pause').click(function(){
-            				if (that.player) that.player.pause();
-            				$('.video-play').show();
-            				$('.video-pause').hide();
-            			});
-            			$('.video-play').hide().click(function(){
-            				if (that.player) that.player.play();
-            				$('.video-play').hide();
-            				$('.video-pause').show();
-            			});
-            			$('.video-stop').hide().click(function(){
-            				if (that.player) {
-            				    that.player.setCurrentTime(0);
-            				    that.player.play();
-            				}
-            				$('.video-stop , .video-play').hide();
-            				$('.video-pause').show();
-            			});
-            			$('.video-foward').click(function(){
-            				if (that.player) that.player.setCurrentTime(that.player.currentTime+10);
-            			});
-            			$('.video-next').click(function(){
-            				if (that.player)that.player.setCurrentTime(that.player.currentTime+60);
-            			});
+		                } else if (position==2) { //play pause stop
+		                    
+		                    
+
+                			$('.video-pause').click(function(){
+                				if (that.player) that.player.pause();
+                				$('.video-play').show();
+                				$('.video-pause').hide();
+                			});
+                			$('.video-play').hide().click(function(){
+                				if (that.player) that.player.play();
+                				$('.video-play').hide();
+                				$('.video-pause').show();
+                			});
+                			$('.video-stop').hide().click(function(){
+                				if (that.player) {
+                				    that.player.setCurrentTime(0);
+                				    that.player.play();
+                				}
+                				$('.video-stop , .video-play').hide();
+                				$('.video-pause').show();
+                			});
+                			
+                			
+		                } else if (position==3) { //foward
+		                    self.player.setCurrentTime(self.player.currentTime+10);
+		                } else if (position==4) { //next
+		                    self.player.setCurrentTime(self.player.currentTime+60);
+		                }
 		                
 		            }
 		        }]
