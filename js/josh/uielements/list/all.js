@@ -23,6 +23,7 @@
         defaultOptions:{
             //where is the tree unfolding to
             "orientation":"up",
+            "persistFocus":true,
             "itemTemplate":function(self,htmlId,data)
 			{
 				/** TODO itemTemplate comme étant un string . Principalement pour simplifer le bousin pour les pas trop développeurs
@@ -50,7 +51,6 @@
 			
 			// this.focusIndex(this.focusedIndex); // he's banned, because he's firing onFocus(ed|ng) events when we don't need them
 			
-			this.focusedIndex=0;
 			//$("#"+this.htmlId+'_0').addClass("focused");
         },
 		
@@ -206,6 +206,13 @@
 		    ]);
 		},
 		
+		refresh:function() {
+		    this.__base();
+		    if (this.options["persistFocus"] && this.focusedIndex!==null) {
+		        $("#"+this.htmlId+'_'+this.focusedIndex).addClass("focused");
+		    }
+		},
+		
 		setLoading:function() {
 		    console.log("LOADING",this.id);
 		    $("#"+this.htmlId)[0].innerHTML = "<li width='100%'>Loading...</li>";
@@ -214,15 +221,22 @@
 		onFocus:function(path)
 		{
 		    this.event('onFocusing');
-		    //todo use menuentry.fullId() to get the index
 		    
-		    var id = path.split("/").pop();
-		    
-		    for (var i=0;i<this.data.length;i++) {
-		        if (id==this.data[i].id) {
-		            this.focusIndex(i);
-		        }
+		    if (path.charAt(path.length-1)=="/") {
+		        this.focusIndex(0);
+		    } else {
+		         //todo use menuentry.fullId() to get the index
+                
+        		var id = path.split("/").pop();
+                
+        		for (var i=0;i<this.data.length;i++) {
+        		    if (id==this.data[i].id) {
+        		        this.focusIndex(i);
+        		    }
+        		}
 		    }
+		    
+		   
 		    this.__base();
 			this.event('onFocused');
 		},
@@ -232,12 +246,7 @@
 			this.event('onFocusIndexing');
 		    if (this.focusedIndex!==null)
 			{
-		        $("#"+this.htmlId+'_'+this.focusedIndex).removeClass("focused");
-		        if ($(".focused").length>0)
-				{
-					console.debug("There was more than one .focused! Lost some nav events?",$(".focused"));
-		            $(".focused").removeClass('focused');
-		        }
+		        $("#"+this.htmlId+" .focused").removeClass("focused");
 		    }
 		    
 		    this.focusedIndex=index;

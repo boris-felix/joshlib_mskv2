@@ -57,7 +57,7 @@
     		    ],
     		    "dimensions":2,
                 "onChange":function(coords,elem) {
-                  $(".focused").removeClass("focused");
+                  $("div.video-controls .focused").removeClass("focused");
                   
                   if (elem.id=="p") {
                       $(".video-play, .video-pause, .video-stop").addClass("focused");
@@ -357,7 +357,7 @@ console.error('handleError',this.errorCode,this.message);
 						'<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
 					</div>\
 					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
-				</div>').appendTo('#main');
+				</div>').appendTo("#"+this.htmlId);
 				
 			if (options["url"]===undefined)
 			{
@@ -375,6 +375,14 @@ console.error('handleError',this.errorCode,this.message);
 				if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration*(e.pageX-t.offset().left)/t.width()));
 			});
 			
+		},
+		
+		onBlur:function() {
+		    this.__base();
+		    
+		    if (!this.options["persistFocus"]) {
+		        $(".video-controls .focused").removeClass("focused");
+		    }
 		},
 		
 		pause:function() {
