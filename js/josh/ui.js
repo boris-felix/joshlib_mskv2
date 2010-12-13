@@ -40,7 +40,7 @@
 			//Listen for any new menuData
 			
 			if (this.options["menuRoot"]) {
-			    /*
+			    
 			    this.app.subscribe("menuDataLoading",function(ev,data) {
 
 			        //This menuData is about us!
@@ -49,7 +49,7 @@
     			        self.refresh();
     			    }
     			});
-                */
+                
 			    this.app.subscribe("menuData",function(ev,data) {
 			        
 			        //This menuData is about us!
@@ -222,9 +222,13 @@
 		    this.processShowHide();
 		},
 		
-		hide:function() {
+		hide:function(immediate) {
 		    this.nextShowHide="hide";
-			this.showHideSwitch.reset();
+		    if (immediate) {
+		        this.processShowHide();
+		    } else {
+		        this.showHideSwitch.reset();
+		    }
 		},
 		
 		insert:function() {

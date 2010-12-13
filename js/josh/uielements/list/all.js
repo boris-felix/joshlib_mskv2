@@ -206,6 +206,11 @@
 		    ]);
 		},
 		
+		setLoading:function() {
+		    console.log("LOADING",this.id);
+		    $("#"+this.htmlId)[0].innerHTML = "<li width='100%'>Loading...</li>";
+		},
+		
 		onFocus:function(path)
 		{
 		    this.event('onFocusing');
