@@ -56,7 +56,7 @@
 		
 		getHtmlOpeningTag:function()
 		{
-			return '<'+this.HtmlTag+' id="'+this.htmlId+'">';
+			return '<'+this.HtmlTag+' id="'+this.htmlId+'" style="display:none">';
 		},
 
 		getHtmlClosingTag:function()
@@ -88,6 +88,10 @@
 		getHtml:function()
 		{
 			return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
+		},
+		
+		setMenuRoot:function(menuRoot) {
+		    this.menuRoot = menuRoot.replace(/\/[^\/]*$/,"/");
 		},
 		
 		event : function(eventname)
@@ -226,11 +230,6 @@
 		    
 		    $("#"+this.htmlId+'_'+index).addClass("focused");
 			this.event('onFocusIndexed');
-		},
-		
-		setData:function(menuRoot,data) {
-		    this.menuRoot = menuRoot;
-			this.data = data;
 		}
 	});
 	

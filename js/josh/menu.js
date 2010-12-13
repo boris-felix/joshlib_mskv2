@@ -104,7 +104,7 @@
 				return false;
 			} else {
 				
-				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && register=="focus" && !self.index[goingto]["_data"]["children"]) 
+				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && (register=="focus" || register=="prefocus" || register=="preload") && !self.index[goingto]["_data"]["children"]) 
 				{
 				    self.app.publish("menuDataLoading",[goingto+"/"],true);
 				    
@@ -148,11 +148,13 @@
 		
 		setData:function(path,data) 
 		{
-			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
+			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les enfants
 			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 					
 			if ( (path.charAt(path.length-1)!='/') || (path=='/') )
 			{
+			    this.app.publish("menuData",[path,data],true);
+			    
 				this.buildIndex(path,data,true);
 				if (typeof data === 'object')
 				{
@@ -170,11 +172,14 @@
 					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
 				}
 			}
-			this.app.publish("menuData",[path,data],true);
+			
 		},
 		
 		buildIndex:function(path,data,recursive) 
 		{
+		    
+		    
+		    
 			if (this.index[path] === undefined) 
 			{
 				this.index[path] = {};
@@ -229,16 +234,23 @@
 			
 			if (recursive && data["children"])
 			{
+			    //fixme
+                this.index[(path!=='/'?path:'')+"/"] = {'_data':data["children"]};
+                
 				for (var i in data["children"])
 				{
-					this.buildIndex((path!=='/'?path:'')+"/"+data["children"][i]["id"],data["children"],true);
+					this.buildIndex((path!=='/'?path:'')+"/"+data["children"][i]["id"],data["children"][i],true);
+					
 				}
+				this.app.publish("menuData",[(path!=='/'?path:'')+"/",data["children"]],true);
+			} else if (path=="/") {
+			    this.index["/"] = {'_data':data};
 			}
 		},
 
 		getData:function(path) 
 		{
-			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les chti n'enfants
+			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les enfants
 			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
 			
 			// aud cas où, je blinde

@@ -24,7 +24,7 @@ test('Installation Joshlib',function(){
 
 test('Menu navigation',function(){
 
-	expect(18);
+	expect(20);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
@@ -76,6 +76,14 @@ test('Menu navigation',function(){
 	    {'id':'leaf41'},
 	    {'id':'leaf42'}
 	]);
+	
+	same(myapp.menu.getData("/leaf2/"),[
+      {'id':'leaf21'},
+      {'id':'leaf22'}
+     ]);
+     
+     var rootm = myapp.menu.getData("/");
+     same(rootm[0],{'id':'leaf1'});
 
 	var lastMenuChange = null;
 	myapp.subscribe("menuChange",function(ev,data) {

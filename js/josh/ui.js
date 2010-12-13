@@ -24,6 +24,8 @@
 			this.hasFocus = false;
 			this.inserted = false;
 			
+			this.menuRoot = false;
+			
 			if (options["parent"]) {
 			    options["parent"].registerChild(this);
 			}
@@ -35,19 +37,19 @@
 			if (this.options["menuRoot"]) {
 			    
 			    this.app.subscribe("menuDataLoading",function(ev,data) {
-			        console.log("load",data);
+
 			        //This menuData is about us!
-    			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
+    			    if (self.menuRoot==data[0]) {
     			        self.setLoading();
     			        self.refresh();
     			    }
     			});
                 
 			    this.app.subscribe("menuData",function(ev,data) {
+			        
 			        //This menuData is about us!
-    			    if (self.options["menuRoot"]==data[0] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[0]))) {
-    			        self.setData(data[0],data[1]);
-    			        
+    			    if (self.menuRoot==data[0]) {
+    			        self.setData(data[1]);
     			        self.refresh();
     			    }
     			});
@@ -58,7 +60,20 @@
     			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
 
     			        if (data[0]=="focus") {
+    			            self.setMenuRoot(data[1]);
+    			            
+    			            var mdata = self.app.menu.getData(self.menuRoot);
+//    			            console.log("m",mdata,self.menuRoot);
+    			            if (mdata) {
+    			                self.setData(mdata);
+    			                self.refresh();
+    			            }
+    			            
     			            self.onFocus(data[1]);
+    			          
+    			        //When we're expected to be the next focus
+    			        } else if (data[0]=="prefocus") {
+        			        self.menuRoot = data[1];
     			            
     			        } else if (data[0]=="current") {
     			            //
@@ -78,6 +93,10 @@
 		
 		init:function() {
 		    
+		},
+		
+		setMenuRoot:function(menuRoot) {
+		    this.menuRoot = menuRoot;
 		},
 		
 		setLoading:function() {
@@ -164,7 +183,8 @@
 			if (typeof callback==='function') { callback(); }
 		},
 		
-		show:function() {		    
+		show:function() {		   
+		     
 			var continuous = true;
 			if (typeof this.options["show"]==='function')
 			{
@@ -195,7 +215,7 @@
 			} else {
 				parent = this.app.baseHtml;
 			}
-			
+//			console.log(this.id,this.getHtml());
 			parent.append(this.getHtml());
 			this.inserted=true;
 			if (this.options["autoShow"]) {
@@ -216,8 +236,11 @@
 		
 		getHtmlId:function() {
 			return this.app.id+"_e_"+this.type+"_"+this.id;
-		}
+		},
 		
+		setData:function(data) {
+			this.data = data;
+		}
 		
 	});
 	
