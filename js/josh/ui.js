@@ -24,6 +24,13 @@
 			this.hasFocus = false;
 			this.inserted = false;
 			
+			this.nextShowHide=false;
+			
+			var self=this;
+			this.showHideSwitch = new J.DelayedSwitch(function() {
+			    self.processShowHide();
+			},null,1000);
+			
 			this.menuRoot = false;
 			
 			if (options["parent"]) {
@@ -31,8 +38,6 @@
 			}
 			
 			//Listen for any new menuData
-			
-			var self = this;
 			
 			if (this.options["menuRoot"]) {
 			    
@@ -74,6 +79,10 @@
     			        //When we're expected to be the next focus
     			        } else if (data[0]=="prefocus") {
         			        self.menuRoot = data[1];
+        			        
+        			        if (self.options["showOnPreFocus"]===true) {
+        			            self.show();
+        			        }
     			            
     			        } else if (data[0]=="current") {
     			            //
@@ -185,29 +194,22 @@
 			if (typeof callback==='function') { callback(); }
 		},
 		
-		show:function() {		   
-		     
-			var continuous = true;
-			if (typeof this.options["show"]==='function')
-			{
-				continuous = this.options["show"](this);
-			} 
-			if (continuous)
-			{
-				$("#"+this.htmlId).show();
-			}
+		processShowHide:function() {
+		    if (this.nextShowHide=="show") {
+		        $("#"+this.htmlId).show();
+		    } else {
+		        $("#"+this.htmlId).hide();
+		    }
+		},
+		
+		show:function() {
+		    this.nextShowHide="show";
+		    this.processShowHide();
 		},
 		
 		hide:function() {
-			var continuous = true;
-			if (typeof this.options["hide"]==='function')
-			{
-				continuous = this.options["hide"](this);
-			} 
-			if (continuous)
-			{
-				$("#"+this.htmlId).hide();
-			}
+		    this.nextShowHide="hide";
+			this.showHideSwitch.reset();
 		},
 		
 		insert:function() {

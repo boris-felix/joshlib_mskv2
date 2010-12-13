@@ -190,14 +190,14 @@
 							    var dest = self.menuRoot+self.data[self.focusedIndex]["id"];
 							}
 							
-							if (self.app.menu.getRegister("current")!=dest) {
+							//if (self.app.menu.getRegister("current")!=dest) {
 							    
 							    self.event('onPanelActing');
                                 
 							    self.app.publish("menuGoTo",["current",dest]);
 							
 							    self.event('onPanelActed');
-							}
+							//}
 						}
 						break; // enter
 				   }
