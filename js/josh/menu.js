@@ -74,7 +74,7 @@
 				break;
 				case 'down' :
 				
-				    if (register=="focus" && self.beingLoaded[self.registre[register]+"/"]) {
+				    if ((register=="focus" || register=="prefocus") && self.beingLoaded[self.registre[register]+"/"]) {
 				        self.setRegister(register,self.registre[register]+"/");
 				        return true;
 					} else if ((typeof self.index[self.registre[register]]['_child'] != 'undefined') && self.index[self.registre[register]]['_child'].length>0 ) {
@@ -111,14 +111,18 @@
 				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && (register=="focus" || register=="prefocus" || register=="preload") && !self.index[goingto]["_data"]["children"]) 
 				{
 				    self.app.publish("menuDataLoading",[goingto+"/"],true);
-				    
+				    self.index[goingto+"/"] = {'_data':"loading"};
 				    self.beingLoaded[goingto+"/"]=true;
 				    
 				    self.index[goingto]["_data"]["getChildren"](function(children) {
 				        
 				        delete self.beingLoaded[goingto+"/"];
 				        
+				        
 				        self.setData(goingto+"/",children);
+				        //console.log("index",goingto,children);
+				        self.index[goingto+"/"]["_data"] = children;
+				        self.app.publish("menuData",[goingto+"/",children],true);
 				        //if we're still waiting for the answer, focus on 1st element
 				        if (self.registre[register]==goingto+"/") {
 				            
@@ -247,8 +251,8 @@
 					
 				}
 				this.app.publish("menuData",[(path!=='/'?path:'')+"/",data["children"]],true);
-			} else if (path=="/") {
-			    this.index["/"] = {'_data':data};
+			} else if ((path.charAt(path.length-1)=='/')) {
+			    this.index[path] = {'_data':data};
 			}
 		},
 

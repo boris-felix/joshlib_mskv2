@@ -40,7 +40,7 @@
 			//Listen for any new menuData
 			
 			if (this.options["menuRoot"]) {
-			    
+			    /*
 			    this.app.subscribe("menuDataLoading",function(ev,data) {
 
 			        //This menuData is about us!
@@ -49,7 +49,7 @@
     			        self.refresh();
     			    }
     			});
-                
+                */
 			    this.app.subscribe("menuData",function(ev,data) {
 			        
 			        //This menuData is about us!
@@ -68,9 +68,13 @@
     			            self.setMenuRoot(data[1]);
     			            
     			            var mdata = self.app.menu.getData(self.menuRoot);
-//    			            console.log("m",mdata,self.menuRoot);
+    			            console.log("m focus",mdata,self.menuRoot);
     			            if (mdata) {
-    			                self.setData(mdata);
+    			                if (mdata=="loading") {
+    			                    self.setLoading();
+    			                } else {
+    			                    self.setData(mdata);
+    			                }
     			                self.refresh();
     			            }
     			            
@@ -79,6 +83,17 @@
     			        //When we're expected to be the next focus
     			        } else if (data[0]=="prefocus") {
         			        self.menuRoot = data[1];
+        			        
+        			        var mdata = self.app.menu.getData(self.menuRoot);
+    			            console.log("m prefocus",mdata,self.menuRoot);
+    			            if (mdata) {
+    			                if (mdata=="loading") {
+    			                    self.setLoading();
+    			                } else {
+    			                    self.setData(mdata);
+    			                }
+    			                self.refresh();
+    			            }
         			        
         			        if (self.options["showOnPreFocus"]===true) {
         			            self.show();
@@ -196,7 +211,7 @@
 		
 		processShowHide:function() {
 		    if (this.nextShowHide=="show") {
-		        $("#"+this.htmlId).show();
+		        $("#"+this.htmlId).css({"opacity":1}).show();
 		    } else {
 		        $("#"+this.htmlId).hide();
 		    }

@@ -24,7 +24,7 @@ test('Installation Joshlib',function(){
 
 test('Menu navigation',function(){
 
-	expect(20);
+	expect(24);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
@@ -154,9 +154,18 @@ test('Menu navigation',function(){
     //should not be loaded right away
     same(lastMenuChange,["focus","/leaf5"],'Async!');
     
+    same(myapp.menu.getData("/leaf5").id,"leaf5");
+    same(myapp.menu.getData("/leaf5/"),"loading");
+    
+    
     stop();
     
     setTimeout(function() {
+
+        same(myapp.menu.getData("/leaf5").id,"leaf5");
+
+        same((myapp.menu.getData("/leaf5/")[0] || {"id":"none"}).id,"leaf51");
+
         myapp.publish("menuGo",["focus","down"],true);
         same(lastMenuChange,["focus","/leaf5/leaf51"],'Down Async');
         
@@ -165,7 +174,7 @@ test('Menu navigation',function(){
         
         
         start();  
-    },600)
+    },700)
     
     
 });
