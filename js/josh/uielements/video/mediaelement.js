@@ -380,9 +380,8 @@ console.error('handleError',this.errorCode,this.message);
 		onBlur:function() {
 		    this.__base();
 		    
-		    if (!this.options["persistFocus"]) {
-		        $(".video-controls .focused").removeClass("focused");
-		    }
+		    $(".video-controls").hide();
+		    
 		},
 		
 		pause:function() {
