@@ -7,14 +7,17 @@
 		    var self=this;
             this.isDefaultPlayer=!(this.options.defaultPlayer===false);
             
+            var playing=false;
+            
             this.app.subscribe("menuChange",function(ev,data) {
             
                 //Filter only video menu items on the "current" register
                 if (data[0]=="current" && self.isDefaultPlayer)
     			{
 				
-                    if (self.app.menu.getData(data[1]).type=="video")
+                    if (self.app.menu.getData(data[1]).type=="video" && playing!=data[1])
     				{
+    				    playing=data[1];
                         self.play(self.app.menu.getData(data[1]));
 					
     					if (self.options.HtmlTags !== undefined)

@@ -44,6 +44,10 @@
 		    this.app.publish("menuChange",[register,position],true);
 		},
 		
+		getRegister:function(register) {
+		    return this.registre[register];
+		},
+		
 		goRelative:function(register,movement) {
 		    
 		    var self = this;

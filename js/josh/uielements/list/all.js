@@ -125,6 +125,7 @@
 							case 'right': sens = 'left';	break;
 						}
 					}
+					console.log("receiveControl",self.id,data);
 		            
 		           switch (sens)
 				   {
@@ -175,20 +176,28 @@
 							self.onBlur();
 							self.app.publish("menuGo",["focus","down"]);
 							self.event('onPanelChilded');
+
 							/// faudrait en async J.publish("menuGo",["current","down"]);
 						}
 						break; // up
 						case 'enter':
 						{
 						    if (!self.hasFocus && !data[1]) return false;
-							self.event('onPanelActing');
+							
 							if (data[1]) {
-							    self.app.publish("menuGoTo",["current",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
+							    var dest = self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"];
 							} else {
-							    self.app.publish("menuGoTo",["current",self.menuRoot+self.data[self.focusedIndex]["id"]]);
+							    var dest = self.menuRoot+self.data[self.focusedIndex]["id"];
 							}
 							
-							self.event('onPanelActed');
+							if (self.app.menu.getRegister("current")!=dest) {
+							    
+							    self.event('onPanelActing');
+                                
+							    self.app.publish("menuGoTo",["current",dest]);
+							
+							    self.event('onPanelActed');
+							}
 						}
 						break; // enter
 				   }

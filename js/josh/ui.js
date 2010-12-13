@@ -116,6 +116,7 @@
 		    
 		    if (!this.hasFocus)
 			{   
+			    console.log("onFocus",this.id);
     		    var self=this;
     		    this.subscribes().forEach(function(s) {
     				self._subscribed.push(self.app.subscribe(s[0],s[1]));
@@ -135,6 +136,7 @@
 		},
 		
 		onBlur:function(path) {
+		    console.log("onBlur",this.id);
 		    if (this.options["hideOnBlur"]===true) {
 		        this.hide();
 		    }

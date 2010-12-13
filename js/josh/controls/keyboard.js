@@ -5,8 +5,11 @@
 
 		start:function() {
 		    var self=this;
+		    
+
 			$(window).bind('keydown',function(e){
 				if (!e) e=window.event;
+				console.log("key",e.keyCode);
 				switch(e.keyCode)
 				{
 					case 13 :
