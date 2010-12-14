@@ -204,6 +204,12 @@ console.error('handleError',this.errorCode,this.message);
 				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
 				'z-index'   : 00
 			});
+			
+			if (this.options["forceAspectRatio"]) {
+			    if (!this.options['width']) {
+			        $('#'+this.htmlId+'_video').css({'width':(this.options["forceAspectRatio"]*$('#'+this.htmlId+'_video').height())+"px"});
+			    }
+			}
             
             console.info('play',options["url"])
 			
