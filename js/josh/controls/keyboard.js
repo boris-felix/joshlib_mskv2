@@ -24,9 +24,9 @@
 					
 						return false;
 					break;
-					case 32 :
+					case 32 : //space
 					
-					    self.app.publish("control",["down"]);
+					    self.app.publish("control",["enter"]);
 
 						return false;
 					break;
@@ -56,6 +56,42 @@
 						return false;
 						
 					break;
+					
+					//special googletv media keys
+					//http://code.google.com/tv/web/docs/implement_for_tv.html
+					
+					case 179:
+					
+					    self.app.publish("control",["play"]);
+					    
+						return false;
+						
+					break;
+					
+					case 178:
+					
+					    self.app.publish("control",["stop"]);
+					    
+						return false;
+						
+					break;
+                    
+				    case 176:
+					
+					    self.app.publish("control",["next"]);
+					    
+						return false;
+						
+					break;
+					
+					case 177:
+					
+					    self.app.publish("control",["prev"]);
+					    
+						return false;
+						
+					break;
+					
 				}
 			});
 			

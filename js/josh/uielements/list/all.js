@@ -37,11 +37,14 @@
 				 **/
 				
                 return "<li id='"+htmlId+"' data-path='"+self.menuRoot+data.id+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
+            },
+            "loadingTemplate":function(self) {
+                return "<li class='loading'>Loading...</li>";
             }
         },
 
         init:function() {
-
+            this.isLoading=true;
             this.focusedIndex=null;
             this.data = [];
         },
@@ -66,15 +69,10 @@
 		
 		getHtmlInner:function()
 		{
-			if (this.data.length==0)
+			if (this.isLoading)
 			{
-				console.info('Data de la List actuellement vide ',this);
-				if (typeof this.options['placeholder']=='function')
-				{
-					return this.options['placeholder']();
-				} else {
-					return this.options['placeholder'];
-				}
+				return this.options["loadingTemplate"](this);
+				
 			} else {
 				var ret =[];
 				for (var i=0;i<this.data.length;i++)
@@ -218,9 +216,14 @@
 		},
 		
 		setLoading:function() {
-		    console.log("LOADING",this.id);
-		    $("#"+this.htmlId)[0].innerHTML = "<li width='100%'>Loading...</li>";
+		    this.isLoading=true;
 		},
+		
+		setData:function(data) {
+		    this.isLoading=false;
+			this.data = data;
+		},
+        
 		
 		onFocus:function(path)
 		{
