@@ -1,43 +1,5 @@
 (function(J,$) {
 
-	/// TODO implémenter les gestions d'erreurs dans la box de controle
-	
-	// plus d'infos sur les events de la balise video : http://www.w3.org/2010/05/video/mediaevents.html
-	/*
-	$('video').live('onerror error',function(e){
-		$('#infobulle').stop().css(infobulleAspectLevel2);
-		// d'après http://www.w3.org/TR/html5/video.html
-			delayHidingPanel(false);
-			switch (e.target.error.code)
-			{
-				case e.target.error.MEDIA_ERR_ABORTED:
-					showbartitle('Lecture interrompue','Vous avez annulé la lecture de la vidéo.');
-				break;
-				case e.target.error.MEDIA_ERR_NETWORK:
-					showbartitle('Lecture interrompue','Un incident réseau a interrompu le flux vidéo.');
-				break;
-				case e.target.error.MEDIA_ERR_DECODE:
-					showbartitle('Lecture impossible','La lecture vidéo s’est interrompue soit parce que le document a été corrompu ou parce que la vidéo utilise des fonctionnalités trop avancées.');
-				break;
-				case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-					showbartitle('Lecture impossible','Cette vidéo n’a pu être chargée, soit à cause d’un problème sur notre serveur, sur internet ou que le format vidéo n’est pas reconnu.');
-				break;
-				default:
-					showbartitle('Lecture interrompue','Une erreur non répertoriée a eu lieue.');
-				break;
-			}
-	});
-	
-	$('video').live('play canplay buffer buffered',function(){
-		$('#infobulle , ul').stop().fadeOut();
-		$('.flareVideo > .controls').show();
-	});
-	
-	$('video').live('ended',function(){
-		delayHidingPanel(false);
-	});
-	// #france24_e_List_showbar img , 
-	*/
 	
 	J.UI.Video = J.Class(J.UI.Video,{
 		
@@ -124,6 +86,15 @@ console.error('handleError',this.errorCode,this.message);
 		    $.each(this.listeners,function(i,o) {
 		        target.removeEventListener(i,o);
 		    });
+		},
+		
+		show:function() {
+		    this.__base();
+		    $("#"+this.htmlId+" .video-controls").stop().css({"opacity":1}).show();
+		},
+		hide:function() {
+		    this.__base();
+		    $("#"+this.htmlId+" .video-controls").hide();
 		},
 		
 		refresh:function() {
@@ -217,8 +188,6 @@ console.error('handleError',this.errorCode,this.message);
                 this.remove();
             }
             
-            
-            
             window._vid = this;
 			
             if (options["url"].match(/\.flv$/) || options["mime"]=="video/flv")
@@ -303,6 +272,9 @@ console.error('handleError',this.errorCode,this.message);
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
+					});
+					me.addEventListener('playing',function(ev){
+					    that.setVideoStatus("playing");
 					});
 					me.addEventListener('timeupdate',function(ev){
 					    //that.setVideoStatus("playing");
@@ -390,6 +362,7 @@ console.error('handleError',this.errorCode,this.message);
 		
 		remove:function()
 		{
+		    this.playingPath=false;
 			if (typeof this.player != 'undefined')
 			{
 			    try 
@@ -436,8 +409,8 @@ console.error('handleError',this.errorCode,this.message);
                 
 				
 			}
-			//console.log("REMOVE VIDEO");
-			$("#"+this.htmlId).html('');
+			console.log("REMOVED VIDEO",this.id);
+			//$("#"+this.htmlId).html('');
 		},
 	    
 	    getHtml:function()

@@ -106,6 +106,7 @@
 					// réfléchir sur la possibilité de proposer en retour d'autres parametres
 				);
 			}
+			return false;
 		},
 		
 		subscribes:function() {
@@ -172,10 +173,13 @@
 						case 'up':
 						{
 						    if (!self.hasFocus) return false;
-							self.event('onPanelChilding');
-							self.onBlur();
-							self.app.publish("menuGo",["focus","down"]);
-							self.event('onPanelChilded');
+							
+							if (!self.event('onPanelChilding')) {
+							    self.onBlur();
+    							self.app.publish("menuGo",["focus","down"]);
+    							self.event('onPanelChilded');
+							}
+							
 
 							/// faudrait en async J.publish("menuGo",["current","down"]);
 						}

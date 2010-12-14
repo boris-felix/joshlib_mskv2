@@ -7,7 +7,7 @@
 		    var self=this;
             this.isDefaultPlayer=!(this.options.defaultPlayer===false);
             
-            var playing=false;
+            this.playingPath = false;
             
             this.app.subscribe("menuChange",function(ev,data) {
             
@@ -15,9 +15,9 @@
                 if (data[0]=="current" && self.isDefaultPlayer)
     			{
 				
-                    if (self.app.menu.getData(data[1]).type=="video" && playing!=data[1])
+                    if (self.app.menu.getData(data[1]).type=="video" && self.playingPath!=data[1])
     				{
-    				    playing=data[1];
+    				    self.playingPath=data[1];
                         self.play(self.app.menu.getData(data[1]));
 					
     					if (self.options.HtmlTags !== undefined)
