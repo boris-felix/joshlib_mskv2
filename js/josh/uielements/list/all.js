@@ -47,6 +47,7 @@
             this.isLoading=true;
             this.focusedIndex=null;
             this.data = [];
+            this.id2index = {};
         },
         
         insert:function() {
@@ -130,12 +131,16 @@
 				   {
 				        case 'hover':
 						{
-						    //todo merge previous/nextmoving
-						    // mouse hover is disabled for now
-							//self.event('onPreviousMoving');
-							//self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"]]);
-							//self.event('onPreviousMoved');
-							//
+						    var split = data[1].split("/");
+						    var lastPath = split[split.length-1];
+						    if (data[1].indexOf(self.menuRoot)===0) {
+						        var subPath = data[1].substring(self.menuRoot.length);
+						        if (subPath.indexOf("/")===-1) {
+						            if (self.id2index[subPath]!==undefined) {
+						                self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[self.id2index[subPath]]["id"]]);
+						            }
+						        }
+						    }
 						}
 						break; // left
 						case 'left':
@@ -184,12 +189,26 @@
 						break; // up
 						case 'enter':
 						{
-						    if (!self.hasFocus && !data[1]) return false;
-							
+						    
+						    var dest = false;
+						    
 							if (data[1]) {
-							    var dest = self.menuRoot+self.data[parseInt(data[1].split("_").pop())]["id"];
+							    var split = data[1].split("/");
+        					    var lastPath = split[split.length-1];
+        					    if (data[1].indexOf(self.menuRoot)===0) {
+        					        var subPath = data[1].substring(self.menuRoot.length);
+        					        if (subPath.indexOf("/")===-1) {
+        					            if (self.id2index[subPath]!==undefined) {
+        					                dest = self.menuRoot+self.data[self.id2index[subPath]]["id"];
+        					            }
+        					        }
+        					    }
+        					    if (!dest) {
+        					        return;
+        					    }
 							} else {
-							    var dest = self.menuRoot+self.data[self.focusedIndex]["id"];
+							    if (!self.hasFocus && !data[1]) return false;
+							    dest = self.menuRoot+self.data[self.focusedIndex]["id"];
 							}
 							
 							//if (self.app.menu.getRegister("current")!=dest) {
@@ -222,6 +241,11 @@
 		setData:function(data) {
 		    this.isLoading=false;
 			this.data = data;
+			
+			//todo: do this in menu
+			for (var i=0;i<data.length;i++) {
+			    this.id2index[data[i].id]=i;
+			}
 		},
         
 		
