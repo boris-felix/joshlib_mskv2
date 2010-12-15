@@ -81,7 +81,9 @@
                 }; 
                 
                 for ( var i = 0, j = subscribers.length; i < j; i++ ){
-                    
+                    if (self.debugEvents) {
+                    //    console.log("debugEventsCallbacks",i,j,message,data,sync);
+                    }
                     //try {
                         //console.log(message,data,subscribers.length,i,subscribers[i]);
                         if (subscribers[i]) subscribers[i].func( message, data );

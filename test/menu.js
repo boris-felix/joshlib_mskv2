@@ -24,7 +24,7 @@ test('Installation Joshlib',function(){
 
 test('Menu navigation',function(){
 
-	expect(24);
+	expect(32);
 	
 	//equals(testee2.index,{},'index d\'origine');
 	
@@ -37,11 +37,17 @@ test('Menu navigation',function(){
 	    {'id':'leaf2',
 	     'children':[
 	      {'id':'leaf21'},
-	      {'id':'leaf22'}
+	      {'id':'leaf22',
+	       'children':[
+  	        {'id':'leaf221'},
+  	        {'id':'leaf222'}
+  	       ]
+	      }
 	     ]
 	    },
         {'id':'leaf3',
          'getChildren':function(callback) {
+             console.log("TEST getChilden leaf3");
                  callback([
                      {"id":"leaf31"},
                      {"id":"leaf32"}
@@ -65,11 +71,35 @@ test('Menu navigation',function(){
         },
         
 	]);
+	myapp.menu.resolveMoves("/leaf1",["next"],function(path) {
+	    equals(path,"/leaf2","resolveMove next");
+	});
+    
+    myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+	    equals(path,"/leaf4","resolveMove next3");
+	});
+	
 	equals(myapp.menu.getData("/leaf4").label,"test1");
 	
+	myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+	    equals(path,"/leaf4","resolveMove next3");
+	});
+	
+	same(myapp.menu.getData("/leaf2").id,"leaf2");
+	
+	same(myapp.menu.getData("/leaf2/"),[
+      {'id':'leaf21'},
+      {'id':'leaf22'}
+     ]);
+     
 	//Change a leaf
 	myapp.menu.setData('/leaf4',{"label":"test2"});
     equals(myapp.menu.getData("/leaf4").label,"test2");
+
+	myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+	    equals(path,"/leaf4","resolveMove next3");
+	});
+    
 
 	//Change a tree
 	myapp.menu.setData('/leaf4/',[
@@ -77,10 +107,11 @@ test('Menu navigation',function(){
 	    {'id':'leaf42'}
 	]);
 	
-	same(myapp.menu.getData("/leaf2/"),[
-      {'id':'leaf21'},
-      {'id':'leaf22'}
-     ]);
+     
+     same(myapp.menu.getData("/leaf4/"),[
+       {'id':'leaf41'},
+       {'id':'leaf42'}
+      ]);
      
      var rootm = myapp.menu.getData("/");
      same(rootm[0],{'id':'leaf1'});
@@ -124,6 +155,14 @@ test('Menu navigation',function(){
 	
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
 	
+	myapp.publish("menuGoTo",["focus","/leaf2/"],true);
+	
+	same(lastMenuChange,["focus","/leaf2/leaf21"],'Menu Go focus down with last slash');
+	
+	myapp.publish("menuGo",["focus","up"],true);
+	
+	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
+	
 	myapp.publish("menuGo",["focus","up"],true);
 	
 	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up - the same.');
@@ -131,10 +170,10 @@ test('Menu navigation',function(){
 	myapp.publish("menuGo",["focus","next"],true);
 	
 	same(lastMenuChange,["focus","/leaf3"],'Menu Go focus next');
-    
+
     myapp.publish("menuGo",["focus","down"],true);
 	
-	same(lastMenuChange,["focus","/leaf3/leaf31"],'Menu Go focus down');
+	same(lastMenuChange,["focus","/leaf3/leaf31"],'Menu Go focus down 3');
     
     myapp.publish("menuGo",["focus","up"],true);
     
@@ -155,6 +194,9 @@ test('Menu navigation',function(){
     same(lastMenuChange,["focus","/leaf5"],'Async!');
     
     same(myapp.menu.getData("/leaf5").id,"leaf5");
+    
+    myapp.publish("menuGo",["focus","down"],true);
+    
     same(myapp.menu.getData("/leaf5/"),"loading");
     
     
@@ -164,13 +206,12 @@ test('Menu navigation',function(){
 
         same(myapp.menu.getData("/leaf5").id,"leaf5");
 
-        same((myapp.menu.getData("/leaf5/")[0] || {"id":"none"}).id,"leaf51");
+        same(((myapp.menu.getData("/leaf5/") || [{"id":"noleaf5"}])[0] || {"id":"noidinzero"}).id,"leaf51");
 
-        myapp.publish("menuGo",["focus","down"],true);
         same(lastMenuChange,["focus","/leaf5/leaf51"],'Down Async');
         
-        myapp.publish("menuGo",["focus","up"],true);
-        same(lastMenuChange,["focus","/leaf5"],'Up');
+        myapp.publish("menuGo",["focus",["up","prev","prev","prev","down","next","down","next","prev","next"]],true);
+        same(lastMenuChange,["focus","/leaf2/leaf22/leaf222"],'Big path');
         
         
         start();  
@@ -178,7 +219,6 @@ test('Menu navigation',function(){
     
     
 });
-
 
 
 test('Async Menu navigation',function(){
@@ -243,7 +283,7 @@ test('Async Menu navigation',function(){
 
     myapp.publish("menuGo",["focus","down"],true);
     
-	same(lastMenuChange,["focus","/leaf2/"],'Down');
+	//same(lastMenuChange,["focus","/leaf2/"],'Down');
 
 	doCb();
 	
@@ -259,7 +299,7 @@ test('Async Menu navigation',function(){
 	same(lastMenuChange,["focus","/leaf2"],'Next');
     
     myapp.publish("menuGo",["focus","down"],true);
-	same(lastMenuChange,["focus","/leaf2/"],'Down');
+	//same(lastMenuChange,["focus","/leaf2/"],'Down');
 	
 	myapp.publish("menuGo",["focus","up"],true);
 	same(lastMenuChange,["focus","/leaf2"],'Reup before CB');
@@ -269,8 +309,6 @@ test('Async Menu navigation',function(){
     same(lastMenuChange,["focus","/leaf2"],'No change');
     
 });
-
-
 
 
 
@@ -342,6 +380,132 @@ test('Grid test',function(){
     g.go("right");
     same(lastEvent,["onExit","right"],'left');
 });
+
+
+
+
+test('Preload all',function(){
+
+	expect(10);
+	
+	//equals(testee2.index,{},'index d\'origine');
+	
+	var J = Joshlib;
+	
+	var myapp = new J.Apps.Test();
+	
+	myapp.menu.preloadAll();
+	
+	myapp.menu.setData('/',[
+	    {'id':'leaf1'},
+	    {'id':'leaf2',
+	     'children':[
+	      {'id':'leaf21'},
+	      {'id':'leaf22'}
+	     ]
+	    },
+        {'id':'leaf3',
+         'getChildren':function(callback) {
+                setTimeout(function() {
+                 callback([
+                     {"id":"leaf31",
+                      'getChildren':function(callback) {
+                             setTimeout(function() {
+                              callback([
+                                  {"id":"leaf311"},
+                                  {"id":"leaf312"}
+                                 ]);
+                             },500);
+                      }},
+                     {"id":"leaf32"}
+                    ]);
+                },500);
+         }
+        },
+        {
+            'id':'leaf4',
+            'label':'test1'
+        },
+        {
+            'id':'leaf5',
+            'getChildren':function(callback) {
+                 setTimeout(function() {
+                     callback([
+                         {"id":"leaf51",
+                           'getChildren':function(callback) {
+                                  setTimeout(function() {
+                                   callback([
+                                       {"id":"leaf511"},
+                                       {"id":"leaf512"}
+                                      ]);
+                                  },500);
+                           }},
+                         {"id":"leaf52"  ,
+                             'getChildren':function(callback) {
+                                    setTimeout(function() {
+                                     callback([
+                                         {"id":"leaf521"},
+                                         {"id":"leaf522"}
+                                        ]);
+                                    },500);
+                             }}
+                        ]);
+                    },500);
+             }
+        },
+        
+	]);
+	
+	
+	
+	equals(myapp.menu.getData("/leaf4").label,"test1");
+	
+	
+		
+    stop();
+    
+    setTimeout(function() {
+
+        same(myapp.menu.getData("/leaf3/leaf31").id,"leaf31");
+        same(myapp.menu.getData("/leaf5/leaf51"),undefined);
+        
+        setTimeout(function() {
+        
+            same(myapp.menu.getData("/leaf5/leaf51").id,"leaf51");
+            same(myapp.menu.getData("/leaf3/leaf31/leaf312"),undefined);
+            
+            setTimeout(function() {
+
+                same(myapp.menu.getData("/leaf3/leaf31/leaf312").id,"leaf312");
+                same(myapp.menu.getData("/leaf5/leaf51/leaf511"),undefined);
+                
+                setTimeout(function() {
+
+                    same(myapp.menu.getData("/leaf5/leaf51/leaf511").id,"leaf511");
+                    same(myapp.menu.getData("/leaf5/leaf52/leaf522"),undefined);
+                    
+                    setTimeout(function() {
+
+                        same(myapp.menu.getData("/leaf5/leaf52/leaf522").id,"leaf522");
+
+                        start();  
+                        
+                    },500);
+
+                },500);
+                
+            },500);
+            
+        },500);
+
+        
+    },750);
+    
+	
+});
+
+
+
 
 /*
 

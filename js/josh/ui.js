@@ -82,7 +82,7 @@
     			          
     			        //When we're expected to be the next focus
     			        } else if (data[0]=="prefocus") {
-        			        self.menuRoot = data[1];
+        			        self.setMenuRoot(data[1]);
         			        
         			        var mdata = self.app.menu.getData(self.menuRoot);
     			            console.log("m prefocus",mdata,self.menuRoot);

@@ -5,271 +5,256 @@
      */
 	J.Menu = J.Class({
 		
-		
-		
 		__constructor:function(app) 
 		{
 
 		    this.app = app;
 		    
-		    this.currentPath='/';
-    		this.focus='/';
-    		this.index=[];
-    		this.datas=[];
-
-    		this.registre={};
+    		this.registers={};
+    		
+    		this.id2index = {};
+    		
+    		this.data = {};
 		    
-			this.index['/']=[];
-			this.index['/']['_child']=[];
-			this.index['/']['_data']=[];
-			
 			this.beingLoaded = {};
 			
 			var self=this;
 			this.app.subscribe("menuGoTo",function(ev,data) {
 			    //data : [ 0 : nom du registre , 1 : chemin  ]
-				self.goAbsolute(data[0],data[1]);
+			    
+			    //Go to first child
+			    if (self.isDirectory(data[1])) {
+			        self.resolveMoves(data[1].substring(0,data[1].length-1),["down"],function(newPath) {
+			            self.setRegister(data[0],newPath);
+			        });
+			    } else {
+			        self.setRegister(data[0],data[1]);
+			    }
+			    
+                
+			    
+				
 			});
 
 			this.app.subscribe("menuGo",function(ev,data) {
 			    //data : [ 0 : nom du registre , 1 : chemin  ]
-			    self.goRelative(data[0],data[1]);    
+			    
+			    self.resolveMoves(self.getRegister(data[0]),data[1],function(newPath) {
+			        self.app.publish("menuGoTo",[data[0],newPath],true);
+			    });
+			        
 			});
 			
 		},
 		
 		setRegister:function(register,position) {
 		    
-		    this.registre[register]=position;
+		    this.registers[register]=position;
 		    this.app.publish("menuChange",[register,position],true);
 		},
 		
 		getRegister:function(register) {
-		    return this.registre[register];
+		    return this.registers[register];
 		},
 		
-		goRelative:function(register,movement) {
+		resolveMoves:function(path,moves,callback) {
+		    if (typeof moves=="string") moves = [moves];
+		    
+		    console.log("resolveMoves ",path,moves[0]);
 		    
 		    var self = this;
-			var goingnear = undefined;
-            
-			switch (movement)
-			{
-				case 'prev' :
-				case 'next' :
-					goingnear = self.index[self.registre[register]]['_'+movement]!==undefined ?
-									self.index[self.registre[register]]['_'+movement]
-									:self.registre[register];
-
-				break;
-				case 'up'   :
-					var path = self.registre[register];
-					path = path.substr(0,path.lastIndexOf('/'));
-					if ((path=='') || (path=='/'))
-					{
-					    goingnear = undefined;
-					} else {
-						goingnear = path;
-					}
-				break;
-				case 'down' :
-				
-				    if ((register=="focus" || register=="prefocus") && self.beingLoaded[self.registre[register]+"/"]) {
-				        self.setRegister(register,self.registre[register]+"/");
-				        return true;
-					} else if ((typeof self.index[self.registre[register]]['_child'] != 'undefined') && self.index[self.registre[register]]['_child'].length>0 ) {
-					    goingnear = self.index[self.registre[register]]['_child'][0];
-					} else {
-					    goingnear = self.registre[register];
-					}
-						
-				break;
-			}
-            
-			if (goingnear===undefined)
-			{
-			    
-                console.log('Out-of-bounds move: ',register,movement);
-				return false;
-			} else {
-				self.app.publish("menuGoTo",[register,goingnear],true);
-				return true;
-			}
+		    var next = function() {
+		        if (moves.length==0) {
+		            console.log(" = ",path);
+		            return callback(path);
+		        }
+		        var move = moves.shift();
+		        
+		        
+		        //Moving up is easy
+		        if (move=="up") {
+		            var dir = self.getDirName(path);
+		            
+		            //Not yet at root level?
+		            if (dir!=="") {
+		                path = dir;
+		            }   
+		            next();
+		            
+		        //Next and previous, also easy
+		        } else if (move=="next" || move=="prev") {
+		            var dir = self.getDirName(path)+"/";
+		            var basename = self.getBaseName(path);
+                    var i=self.id2index[dir][basename];
+                    
+                    i+=(move=="next"?1:-1);
+                    
+                    if (i>=0 && i<self.data[dir].length) {
+                        path = dir+self.data[dir][i].id;
+                    }   
+                    next();
+                    
+                //Now, down is the hard one.
+		        } else if (move=="down") {
+		            
+		            //If we already have registered childs
+		            if (self.data[path+"/"]) {
+		                if (self.data[path+"/"]=="loading") {
+		                    //TODO fire when ready?
+		                    
+		                } else {
+		                    
+		                    //Go to the first child
+		                    if (self.data[path+"/"].length>0) {
+		                        path = path+"/"+self.data[path+"/"][0].id;
+		                    }
+		                    next();
+		                    
+		                }
+		                
+		            //Asynchronous loading
+		            //(register=="focus" || register=="prefocus" || register=="preload")
+		            } else {
+		                var dir = self.getDirName(path)+"/";
+    		            var basename = self.getBaseName(path);
+                        var i=self.id2index[dir][basename];
+		                
+		                if (typeof self.data[dir][i]["getChildren"]=="function") {
+		                
+    		                self.app.publish("menuDataLoading",[path+"/"],true);
+    		                self.beingLoaded[path+"/"]=true;
+		                
+		                    console.log("BL",self.beingLoaded[path+"/"],path);
+		                    
+    		                self.data[dir][i]["getChildren"](function(children) {
+		                    
+    		                    delete self.beingLoaded[path+"/"];
+		                        
+    		                    if (children.length>0) {
+    		                        self.setData(path+"/",children);
+    		                        path = path+"/"+self.data[path+"/"][0].id;
+    		                    }
+    		                    next();
+		                    
+		                    
+    		                },self.data[dir][i]);
+	                    }
+		            }
+		            
+		        }
+		        
+		    };
+		    
+		    next();
 		    
 		},
 		
-		goAbsolute:function(register,goingto) {
-		    
-		    var self = this;
-		    
-			if ((self.index[goingto]===undefined) || (goingto===undefined) || (register===undefined) )
-			{
-			    console.warn("no such menu "+goingto);
-				return false;
-			} else {
-				
-				if (typeof self.index[goingto]["_data"]["getChildren"]=="function" && (register=="focus" || register=="prefocus" || register=="preload") && !self.index[goingto]["_data"]["children"]) 
-				{
-				    self.app.publish("menuDataLoading",[goingto+"/"],true);
-				    self.index[goingto+"/"] = {'_data':"loading"};
-				    self.beingLoaded[goingto+"/"]=true;
-				    
-				    self.index[goingto]["_data"]["getChildren"](function(children) {
-				        
-				        delete self.beingLoaded[goingto+"/"];
-				        
-				        
-				        self.setData(goingto+"/",children);
-				        //console.log("index",goingto,children);
-				        self.index[goingto+"/"]["_data"] = children;
-				        self.app.publish("menuData",[goingto+"/",children],true);
-				        //if we're still waiting for the answer, focus on 1st element
-				        if (self.registre[register]==goingto+"/") {
-				            
-				            if (children.length>0) {
-				                
-				                self.setRegister(register,goingto+"/"+children[0]["id"]);
-				            } else {
-				                
-				                //back to parent if no children
-				                self.setRegister(register,goingto);
-				            }
-				            
-				        }
-				        
-				        
-				    },self.index[goingto]["_data"]);
-				}
-				
-				self.setRegister(register,goingto);
-				
-				
-				return true;
-			}
-		    
+		isDirectory:function(path) {
+		    return path.charAt(path.length-1)=="/";
 		},
 		
-		setRootData:function(data)
-		{
-			return this.setData("/",data);
+		//Returns the final component of a pathname
+		getBaseName:function(path) {
+		    var tmp = path.split("/");
+		    return tmp[tmp.length-1];
+		},
+        
+        //Returns the directory component of a pathname
+		getDirName:function(path) {
+		    return path.replace(/\/[^/]*$/,"");
 		},
 		
-		setData:function(path,data) 
-		{
-			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les enfants
-			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
-					
-			if ( (path.charAt(path.length-1)!='/') || (path=='/') )
-			{
-			    this.app.publish("menuData",[path,data],true);
-			    
-				this.buildIndex(path,data,true);
-				if (typeof data === 'object')
-				{
-					for (var key in data)
-					{
-						if (typeof data[key] === 'object') this.buildIndex((path==='/'?'':path)+'/'+data[key]['id'],data[key],true);
-					}
-				}
-				
-				
-			} else {
-				
-				for (var key in data)
-				{
-					if (typeof data[key] === 'object') this.buildIndex(path+data[key]['id'],data[key],true);
-				}
-			}
-			
-		},
-		
-		buildIndex:function(path,data,recursive) 
-		{
-		    
-		    
-		    
-			if (this.index[path] === undefined) 
-			{
-				this.index[path] = {};
-				this.index[path]['_data'] = {};
-				
-				if (path!='/')
-				{
-					var parpath = path.substr(0,path.lastIndexOf('/'));
-					parpath = (parpath == '' )? '/' : parpath;
-
-					if (this.index[parpath]['_child']===undefined)
-					{
-						this.index[path]['_prev'] = false;
-						this.index[parpath]['_child'] = [path];
-					} else {
-						var prevchild = this.index[parpath]['_child'][this.index[parpath]['_child'].length-1];
-						this.index[parpath]['_child'].push(path);
-						this.index[path]['_prev']=prevchild;
-						if (this.index[path]['_prev']!==undefined) this.index[this.index[path]['_prev']]['_next']=path;
-					}
-					this.index[path]['_next']=false;
-				}
-			}
-			
-			if (this.index[path]['_data'] === undefined)
-			{
-				this.index[path]['_data'] = {};
-			}
-			
-			if (typeof data === 'string')
-			{
-				this.index[path]['_data'][0]=data;
-			} else {
-				// on a un object
-				for (var key in data) {
-					
-					if (typeof data[key] !== 'object') 
-					{
-						this.index[path]['_data'][key]=data[key];
-					} else {
-//						 if (recursive && data[key]["id"])
-//						{
-//							this.buildIndex((path!=='/'?path:'')+"/"+data[key]["id"],data[key],true);
-//						}
-					}
-				}
-			}
-
-			var d=new Date();				
-			this.index[path]['_when'] = d.getTime(); // ceci pour un usage futur qui permettrait de mettre à jour les données passé un certain temps.
-
-			
-			if (recursive && data["children"])
-			{
-			    //fixme
-                this.index[(path!=='/'?path:'')+"/"] = {'_data':data["children"]};
+		setData:function(path,data) {
+		    console.log("set",path);
+		    if (this.isDirectory(path)) {
+		        delete this.beingLoaded[path];
+		        
+		        this.data[path] = [];
+		        this.id2index[path] = {};
+		        for (var i=0;i<data.length;i++) {
+		            this.id2index[path][data[i].id] = i;
+		            this.setData(path+data[i].id,data[i]);
+	            }
+		        
+		    //Leaf
+	        } else {
+	            
+                var dir = this.getDirName(path)+"/";
+                var basename = this.getBaseName(path);
                 
-				for (var i in data["children"])
-				{
-					this.buildIndex((path!=='/'?path:'')+"/"+data["children"][i]["id"],data["children"][i],true);
-					
-				}
-				this.app.publish("menuData",[(path!=='/'?path:'')+"/",data["children"]],true);
-			} else if ((path.charAt(path.length-1)=='/')) {
-			    this.index[path] = {'_data':data};
-			}
-		},
+                var children = data["children"];
+                delete data["children"];
 
-		getData:function(path) 
-		{
-			// si on a pas le leading slash, on considère qu'il s'agit d'un adressage relatif, donc vers les enfants
-			if (path.charAt(0)!='/') path = (this.currentPath=='/'?'':this.currentPath)+'/'+path;
-			
-			// aud cas où, je blinde
-			if (this.index[path]===undefined)
-			{
-console.error('getData : données inexistantes pour'+path,this);
-				return false;
-			} else {
-				return this.index[path]['_data'];
-			}
-		}
+                console.log(" set leaf",path,dir,basename,this.data,this.id2index);
+                if (this.data[dir]!==null && this.id2index[dir]!==null) {
+                    var i = this.id2index[dir][basename];
+                    console.log(" set leaf i=",i);
+                    if (i===null) {
+                        throw "can't setData to a new menu element like that for now";
+                    }
+                    
+                    if (!this.data[dir][i]) {
+                        this.data[dir][i] = data;
+                    } else {
+                        for (var elem in data) {
+                            this.data[dir][i][elem] = data[elem];
+                        }
+                    }
+                    
+                }
+                //TODO remove children element in stored data struct
+                if (children) {
+                    this.setData(path+"/",children);
+                }
+	        }
+	        this.sendMenuDataEvent(path);
+		},
+		
+		sendMenuDataEvent:function(path) {
+		    this.app.publish("menuData",[path,this.getData(path)]);
+		},
+		
+
+        getData:function(path) 
+        {
+            //Directory
+            if (this.isDirectory(path)) {
+                
+                if (this.beingLoaded[path]) {
+                    return "loading";
+                } else {
+                    return this.data[path];
+                }
+                
+            //Leaf
+            } else {
+                
+                var dir = this.getDirName(path)+"/";
+                var basename = this.getBaseName(path);
+                //console.log("getData",dir,this.data,this.id2index);
+                if (this.beingLoaded[dir]) {
+                    return "loading";
+                } else if (this.data[dir] && this.id2index[dir]!==null) {
+                    var i = this.id2index[dir][basename];
+                    if (i!==null) {
+                        return this.data[dir][i];
+                    }
+                }
+                return null;
+                
+            }
+            
+        },
+
+
+        preloadAll:function() {
+            return;
+            var self = this;
+            self.app.subscribe("menuData",function(ev,data) {
+                self.app.publish("menuGoTo",["preload",data]);
+            });
+        }
+		
 		
 	});
 	

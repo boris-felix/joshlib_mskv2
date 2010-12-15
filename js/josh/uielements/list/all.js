@@ -109,7 +109,7 @@
 		},
 		
 		subscribes:function() {
-
+		    
 		    var self=this;
 		    return this.__base().concat([
 		        ["control",function(ev,data) {

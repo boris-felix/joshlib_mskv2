@@ -293,6 +293,14 @@ console.error('handleError',this.errorCode,this.message);
 					    that.setVideoStatus("stopped");
 						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
+						
+						var playlistNextMoves = that.app.menu.getData(that.menuRoot).playlistNext || ["next"];
+						
+						that.app.menu.resolveMoves(that.menuRoot,playlistNextMoves,function(newPath) {
+						    that.app.publish("menuGoTo",["focus",newPath],true);
+						    that.app.publish("control",["enter"]);
+						});
+						
 						that.delegated('ended');
 					});
 					
@@ -353,6 +361,10 @@ console.error('handleError',this.errorCode,this.message);
 				if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration*(e.pageX-t.offset().left)/t.width()));
 			});
 			
+		},
+		
+		setMenuRoot:function(menuRoot) {
+		    this.menuRoot = menuRoot.replace(/\/[^\/]+$/,"");
 		},
 		
 		onBlur:function() {
