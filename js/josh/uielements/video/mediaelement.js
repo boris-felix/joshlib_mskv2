@@ -294,9 +294,11 @@ console.error('handleError',this.errorCode,this.message);
 				error:this.handleError,
                 success:function(me,domNode) {
                     
-                    that.player = me;
-                    window._mejs=me;
                     
+              
+              //      var me = $('#'+this.htmlId+'_video')[0];
+                    that.player = me;
+                   
 					$('.video-buttons').show();
 					$('.video-info').hide();
                     
@@ -322,14 +324,10 @@ console.error('handleError',this.errorCode,this.message);
 						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
 						
-						var playlistNextMoves = that.app.menu.getData(that.menuCurrent).playlistNext || ["next"];
-						console.log("AAA playlistNextMoves",that.menuCurrent,that.app.menu.getData(that.menuCurrent).playlistNext,JSON.stringify(playlistNextMoves));
-						that.app.menu.resolveMoves(that.menuCurrent,playlistNextMoves,function(newPath) {
-						    that.app.publish("menuGoTo",["focus",newPath],true);
-						    that.app.publish("control",["enter"]);
-						});
-						
 						that.delegated('ended');
+						
+						that.playNext();
+						
 					});
 					
 					me.addEventListener('canplay',function(ev){
@@ -342,7 +340,7 @@ console.error('handleError',this.errorCode,this.message);
 					
 					me.addEventListener('error',function(ev){
 					    //ignore errors about the gif img unloader
-					    if (ev.target.src.match(/^data\:/)) {
+					    if (ev.target.src.match(/\.gif$/)) {
 					        return;
 					    }
 					    console.log("ERRVIDEO",ev);
@@ -402,6 +400,17 @@ console.error('handleError',this.errorCode,this.message);
 		    
 		},
 		
+		playNext:function() {
+		    var that=this;
+		    
+			var playlistNextMoves = that.app.menu.getData(that.menuCurrent).playlistNext || ["next"];
+			console.log("playlistNextMoves",that.menuCurrent,that.app.menu.getData(that.menuCurrent).playlistNext,JSON.stringify(playlistNextMoves));
+			that.app.menu.resolveMoves(that.menuCurrent,playlistNextMoves,function(newPath) {
+			    that.app.publish("menuGoTo",["focus",newPath],true);
+			    that.app.publish("control",["enter"]);
+			});
+		},
+		
 		pause:function() {
             this.setVideoStatus("paused");
 		    if (this.player) this.player.pause();
@@ -415,47 +424,58 @@ console.error('handleError',this.errorCode,this.message);
 		remove:function()
 		{
 		    this.playingPath=false;
-			if (typeof this.player != 'undefined')
+			//if (typeof this.player != 'undefined')
+			if (this.player)
 			{
 			    try 
 				{
+				    console.log("remove workflow: stopAll",this.id);
 					this.stopListeningAll(this.player);
 				} catch (e) {}
                 
 				try 
 				{
+				    console.log("remove workflow: pause",this.id);
 					this.player.pause();
 					
 				} catch (e) {}
 				
 				try 
 				{
+				    console.log("remove workflow: stop",this.id);
 					this.player.stop();
 				} catch (e) {}
 				
 				try 
 				{
+				    console.log("remove workflow: stopped",this.id);
 				    this.setVideoStatus("stopped");
 				} catch (e) {}
 				
                 try 
 				{
-					this.player.setSrc('data:image/gif;base64,R0lGODlhAQABAJH/AP///wAAAP///wAAACH/C0FET0JFOklSMS4wAt7tACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw==');
+				    console.log("remove workflow: src",this.id);
+					//this.player.src ='/images/mediaelement/empty.mp4'; // setSrc('/images/mediaelement/empty.mp4'); //data:image/gif;base64,R0lGODlhAQABAJH/AP///wAAAP///wAAACH/C0FET0JFOklSMS4wAt7tACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw==');
+					this.player.setSrc('/images/mediaelement/spacer.gif');
+					console.log("remove workflow: load",this.id);
 					this.player.load();
 				} catch (e) {}
 				
 				try 
 				{
+				    console.log("remove workflow: restop",this.id);
 					this.player.stop();
 				} catch (e) {}
                 
 				try 
 				{
+				    console.log("remove workflow: remove",this.id);
 					$(this.player).remove();
 				} catch (e) {}
 				
 				try 
 				{
+				    console.log("remove workflow: delete",this.id);
 					delete this.player;
 				} catch (e) {}
                 

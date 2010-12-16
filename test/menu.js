@@ -266,7 +266,9 @@ test('Async Menu navigation',function(){
 	
 
 	
-	
+	myapp.publish("menuGoTo",["focus","/"],true);
+    
+	same(lastMenuChange,["focus","/leaf1"],'Menu init - first child');
 	
 	
 	myapp.publish("menuGoTo",["focus","/leaf1"],true);

@@ -194,6 +194,9 @@
         					    }
 							} else {
 							    if (!self.hasFocus && !data[1]) return false;
+							    
+							    if (self.isLoading) return false;
+							    
 							    dest = self.menuRoot+self.data[self.focusedIndex]["id"];
 							}
 							
@@ -201,7 +204,8 @@
 							    
 							    self.event('onPanelActing');
                                 
-							    self.app.publish("menuGoTo",["current",dest]);
+                                self.app.publish("menuGoTo",["current",dest]);
+                                
 							
 							    self.event('onPanelActed');
 							//}

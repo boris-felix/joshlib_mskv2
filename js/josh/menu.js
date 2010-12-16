@@ -5,6 +5,13 @@
      */
 	J.Menu = J.Class({
 		
+		inverses:{
+		    "down":"up",
+		    "up":"down",
+		    "next":"prev",
+		    "prev":"next"
+		},
+		
 		__constructor:function(app) 
 		{
 
@@ -20,21 +27,27 @@
 			
 			var self=this;
 			this.app.subscribe("menuGoTo",function(ev,data) {
-			    //data : [ 0 : nom du registre , 1 : chemin  ]
+			    var register=data[0];
+			    var path=data[1];
+			    
+			    //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
+			    if (!path) return;
 			    
 			    //Go to first child
-			    if (self.isDirectory(data[1])) {
+			    if (self.isDirectory(path)) {
 			        var async=true
-			        self.resolveMoves(data[1].substring(0,data[1].length-1),["down"],function(newPath) {
+			        self.resolveMoves(path.substring(0,path.length-1),["down"],function(newPath) {
+			            console.log("FChild callback got "+newPath,newPath);
 			            async=false;
-			            self.setRegister(data[0],newPath);
+			            self.setRegister(register,newPath);
 			        });
 			        //Set the temporary register
 			        if (async) {
-			            self.setRegister(data[0],data[1]);
+			            console.log("FChild callback was async, setting "+path,path);
+			            self.setRegister(register,path);
 			        }
 			    } else {
-			        self.setRegister(data[0],data[1]);
+			        self.setRegister(register,path);
 			    }
 			    
                 
@@ -43,15 +56,21 @@
 			});
 
 			this.app.subscribe("menuGo",function(ev,data) {
+			    var register=data[0];
+			    var path=data[1];
+			    
+			    //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
+			    if (!path) return;
+                
 			    //data : [ 0 : nom du registre , 1 : chemin  ]
 			    var async=true;
-			    self.resolveMoves(self.getRegister(data[0]),data[1],function(newPath) {
+			    self.resolveMoves(self.getRegister(register),path,function(newPath) {
 			        async=false;
-			        self.app.publish("menuGoTo",[data[0],newPath],true);
+			        self.app.publish("menuGoTo",[register,newPath],true);
 			    });
 			    
-			    if (async && data[1]=="down") {
-			        self.setRegister(data[0],self.getRegister(data[0])+"/");
+			    if (async && path=="down") {
+			        self.setRegister(register,(self.getRegister(register)+"/").replace(/\/\/$/,"/"));
 			    }
 			        
 			});
@@ -59,6 +78,9 @@
 		},
 		
 		setRegister:function(register,position) {
+		    
+		    //try to fix https://github.com/joshfire/france24/issues/#issue/41
+		    if (!position) return;
 		    
 		    this.registers[register]=position;
 		    this.app.publish("menuChange",[register,position],true);
@@ -68,10 +90,36 @@
 		    return this.registers[register];
 		},
 		
-		resolveMoves:function(path,moves,callback) {
-		    if (typeof moves=="string") moves = [moves];
+		compactMoves:function(moves) {
+		    if (moves.length<2) return [].concat(moves);
+		    var newMoves = [];
 		    
+		    for (var i=0;i<moves.length;i++) {
+		        if ((i<moves.length-1) && moves[i]==this.inverses[moves[i+1]]) {
+		            i++;
+		        } else {
+		            newMoves.push(moves[i]);
+		        }
+		    }
+		    //console.log("                                         compat",moves,newMoves);
+		    return newMoves;
+		    
+		},
+		
+		resolveMoves:function(path,moves,callback) {
+		    if (typeof moves=="string") {
+		        moves = [moves];
+		    } else {
+		        moves = [].concat(moves);
+		    }
 		    console.log("resolveMoves ",path,moves[0]);
+		    
+		    //Can't resolve moves from a directory. Start from its first child.
+		    if (this.isDirectory(path)) {
+		        path = this.getDirName(path);
+		        moves.unshift("down");
+		    }
+		    moves = [].concat(this.compactMoves(moves));
 		    
 		    var self = this;
 		    var next = function() {

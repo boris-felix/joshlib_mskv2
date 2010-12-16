@@ -63,12 +63,17 @@
     			});
     			
     			this.app.subscribe("menuChange",function(ev,data) {
-
+                    var path=data[1];
+                    var register=data[0];
+                    
+                    
+                    
+                    
 			        //This menuData is about us!
-    			    if (self.options["menuRoot"]==data[1] || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(data[1]))) {
+    			    if (self.options["menuRoot"]==path || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(path))) {
 
-    			        if (data[0]=="focus") {
-    			            self.setMenuRoot(data[1]);
+    			        if (register=="focus") {
+    			            self.setMenuRoot(path);
     			            
     			            var mdata = self.app.menu.getData(self.menuRoot);
     			            console.log("m focus",mdata,self.menuRoot);
@@ -81,11 +86,11 @@
     			                self.refresh();
     			            }
     			            
-    			            self.onFocus(data[1]);
+    			            self.onFocus(path);
     			          
     			        //When we're expected to be the next focus
-    			        } else if (data[0]=="prefocus") {
-        			        self.setMenuRoot(data[1]);
+    			        } else if (register=="prefocus") {
+        			        self.setMenuRoot(path);
         			        
         			        var mdata = self.app.menu.getData(self.menuRoot);
     			            console.log("m prefocus",mdata,self.menuRoot);
@@ -102,13 +107,13 @@
         			            self.show();
         			        }
     			            
-    			        } else if (data[0]=="current") {
-    			            self.setMenuCurrent(data[1]);
+    			        } else if (register=="current") {
+    			            self.setMenuCurrent(path);
     			        }
     			        
     			    //Was a focus on another element: blur us
-    			    } else if (data[0]=="focus" && self.hasFocus) {
-    			        self.onBlur(data[1]);
+    			    } else if (register=="focus" && self.hasFocus) {
+    			        self.onBlur(path);
     			    }
     			});
 			}
