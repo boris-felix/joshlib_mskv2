@@ -5,7 +5,7 @@
 		
 		init:function() {
 		    var self=this;
-            this.isDefaultPlayer=!(this.options.defaultPlayer===false);
+		    this.setDefaultPlayer(!(this.options.defaultPlayer===false));
             
             this.playingPath = false;
             
@@ -33,6 +33,7 @@
                 }
     		});
     		
+    		
         },
         
         getHtmlInner:function() {
@@ -41,6 +42,7 @@
         
         setDefaultPlayer:function(dft) {
             this.isDefaultPlayer = dft;
+            
         }
 	});
 	

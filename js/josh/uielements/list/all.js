@@ -93,20 +93,6 @@
 		    this.menuRoot = menuRoot.replace(/\/[^\/]*$/,"/");
 		},
 		
-		event : function(eventname)
-		{
-			// détournement d'évènements
-			if (typeof this.options[eventname] === 'function')
-			{
-				return this.options[eventname](
-							this,		// la List en cours
-							eventname	// la clé de l'évènement appelant
-
-					// réfléchir sur la possibilité de proposer en retour d'autres parametres
-				);
-			}
-			return false;
-		},
 		
 		subscribes:function() {
 		    
@@ -251,8 +237,7 @@
 		
 		onFocus:function(path)
 		{
-		    this.event('onFocusing');
-		    
+
 		    if (path.charAt(path.length-1)=="/") {
 		        this.focusIndex(0);
 		    } else {
@@ -269,7 +254,6 @@
 		    
 		   
 		    this.__base();
-			this.event('onFocused');
 		},
 		
 		focusIndex:function(index)

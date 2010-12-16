@@ -32,6 +32,8 @@
 			},null,1000);
 			
 			this.menuRoot = false;
+			this.menuCurrent = false;
+            
 			
 			if (options["parent"]) {
 			    options["parent"].registerChild(this);
@@ -100,7 +102,7 @@
         			        }
     			            
     			        } else if (data[0]=="current") {
-    			            //
+    			            self.setMenuCurrent(data[1]);
     			        }
     			        
     			    //Was a focus on another element: blur us
@@ -122,6 +124,9 @@
 		setMenuRoot:function(menuRoot) {
 		    this.menuRoot = menuRoot;
 		},
+		setMenuCurrent:function(menuCurrent) {
+		    this.menuCurrent = menuCurrent;
+		},
 		
 		setLoading:function() {
 
@@ -136,11 +141,27 @@
 		    return [];
 		},
 		
+		
+		
+		event : function(eventname)
+		{
+			// détournement d'évènements
+			if (typeof this.options[eventname] === 'function')
+			{
+				return this.options[eventname](
+							this,		// la List en cours
+							eventname	// la clé de l'évènement appelant
+
+					// réfléchir sur la possibilité de proposer en retour d'autres parametres
+				);
+			}
+			return false;
+		},
+		
 		onFocus:function(path) {
 		    
 		    if (!this.hasFocus)
 			{   
-			    console.log("onFocus",this.id);
     		    var self=this;
     		    this.subscribes().forEach(function(s) {
     				self._subscribed.push(self.app.subscribe(s[0],s[1]));
@@ -154,9 +175,11 @@
 				{
     		        this.options["showOnFocus"]();
     		    }
+    		    
+    			
     	    }
 		    this.hasFocus = true;
-		    
+		    this.event('onFocused');
 		},
 		
 		onBlur:function(path) {

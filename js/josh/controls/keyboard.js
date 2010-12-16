@@ -78,7 +78,7 @@
                     
 				    case 176:
 					
-					    self.app.publish("control",["next"]);
+					    self.app.publish("control",["forward"]);
 					    
 						return false;
 						
@@ -86,7 +86,7 @@
 					
 					case 177:
 					
-					    self.app.publish("control",["prev"]);
+					    self.app.publish("control",["rewind"]);
 					    
 						return false;
 						

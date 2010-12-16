@@ -37,6 +37,35 @@
     		
     		this.videoStatus = false;
     		
+    		
+    		this.app.subscribe("control",function(ev,data) {
+    		    
+    		    if (self.isDefaultPlayer) {
+    		        if (data[0]=="play") {
+    		            
+    		            self.grid.goTo([2,0]);
+    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+    		            self.app.publish("control",["enter"],true);
+    		        } else if (data[0]=="stop") {
+    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+    		            self.stop();   
+    		        } else if (data[0]=="pause") {
+    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+        		        self.pause();   
+        		    } else if (data[0]=="forward") {
+        		        self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+        		        self.grid.goTo([3,0]);
+    		            self.app.publish("control",["enter"],true);
+        		    } else if (data[0]=="rewind") {
+        		        self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+        		        self.grid.goTo([1,0]);
+    		            self.app.publish("control",["enter"],true);  
+        		    }
+    		    }
+    		    
+    		    
+		    });
+    		
     		this.__base();
     		
 		},
@@ -145,8 +174,7 @@ console.error('handleError',this.errorCode,this.message);
 		                } else if (position[0]==2) { //play pause stop
 		                    
 		                    if (self.videoStatus=="playing") {
-		                        self.setVideoStatus("paused");
-		                        self.player.pause();
+		                        self.pause();
 		                        
 		                        
 		                    } else if (self.videoStatus=="stopped" || self.videoStatus=="paused") {
@@ -294,9 +322,9 @@ console.error('handleError',this.errorCode,this.message);
 						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
 						
-						var playlistNextMoves = that.app.menu.getData(that.menuRoot).playlistNext || ["next"];
-						
-						that.app.menu.resolveMoves(that.menuRoot,playlistNextMoves,function(newPath) {
+						var playlistNextMoves = that.app.menu.getData(that.menuCurrent).playlistNext || ["next"];
+						console.log("AAA playlistNextMoves",that.menuCurrent,that.app.menu.getData(that.menuCurrent).playlistNext,JSON.stringify(playlistNextMoves));
+						that.app.menu.resolveMoves(that.menuCurrent,playlistNextMoves,function(newPath) {
 						    that.app.publish("menuGoTo",["focus",newPath],true);
 						    that.app.publish("control",["enter"]);
 						});
@@ -362,11 +390,11 @@ console.error('handleError',this.errorCode,this.message);
 			});
 			
 		},
-		
-		setMenuRoot:function(menuRoot) {
-		    this.menuRoot = menuRoot.replace(/\/[^\/]+$/,"");
+		/*
+		setMenuCurrent:function(menuCurrent) {
+		    this.menuCurrent = menuCurrent.replace(/\/[^\/]+$/,"");
 		},
-		
+		*/
 		onBlur:function() {
 		    this.__base();
 		    
@@ -375,9 +403,15 @@ console.error('handleError',this.errorCode,this.message);
 		},
 		
 		pause:function() {
+            this.setVideoStatus("paused");
 		    if (this.player) this.player.pause();
 	    },
 		
+		stop:function() {
+		    this.setVideoStatus("stopped");
+		    if (this.player) this.player.stop();
+	    },
+	    
 		remove:function()
 		{
 		    this.playingPath=false;
