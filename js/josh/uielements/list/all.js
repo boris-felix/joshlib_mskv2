@@ -221,6 +221,7 @@
 		},
 		
 		setLoading:function() {
+		    console.log("LOAD",this.id);
 		    this.isLoading=true;
 		},
 		

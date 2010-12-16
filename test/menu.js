@@ -283,7 +283,7 @@ test('Async Menu navigation',function(){
 
     myapp.publish("menuGo",["focus","down"],true);
     
-	//same(lastMenuChange,["focus","/leaf2/"],'Down');
+	same(lastMenuChange,["focus","/leaf2/"],'Down');
 
 	doCb();
 	
@@ -299,7 +299,7 @@ test('Async Menu navigation',function(){
 	same(lastMenuChange,["focus","/leaf2"],'Next');
     
     myapp.publish("menuGo",["focus","down"],true);
-	//same(lastMenuChange,["focus","/leaf2/"],'Down');
+	same(lastMenuChange,["focus","/leaf2/"],'Down');
 	
 	myapp.publish("menuGo",["focus","up"],true);
 	same(lastMenuChange,["focus","/leaf2"],'Reup before CB');

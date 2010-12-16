@@ -24,9 +24,15 @@
 			    
 			    //Go to first child
 			    if (self.isDirectory(data[1])) {
+			        var async=true
 			        self.resolveMoves(data[1].substring(0,data[1].length-1),["down"],function(newPath) {
+			            async=false;
 			            self.setRegister(data[0],newPath);
 			        });
+			        //Set the temporary register
+			        if (async) {
+			            self.setRegister(data[0],data[1]);
+			        }
 			    } else {
 			        self.setRegister(data[0],data[1]);
 			    }
@@ -38,10 +44,15 @@
 
 			this.app.subscribe("menuGo",function(ev,data) {
 			    //data : [ 0 : nom du registre , 1 : chemin  ]
-			    
+			    var async=true;
 			    self.resolveMoves(self.getRegister(data[0]),data[1],function(newPath) {
+			        async=false;
 			        self.app.publish("menuGoTo",[data[0],newPath],true);
 			    });
+			    
+			    if (async && data[1]=="down") {
+			        self.setRegister(data[0],self.getRegister(data[0])+"/");
+			    }
 			        
 			});
 			
@@ -138,6 +149,8 @@
 		                    
 		                    
     		                },self.data[dir][i]);
+	                    } else {
+	                        next();
 	                    }
 		            }
 		            
