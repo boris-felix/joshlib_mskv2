@@ -45,6 +45,7 @@
 			    
 			    this.app.subscribe("menuDataLoading",function(ev,data) {
 
+                    console.log("LOADING",self.id,self.menuRoot,data[0])
 			        //This menuData is about us!
     			    if (self.menuRoot==data[0]) {
     			        self.setLoading();

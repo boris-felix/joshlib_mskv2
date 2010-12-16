@@ -10,7 +10,7 @@
 				var menuPath = $(this).attr('data-path');
 			    
 			    if (menuPath) {
-				    self.app.publish("menuChange",["focus",menuPath]);
+				    self.app.publish("menuChange",["focus",menuPath],true);
 				}    
 				
 				self.app.publish("control",["enter",menuPath || event.currentTarget.id]);
