@@ -172,12 +172,7 @@
 				{
     		        this.show();
     		    }
-    		    if (typeof this.options["showOnFocus"]==='function')
-				{
-    		        this.options["showOnFocus"]();
-    		    }
     		    
-    			
     	    }
 		    this.hasFocus = true;
 		    this.event('onFocused');
@@ -185,13 +180,11 @@
 		
 		onBlur:function(path) {
 		    console.log("onBlur",this.id,this.options["persistFocus"]);
-		    if (this.options["hideOnBlur"]===true) {
-		        this.hide();
-		    }
 		    
-		    if (typeof this.options["hideOnBlur"]==='function')
-			{
-		        this.options["hideOnBlur"]();
+		    this.event("onBlurring");
+		    
+		    if (this.options["hideOnBlur"]===true) {
+		        this.hideDelayed();
 		    }
 		    
 		    if (!this.options["persistFocus"]) {
@@ -203,6 +196,8 @@
 		    this._subscribed.forEach(function(s) {
 		        self.app.unsubscribe(s);
 		    });
+		    
+		    this.event("onBlurred");
 		},
 		
 		refresh:function(callback)
