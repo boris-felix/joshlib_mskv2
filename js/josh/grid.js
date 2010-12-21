@@ -5,17 +5,31 @@
      */
 	J.Grid = J.Class({
 		
+		//Indexed by orientation
 		moves:{
-		    "down":[0,1],
-		    "up":[0,-1],
-            "right":[1,0],
-            "left":[-1,0],
+		    "up":{
+		        "down":[0,1],
+    		    "up":[0,-1],
+                "right":[1,0],
+                "left":[-1,0]
+		    },
+		    "down":{
+		        "down":[0,-1],
+		        "up":[0,1],
+		        "right":[1,0],
+                "left":[-1,0]
+		    }
 		},
 		
 		__constructor:function(options) {
 			this.options = options;
 			this.grid = options.grid;
 			this.currentCoords = false;
+			this.orientation = options.orientation || "up";
+		},
+		
+		setGrid:function(grid) {
+		    this.grid = grid;
 		},
 		
 		get:function(coords) {
@@ -28,12 +42,12 @@
 		},
 		
 		go:function(move) {
-		    var newx = this.moves[move][0]+this.currentCoords[0];
-		    var newy = this.moves[move][1]+this.currentCoords[1];
+		    var newx = this.moves[this.orientation][move][0]+this.currentCoords[0];
+		    var newy = this.moves[this.orientation][move][1]+this.currentCoords[1];
 		    if (newy<0 || newy>=this.grid.length || !this.grid[newy]) {
-		        this.options.onExit(move);
+		        this.options.onExit([-this.moves[this.orientation][move][0],-this.moves[this.orientation][move][1]]);
 		    } else if (newx<0 || newx>=this.grid[newy].length || !this.grid[newy][newx]) {
-		        this.options.onExit(move);
+		        this.options.onExit([-this.moves[this.orientation][move][0],-this.moves[this.orientation][move][1]]);
 		    } else {
 		        this.goTo([newx,newy]);
 		    }

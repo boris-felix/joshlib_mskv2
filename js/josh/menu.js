@@ -37,13 +37,13 @@
 			    if (self.isDirectory(path)) {
 			        var async=true
 			        self.resolveMoves(path.substring(0,path.length-1),["down"],function(newPath) {
-			            console.log("FChild callback got "+newPath,newPath);
+			            //console.log("FChild callback got "+newPath,newPath);
 			            async=false;
 			            self.setRegister(register,newPath);
 			        });
 			        //Set the temporary register
 			        if (async) {
-			            console.log("FChild callback was async, setting "+path,path);
+			            //console.log("FChild callback was async, setting "+path,path);
 			            self.setRegister(register,path);
 			        }
 			    } else {

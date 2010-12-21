@@ -28,7 +28,8 @@
                   }
                 },
                 "onExit":function(side) {
-                    if (side=="down") {
+                    console.log("exxxxit",side);
+                    if (side[1]<0) {
                         self.app.publish("menuGo",["focus","up"]);
                     }
                 },

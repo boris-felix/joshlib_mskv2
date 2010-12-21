@@ -48,6 +48,39 @@
             this.focusedIndex=null;
             this.data = [];
             this.id2index = {};
+            
+            var self=this;
+     		this.grid = new J.Grid({
+    		    "grid":[
+    		        []
+    		    ],
+    		    "dimensions":2,
+                "onChange":function(coords,elem) {
+                    self.app.publish("menuGoTo",["focus",self.menuRoot+elem.id]);
+                },
+                "onExit":function(side) {
+                    //go to leaf
+                    console.log("exit on side "+side);
+                    if (side[1]>0) {
+                        
+                        if (!self.event('onPanelChilding')) {
+						    self.onBlur();
+							self.app.publish("menuGo",["focus","down"]);
+							self.event('onPanelChilded');
+						}
+                        
+                    //go to parent
+                    } else if (side[1]<0) {
+                        if (self.menuRoot=='/') return false;
+                        self.event('onPanelExiting');
+						self.onBlur();
+                        self.app.publish("menuGo",["focus","up"]);
+                        self.event('onPanelExited');
+                        
+                    }
+                },
+                "orientation":this.options.orientation
+    		});
         },
         
         insert:function() {
@@ -112,107 +145,59 @@
 						}
 					}
 					console.log("receiveControl",self.id,data);
-		            
-		           switch (sens)
-				   {
-				        case 'hover':
-						{
-						    var split = data[1].split("/");
-						    var lastPath = split[split.length-1];
-						    if (data[1].indexOf(self.menuRoot)===0) {
-						        var subPath = data[1].substring(self.menuRoot.length);
-						        if (subPath.indexOf("/")===-1) {
-						            if (self.id2index[subPath]!==undefined) {
-						                self.app.publish("menuGoTo",["focus",self.menuRoot+self.data[self.id2index[subPath]]["id"]]);
-						            }
-						        }
-						    }
-						}
-						break; // left
-						case 'left':
-						{
-						    if (!self.hasFocus) return false;
-										
-							self.event('onPreviousMoving');
-						    self.app.publish("menuGo",["focus","prev"]);
-							self.event('onPreviousMoved');
-						}
-						break; // left
-						case 'right':
-						{
-						    if (!self.hasFocus) return false;
-							self.event('onNextMoving');
-						    self.app.publish("menuGo",["focus","next"]);
-							self.event('onNextMoved');
-						}
-						break; // right
-						case 'down':
-						case 'exit':
-						{
-						    if (!self.hasFocus) return false;
-							// si on est pas au TOUT PREMIER NIVEAU (sinon on atteri nulle part)
-							//if (/^\/\w+\/$/.test(self.menuRoot)) return;
-							if (self.menuRoot=='/') return false;
-							self.event('onPanelExiting');
-							self.onBlur();
-							self.app.publish("menuGo",["focus","up"]);
-							self.event('onPanelExited');
-						}
-						break; // down , exit
-						case 'up':
-						{
-						    if (!self.hasFocus) return false;
-							
-							if (!self.event('onPanelChilding')) {
-							    self.onBlur();
-    							self.app.publish("menuGo",["focus","down"]);
-    							self.event('onPanelChilded');
-							}
-							
+		        
+		        
+		           if (sens=="hover") {
+		               var split = data[1].split("/");
+					    var lastPath = split[split.length-1];
+					    if (data[1].indexOf(self.menuRoot)===0) {
+					        var subPath = data[1].substring(self.menuRoot.length);
+					        if (subPath.indexOf("/")===-1) {
+					            if (self.id2index[subPath]!==undefined) {
+					                self.grid.goTo([self.id2index[subPath],0]);
+					            }
+					        }
+					    }
+		               
+		           } else if (sens=="left" || sens=="right" || sens=="down" || sens=="up") {
+		               if (!self.hasFocus) return false;
+		               self.grid.go(sens);
+		               
+		           } else if (sens=="enter") {
 
-							/// faudrait en async J.publish("menuGo",["current","down"]);
-						}
-						break; // up
-						case 'enter':
-						{
+                        var dest = false;
+ 
+                        if (data[1]) {
+                            var split = data[1].split("/");
+                            var lastPath = split[split.length-1];
+                            if (data[1].indexOf(self.menuRoot)===0) {
+                                var subPath = data[1].substring(self.menuRoot.length);
+                                if (subPath.indexOf("/")===-1) {
+                                    if (self.id2index[subPath]!==undefined) {
+                                        dest = self.menuRoot+self.data[self.id2index[subPath]]["id"];
+                                    }
+                                }
+                            }
+                            if (!dest) {
+                                return;
+                            }
+                        } else {
+                            if (!self.hasFocus && !data[1]) return false;
+    
+                            if (self.isLoading) return false;
+    
+                            dest = self.menuRoot+self.data[self.focusedIndex]["id"];
+                        }
+
+                        self.event('onPanelActing');
+   
+                        self.app.publish("menuGoTo",["current",dest]);
+
+                        self.event('onPanelActed');
+ 
+		           }
+		           
 						    
-						    var dest = false;
-						    
-							if (data[1]) {
-							    var split = data[1].split("/");
-        					    var lastPath = split[split.length-1];
-        					    if (data[1].indexOf(self.menuRoot)===0) {
-        					        var subPath = data[1].substring(self.menuRoot.length);
-        					        if (subPath.indexOf("/")===-1) {
-        					            if (self.id2index[subPath]!==undefined) {
-        					                dest = self.menuRoot+self.data[self.id2index[subPath]]["id"];
-        					            }
-        					        }
-        					    }
-        					    if (!dest) {
-        					        return;
-        					    }
-							} else {
-							    if (!self.hasFocus && !data[1]) return false;
-							    
-							    if (self.isLoading) return false;
-							    
-							    dest = self.menuRoot+self.data[self.focusedIndex]["id"];
-							}
-							
-							//if (self.app.menu.getRegister("current")!=dest) {
-							    
-							    self.event('onPanelActing');
-                                
-                                self.app.publish("menuGoTo",["current",dest]);
-                                
-							
-							    self.event('onPanelActed');
-							//}
-						}
-						break; // enter
-				   }
-		          
 		        }]
 		    ]);
 		},
@@ -232,6 +217,8 @@
 		setData:function(data) {
 		    this.isLoading=false;
 			this.data = data;
+			
+			this.grid.setGrid([data]);
 			
 			//todo: do this in menu
 			for (var i=0;i<data.length;i++) {
@@ -263,16 +250,19 @@
 		
 		focusIndex:function(index)
 		{
-			this.event('onFocusIndexing');
+		    
+		    if (this.focusedIndex===index) return;
+		    
 		    if (this.focusedIndex!==null)
 			{
 		        $("#"+this.htmlId+" .focused").removeClass("focused");
 		    }
 		    
 		    this.focusedIndex=index;
+		    this.grid.goTo([index,0]);
 		    
 		    $("#"+this.htmlId+'_'+index).addClass("focused");
-			this.event('onFocusIndexed');
+
 		}
 	});
 	
