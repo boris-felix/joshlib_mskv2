@@ -33,7 +33,7 @@
                         self.app.publish("menuGo",["focus","up"]);
                     }
                 },
-                "orientation":"up"
+                "orientation":self.options.orientation || "up"
     		});
     		
     		this.videoStatus = false;
