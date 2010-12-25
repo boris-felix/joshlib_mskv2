@@ -112,7 +112,7 @@
 		    } else {
 		        moves = [].concat(moves);
 		    }
-		    console.log("resolveMoves ",path,moves[0]);
+		    //console.log("resolveMoves ",path,moves[0]);
 		    
 		    //Can't resolve moves from a directory. Start from its first child.
 		    if (this.isDirectory(path)) {
@@ -124,7 +124,7 @@
 		    var self = this;
 		    var next = function() {
 		        if (moves.length==0) {
-		            console.log(" = ",path);
+		            //console.log(" = ",path);
 		            return callback(path);
 		        }
 		        var move = moves.shift();
@@ -183,7 +183,7 @@
     		                self.app.publish("menuDataLoading",[path+"/"],true);
     		                self.beingLoaded[path+"/"]=true;
 		                
-		                    console.log("BL",self.beingLoaded[path+"/"],path);
+		                    //console.log("BL",self.beingLoaded[path+"/"],path);
 		                    
     		                self.data[dir][i]["getChildren"](function(children) {
 		                    
@@ -226,7 +226,7 @@
 		},
 		
 		setData:function(path,data) {
-		    console.log("set",path);
+		    //console.log("set",path);
 		    if (this.isDirectory(path)) {
 		        delete this.beingLoaded[path];
 		        
@@ -246,10 +246,10 @@
                 var children = data["children"];
                 delete data["children"];
 
-                console.log(" set leaf",path,dir,basename,this.data,this.id2index);
+                //console.log(" set leaf",path,dir,basename,this.data,this.id2index);
                 if (this.data[dir]!==null && this.id2index[dir]!==null) {
                     var i = this.id2index[dir][basename];
-                    console.log(" set leaf i=",i);
+                    //console.log(" set leaf i=",i);
                     if (i===null) {
                         throw "can't setData to a new menu element like that for now";
                     }
@@ -309,10 +309,16 @@
 
 
         preloadAll:function() {
-            return;
             var self = this;
             self.app.subscribe("menuData",function(ev,data) {
-                self.app.publish("menuGoTo",["preload",data]);
+                var path = data[0];
+                if (!self.isDirectory(path) && (typeof data[1].getChildren=="function")) {
+                    
+                    self.app.publish("menuGoTo",["preload",data[0]+"/"]);
+                    
+                }
+                
+                
             });
         }
 		

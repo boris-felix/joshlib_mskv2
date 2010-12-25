@@ -270,7 +270,9 @@ console.error('handleError',this.errorCode,this.message);
         		// test for HTML5 and plugin capabilities
         		playback = this.determinePlayback(htmlMediaElement, options, isVideo, supportsMediaTag);
                 playback.url = htmlMediaElement.getAttribute('src');
-                console.log(playback);
+                
+                //console.log(playback);
+        		
         		if (playback.method == 'native') {
         			// add methods to native HTMLMediaElement
         			this.updateNative( htmlMediaElement, options, autoplay, preload, playback);				
