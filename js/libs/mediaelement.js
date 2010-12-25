@@ -318,6 +318,7 @@ mejs.PluginMediaElement.prototype = {
 		}
 	},	
 	canPlayType: function(type) {
+	    
 		var i,
 			j,
 			pluginInfo,

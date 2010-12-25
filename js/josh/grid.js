@@ -30,6 +30,7 @@
 		
 		setGrid:function(grid) {
 		    this.grid = grid;
+		    //this.currentCoords = false;
 		},
 		
 		get:function(coords) {
@@ -37,8 +38,10 @@
 		},
 		
 		goTo:function(coords) {
-		    this.currentCoords=coords;
-		    this.options.onChange(this.currentCoords,this.get(this.currentCoords));
+		    if (!this.currentCoords || coords[0]!==this.currentCoords[0] || coords[1]!==this.currentCoords[1]) {
+		        this.currentCoords=coords;
+		        this.options.onChange(this.currentCoords,this.get(this.currentCoords));
+	        }
 		},
 		
 		go:function(move) {

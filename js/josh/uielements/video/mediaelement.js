@@ -223,9 +223,9 @@ console.error('handleError',this.errorCode,this.message);
 			{
                 // No autoplay here because <video src='xxx.flv' autoplay> will start playing on a GoogleTV
         		// even if video.canPlayType("video/flv")==""        		
-                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' poster='"+options["image"]+"' />";
+                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
             } else {
-                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' autoplay='true' autobuffer preload poster='"+options["image"]+"' />";
+                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' autoplay='true' autobuffer preload "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
             }
 			
 			$('#'+this.htmlId+'_video').css({
@@ -269,7 +269,8 @@ console.error('handleError',this.errorCode,this.message);
 
         		// test for HTML5 and plugin capabilities
         		playback = this.determinePlayback(htmlMediaElement, options, isVideo, supportsMediaTag);
-
+                playback.url = htmlMediaElement.getAttribute('src');
+                console.log(playback);
         		if (playback.method == 'native') {
         			// add methods to native HTMLMediaElement
         			this.updateNative( htmlMediaElement, options, autoplay, preload, playback);				
@@ -290,6 +291,7 @@ console.error('handleError',this.errorCode,this.message);
                 pluginWidth: $('#'+this.htmlId+"_video").width(),
                 pluginHeight: $('#'+this.htmlId+"_video").height(),
                 
+                type:options["mime"],
                 //type:"native",
                 //enablePluginDebug:true,
 				error:this.handleError,

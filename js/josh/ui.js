@@ -73,6 +73,7 @@
     			    if (self.options["menuRoot"]==path || (typeof self.options["menuRoot"]!="string" && self.options["menuRoot"].test(path))) {
 
     			        if (register=="focus") {
+    			            
     			            self.setMenuRoot(path);
     			            
     			            var mdata = self.app.menu.getData(self.menuRoot);
@@ -80,10 +81,12 @@
     			            if (mdata) {
     			                if (mdata=="loading") {
     			                    self.setLoading();
-    			                } else {
+    			                    self.refresh();
+    			                } else if (!self.data) {
     			                    self.setData(mdata);
+    			                    self.refresh();
     			                }
-    			                self.refresh();
+    			                
     			            }
     			            
     			            self.onFocus(path);
@@ -97,10 +100,11 @@
     			            if (mdata) {
     			                if (mdata=="loading") {
     			                    self.setLoading();
-    			                } else {
+    			                    self.refresh();
+    			                } else if (!self.data) {
     			                    self.setData(mdata);
+    			                    self.refresh();
     			                }
-    			                self.refresh();
     			            }
         			        
         			        if (self.options["showOnPreFocus"]===true) {
@@ -128,7 +132,10 @@
 		},
 		
 		setMenuRoot:function(menuRoot) {
-		    this.menuRoot = menuRoot;
+		    if (this.menuRoot!=menuRoot) {
+		        this.menuRoot = menuRoot;
+    		    this.data = false;
+		    }
 		},
 		setMenuCurrent:function(menuCurrent) {
 		    this.menuCurrent = menuCurrent;
@@ -280,6 +287,7 @@
 		
 		setData:function(data) {
 			this.data = data;
+			this.isLoading=false;
 		}
 		
 	});

@@ -56,11 +56,12 @@
     		    ],
     		    "dimensions":2,
                 "onChange":function(coords,elem) {
-                    self.app.publish("menuGoTo",["focus",self.menuRoot+elem.id]);
+                    console.log("onChange",coords,elem);
+                    self.focusIndex(coords[0]);
                 },
                 "onExit":function(side) {
                     //go to leaf
-                    console.log("exit on side "+side);
+                    console.log("onExit",side);
                     if (side[1]>0) {
                         
                         if (!self.event('onPanelChilding')) {
@@ -105,7 +106,11 @@
 		{
 			if (this.isLoading)
 			{
-				return this.options["loadingTemplate"](this);
+				if (typeof this.options["loadingTemplate"]=="function") {
+				    return this.options["loadingTemplate"](this);
+				} else {
+				    return this.options["loadingTemplate"];
+				}
 				
 			} else {
 				var ret =[];
@@ -123,7 +128,7 @@
 		},
 		
 		setMenuRoot:function(menuRoot) {
-		    this.menuRoot = menuRoot.replace(/\/[^\/]*$/,"/");
+		    this.__base(menuRoot.replace(/\/[^\/]*$/,"/"));
 		},
 		
 		
@@ -215,43 +220,39 @@
 		},
 		
 		setData:function(data) {
-		    this.isLoading=false;
-			this.data = data;
-			
-			this.grid.setGrid([data]);
-			
+		    this.__base(data);
+		    
 			//todo: do this in menu
 			for (var i=0;i<data.length;i++) {
 			    this.id2index[data[i].id]=i;
 			}
+			
+			this.grid.setGrid([data]);
+			this.grid.currentCoords=false;
 		},
-        
-		
+        /*
+        onBlur:function(path) {
+            this.grid.currentCoords=false;
+            this.__base(path);
+        },
+		*/
 		onFocus:function(path)
 		{
 
 		    if (path.charAt(path.length-1)=="/") {
-		        this.focusIndex(0);
+		        this.grid.goTo([0,0]);
 		    } else {
-		         //todo use menuentry.fullId() to get the index
-                
-        		var id = path.split("/").pop();
-                
-        		for (var i=0;i<this.data.length;i++) {
-        		    if (id==this.data[i].id) {
-        		        this.focusIndex(i);
-        		    }
-        		}
+		        var id = path.split("/").pop();
+		        var index=this.id2index[id];
+                this.grid.goTo([index,0]);
 		    }
 		    
 		   
-		    this.__base();
+		    this.__base(path);
 		},
 		
 		focusIndex:function(index)
 		{
-		    
-		    if (this.focusedIndex===index) return;
 		    
 		    if (this.focusedIndex!==null)
 			{
@@ -259,7 +260,7 @@
 		    }
 		    
 		    this.focusedIndex=index;
-		    this.grid.goTo([index,0]);
+		    this.app.publish("menuGoTo",["focus",this.menuRoot+this.data[this.focusedIndex].id],true);
 		    
 		    $("#"+this.htmlId+'_'+index).addClass("focused");
 
