@@ -12,6 +12,10 @@
 		
 		baseDefaultOptions:{
 		    hideDelay:0,
+		    autoInsert:true,
+		    showOnFocus:true,
+			showOnPreFocus:true,
+			hideOnBlur:true
 		},
 		
 		
@@ -189,13 +193,13 @@
     		    
     	    }
 		    this.hasFocus = true;
-		    this.event('onFocused');
+		    this.event('onAfterFocus');
 		},
 		
 		onBlur:function(path) {
 		    console.log("onBlur",this.id,this.options["persistFocus"]);
 		    
-		    this.event("onBlurring");
+		    this.event("onBeforeBlur");
 		    
 		    if (this.options["hideOnBlur"]===true) {
 		        this.hideDelayed();
@@ -211,7 +215,7 @@
 		        self.app.unsubscribe(s);
 		    });
 		    
-		    this.event("onBlurred");
+		    this.event("onAfterBlur");
 		},
 		
 		refresh:function(callback)

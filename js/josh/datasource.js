@@ -28,7 +28,6 @@
 		        args.success.apply(null,this.cache[hash]["result"]);
 		        return;
 		    } else {
-				if (typeof args["whileFreshing"]==='function') { args["whileFreshing"](); }
 
                 var params = jQuery.extend(true, {}, args);
 		        var self = this;
@@ -39,7 +38,6 @@
 		            if (params["pool"]) {
     		            self.pools[params["pool"]].returnToPool();
     		        }
-					if (typeof args["whenFreshed"]==='function') { args["whenFreshed"](); }
 		            args["success"].apply(null,arguments);
 		        };
 		        

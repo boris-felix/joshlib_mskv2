@@ -24,6 +24,7 @@
             //where is the tree unfolding to
             "orientation":"up",
             "persistFocus":true,
+            "browsingSense" :   'locale', 
             "itemTemplate":function(self,htmlId,data)
 			{
 				/** TODO itemTemplate comme étant un string . Principalement pour simplifer le bousin pour les pas trop développeurs
@@ -63,20 +64,14 @@
                     //go to leaf
                     console.log("onExit",side);
                     if (side[1]>0) {
+                        self.app.publish("menuGo",["focus","down"],true);
                         
-                        if (!self.event('onPanelChilding')) {
-						    self.onBlur();
-							self.app.publish("menuGo",["focus","down"],true);
-							self.event('onPanelChilded');
-						}
                         
                     //go to parent
                     } else if (side[1]<0) {
                         if (self.menuRoot=='/') return false;
-                        self.event('onPanelExiting');
-						self.onBlur();
+                        
                         self.app.publish("menuGo",["focus","up"],true);
-                        self.event('onPanelExited');
                         
                     }
                 },
@@ -87,9 +82,6 @@
         insert:function() {
             this.__base();
 			
-			// this.focusIndex(this.focusedIndex); // he's banned, because he's firing onFocus(ed|ng) events when we don't need them
-			
-			//$("#"+this.htmlId+'_0').addClass("focused");
         },
 		
 		getHtmlOpeningTag:function()
@@ -209,6 +201,7 @@
 		
 		refresh:function() {
 		    this.__base();
+		    console.log("REF",this.id,this.focusedIndex);
 		    if (this.options["persistFocus"] && this.focusedIndex!==null) {
 		        $("#"+this.htmlId+'_'+this.focusedIndex).addClass("focused");
 		    }
@@ -253,18 +246,17 @@
 		
 		focusIndex:function(index)
 		{
-		    
-		    if (this.focusedIndex!==null)
-			{
-		        $("#"+this.htmlId+" .focused").removeClass("focused");
-		    }
-		    
+		    console.log(this.id,"F",index);
+
+	        $("#"+this.htmlId+" .focused").removeClass("focused");
+
 		    this.focusedIndex=index;
 		    
-		    if (!this.isLoading)
+		    if (!this.isLoading && index!==null)
 		        this.app.publish("menuGoTo",["focus",this.menuRoot+this.data[this.focusedIndex].id],true);
 		    
-		    $("#"+this.htmlId+'_'+index).addClass("focused");
+		    if (index!==null)
+		        $("#"+this.htmlId+'_'+index).addClass("focused");
 
 		}
 	});
