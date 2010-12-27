@@ -10,14 +10,16 @@
         */
 	    {
 		
-		defaultOptions:{},
+		baseDefaultOptions:{
+		    hideDelay:0,
+		},
 		
 		
 		__constructor:function(app,id,options) {
 
 			this.app = app;
 			this.id = id;
-			this.options = $.extend({},this.defaultOptions,options || {});
+			this.options = $.extend({},this.baseDefaultOptions,this.defaultOptions,options || {});
 			this.htmlId = this.getHtmlId();
 			this.children=[];
 			this._subscribed = [];
@@ -29,7 +31,7 @@
 			var self=this;
 			this.showHideSwitch = new J.DelayedSwitch(function() {
 			    self.processShowHide();
-			},null,1000);
+			},null,this.options["hidedelay"]);
 			
 			this.menuRoot = false;
 			this.menuCurrent = false;
@@ -45,7 +47,7 @@
 			    
 			    this.app.subscribe("menuDataLoading",function(ev,data) {
 
-                    console.log("LOADING",self.id,self.menuRoot,data[0])
+                    //console.log("LOADING",self.id,self.menuRoot,data[0])
 			        //This menuData is about us!
     			    if (self.menuRoot==data[0]) {
     			        self.setLoading();

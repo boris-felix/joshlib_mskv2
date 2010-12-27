@@ -61,7 +61,7 @@
 			    
 			    //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
 			    if (!path) return;
-                
+                console.log("inmenu");
 			    //data : [ 0 : nom du registre , 1 : chemin  ]
 			    var async=true;
 			    self.resolveMoves(self.getRegister(register),path,function(newPath) {

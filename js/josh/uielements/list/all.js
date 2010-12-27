@@ -66,7 +66,7 @@
                         
                         if (!self.event('onPanelChilding')) {
 						    self.onBlur();
-							self.app.publish("menuGo",["focus","down"]);
+							self.app.publish("menuGo",["focus","down"],true);
 							self.event('onPanelChilded');
 						}
                         
@@ -75,7 +75,7 @@
                         if (self.menuRoot=='/') return false;
                         self.event('onPanelExiting');
 						self.onBlur();
-                        self.app.publish("menuGo",["focus","up"]);
+                        self.app.publish("menuGo",["focus","up"],true);
                         self.event('onPanelExited');
                         
                     }
@@ -260,7 +260,9 @@
 		    }
 		    
 		    this.focusedIndex=index;
-		    this.app.publish("menuGoTo",["focus",this.menuRoot+this.data[this.focusedIndex].id],true);
+		    
+		    if (!this.isLoading)
+		        this.app.publish("menuGoTo",["focus",this.menuRoot+this.data[this.focusedIndex].id],true);
 		    
 		    $("#"+this.htmlId+'_'+index).addClass("focused");
 
