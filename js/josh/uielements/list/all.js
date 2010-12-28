@@ -201,14 +201,14 @@
 		
 		refresh:function() {
 		    this.__base();
-		    console.log("REF",this.id,this.focusedIndex);
+		    //console.log("REF",this.id,this.focusedIndex);
 		    if (this.options["persistFocus"] && this.focusedIndex!==null) {
 		        $("#"+this.htmlId+'_'+this.focusedIndex).addClass("focused");
 		    }
 		},
 		
 		setLoading:function() {
-		    console.log("LOAD",this.id);
+		    //console.log("LOAD",this.id);
 		    this.isLoading=true;
 		},
 		
@@ -221,7 +221,8 @@
 			}
 			
 			this.grid.setGrid([data]);
-			this.grid.currentCoords=false;
+			
+			//this.grid.currentCoords=false;
 		},
         /*
         onBlur:function(path) {
@@ -242,6 +243,11 @@
 		    
 		   
 		    this.__base(path);
+		},
+		
+		resetIndex:function() {
+		    this.focusIndex(null);
+		    this.grid.currentCoords=false;
 		},
 		
 		focusIndex:function(index)

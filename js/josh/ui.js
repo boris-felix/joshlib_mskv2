@@ -35,7 +35,7 @@
 			var self=this;
 			this.showHideSwitch = new J.DelayedSwitch(function() {
 			    self.processShowHide();
-			},null,this.options["hidedelay"]);
+			},null,this.options["hideDelay"]);
 			
 			this.menuRoot = false;
 			this.menuCurrent = false;
@@ -94,7 +94,7 @@
     			                }
     			                
     			            }
-    			            
+    			            console.log("m onfocus",mdata,self.menuRoot,path);
     			            self.onFocus(path);
     			          
     			        //When we're expected to be the next focus

@@ -40,17 +40,22 @@
 		goTo:function(coords) {
 		    if (!this.currentCoords || coords[0]!==this.currentCoords[0] || coords[1]!==this.currentCoords[1]) {
 		        this.currentCoords=coords;
-		        this.options.onChange(this.currentCoords,this.get(this.currentCoords));
+		        if (this.options.onChange) this.options.onChange(this.currentCoords,this.get(this.currentCoords));
 	        }
+	        if (this.options.onSelect) this.options.onSelect(this.currentCoords,this.get(this.currentCoords));
 		},
 		
 		go:function(move) {
 		    var newx = this.moves[this.orientation][move][0]+this.currentCoords[0];
 		    var newy = this.moves[this.orientation][move][1]+this.currentCoords[1];
-		    if (newy<0 || newy>=this.grid.length || !this.grid[newy]) {
-		        this.options.onExit([-this.moves[this.orientation][move][0],-this.moves[this.orientation][move][1]]);
-		    } else if (newx<0 || newx>=this.grid[newy].length || !this.grid[newy][newx]) {
-		        this.options.onExit([-this.moves[this.orientation][move][0],-this.moves[this.orientation][move][1]]);
+		    if (
+		        (newy<0 || newy>=this.grid.length || !this.grid[newy])
+		        ||
+		        (newx<0 || newx>=this.grid[newy].length || !this.grid[newy][newx])
+		       ) {
+		        
+		        if (this.options.onExit) this.options.onExit([-this.moves[this.orientation][move][0],-this.moves[this.orientation][move][1]]);
+		        
 		    } else {
 		        this.goTo([newx,newy]);
 		    }

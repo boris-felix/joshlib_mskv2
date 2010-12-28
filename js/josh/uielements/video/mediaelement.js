@@ -18,7 +18,7 @@
     		        [{"id":"previous"}        ,{"id":"reward"}         ,{"id":"p"}     ,{"id":"foward"}         ,{"id":"next"}]
     		    ],
     		    "dimensions":2,
-                "onChange":function(coords,elem) {
+                "onSelect":function(coords,elem) {
                   $("div.video-controls .focused").removeClass("focused");
                   
                   if (elem.id=="p") {
@@ -213,6 +213,8 @@ console.error('handleError',this.errorCode,this.message);
 		play:function(options)
 		{
 
+            this.playData = options;
+            
             if (this.player) {
                 this.remove();
             }
