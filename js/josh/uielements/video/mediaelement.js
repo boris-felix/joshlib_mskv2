@@ -113,8 +113,11 @@ console.error('handleError',this.errorCode,this.message);
 		},
 		
 		stopListeningAll:function(target) {
+		    
 		    $.each(this.listeners,function(i,o) {
-		        target.removeEventListener(i,o);
+		        try {
+		            target.removeEventListener(i,o);
+		        } catch (e) {}
 		    });
 		},
 		
@@ -215,20 +218,47 @@ console.error('handleError',this.errorCode,this.message);
 
             this.playData = options;
             
-            if (this.player) {
-                this.remove();
+            console.log("playData",options);
+            
+            var isFLV = options["url"].match(/\.flv$/) || options["mime"]=="video/flv";
+            
+            //try to reuse existing instances because of http://code.google.com/p/chromium/issues/detail?id=68010
+            if (this.player && $('#'+this.htmlId+'_video').size()) {
+                
+                this.stopListeningAll(this.player);
+                
+                if (this.options.cleanup) {
+                    this.options.cleanup();
+                }
+                
+                try {
+                    this.player.stop();
+                } catch (e) {};
+                
+                $('#'+this.htmlId+'_video').attr("src",options["url"]);
+                if (options["image"]) $('#'+this.htmlId+'_video').attr("poster",options["image"]);
+                $('#'+this.htmlId+'_video').attr("autoplay",isFLV?false:true);
+                $('#'+this.htmlId+'_video').attr("autobuffer",isFLV?false:true);
+                $('#'+this.htmlId+'_video').attr("preload",isFLV?false:true);
+                $('#'+this.htmlId+'_video').css({"display":isFLV?"none":"block"});
+                
+                $('#'+this.htmlId+' .me-plugin').remove();
+                $('#'+this.htmlId+' .video-controls').remove();
+                
+                
+                
+            } else {
+                
+                if (isFLV)
+    			{
+                    // No autoplay here because <video src='xxx.flv' autoplay> will start playing on a GoogleTV
+            		// even if video.canPlayType("video/flv")==""        		
+                    $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
+                } else {
+                    $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' autoplay='true' autobuffer preload "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
+                }
             }
             
-            window._vid = this;
-			
-            if (options["url"].match(/\.flv$/) || options["mime"]=="video/flv")
-			{
-                // No autoplay here because <video src='xxx.flv' autoplay> will start playing on a GoogleTV
-        		// even if video.canPlayType("video/flv")==""        		
-                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
-            } else {
-                $("#"+this.htmlId)[0].innerHTML = "<video id='"+this.htmlId+"_video' src='"+options["url"]+"' autoplay='true' autobuffer preload "+(options["image"]?"poster='"+options["image"]+"'":"")+" />";
-            }
 			
 			$('#'+this.htmlId+'_video').css({
 				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
@@ -311,22 +341,23 @@ console.error('handleError',this.errorCode,this.message);
                     
 					that.delegated('success');
 					
-					me.addEventListener('progress',function(ev){
+					that.startListening(me,'progress',function(ev){
 						$('.video-duration').text(isNaN(me.duration)?'--:--':   mejs.Utility.secondsToTimeCode(me.duration));
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('progress');
 					});
-					me.addEventListener('playing',function(ev){
+					that.startListening(me,'playing',function(ev){
 					    that.setVideoStatus("playing");
+					    that.delegated('playing');
 					});
-					me.addEventListener('timeupdate',function(ev){
+					that.startListening(me,'timeupdate',function(ev){
 					    //that.setVideoStatus("playing");
 						$('.video-currenttime').text(mejs.Utility.secondsToTimeCode(me.currentTime));
 						$('.video-time-current').css('width',Math.round(100 * me.currentTime / me.duration)+'%');
 						$('.video-time-loaded').css('width',Math.round(100 * me.bufferedBytes / me.bytesTotal)+'%');
 						that.delegated('timeupdate');
 					});
-					me.addEventListener('ended',function(ev){
+					that.startListening(me,'ended',function(ev){
 					    that.setVideoStatus("stopped");
 						$('.video-play , .video-pause').hide();
 						$('.video-stop').show();
@@ -337,7 +368,7 @@ console.error('handleError',this.errorCode,this.message);
 						
 					});
 					
-					me.addEventListener('canplay',function(ev){
+					that.startListening(me,'canplay',function(ev){
 						me.play();
 						that.setVideoStatus("playing");
 						$('.video-buttons').show();
@@ -345,7 +376,7 @@ console.error('handleError',this.errorCode,this.message);
 						that.delegated('canplay');
 					});
 					
-					me.addEventListener('error',function(ev){
+					that.startListening(me,'error',function(ev){
 					    //ignore errors about the gif img unloader
 					    if (ev.target.src.match(/\.gif$/)) {
 					        return;
