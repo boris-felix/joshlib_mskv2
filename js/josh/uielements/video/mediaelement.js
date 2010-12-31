@@ -228,7 +228,7 @@ console.error('handleError',this.errorCode,this.message);
                 this.stopListeningAll(this.player);
                 
                 if (this.options.cleanup) {
-                    this.options.cleanup();
+                    this.options.cleanup(this);
                 }
                 
                 try {
@@ -240,7 +240,7 @@ console.error('handleError',this.errorCode,this.message);
                 $('#'+this.htmlId+'_video').attr("autoplay",isFLV?false:true);
                 $('#'+this.htmlId+'_video').attr("autobuffer",isFLV?false:true);
                 $('#'+this.htmlId+'_video').attr("preload",isFLV?false:true);
-                $('#'+this.htmlId+'_video').css({"display":isFLV?"none":"block"});
+                $('#'+this.htmlId+'_video').css({"display":isFLV?"none":"block","width":"","height":""});
                 
                 $('#'+this.htmlId+' .me-plugin').remove();
                 $('#'+this.htmlId+' .video-controls').remove();
@@ -261,14 +261,14 @@ console.error('handleError',this.errorCode,this.message);
             
 			
 			$('#'+this.htmlId+'_video').css({
-				'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
-				'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
+				//'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
+				//'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
 				'z-index'   : 00
 			});
 			
 			if (this.options["forceAspectRatio"]) {
 			    if (!this.options['width']) {
-			        $('#'+this.htmlId+'_video').css({'width':(this.options["forceAspectRatio"]*$('#'+this.htmlId+'_video').height())+"px"});
+			        $('#'+this.htmlId+'_video').css({'height':($('#'+this.htmlId+'_video').width()/this.options["forceAspectRatio"])+"px"});
 			    }
 			}
             
