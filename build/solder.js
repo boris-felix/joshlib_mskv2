@@ -113,6 +113,7 @@ exports.config = {
         'js/josh/datasource.js',
         'js/josh/controls/keyboard.js',
         'js/josh/controls/mouse.js',
+       // 'js/josh/controls/kinect.js',
         'js/josh/uielements/panel.js',
         'js/josh/uielements/list/all.js',
         'js/josh/uielements/video/all.js',
