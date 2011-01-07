@@ -113,7 +113,6 @@ exports.config = {
         'js/josh/datasource.js',
         'js/josh/controls/keyboard.js',
         'js/josh/controls/mouse.js',
-       // 'js/josh/controls/kinect.js',
         'js/josh/uielements/panel.js',
         'js/josh/uielements/list/all.js',
         'js/josh/uielements/video/all.js',
@@ -130,6 +129,19 @@ exports.config = {
       ],
       js: [
         'js/josh/targets/10feet/googletv.js',
+        'js/josh/uielements/video/mediaelement.js'
+      ]
+    },
+    
+    'joshlib-kinectdemo': {
+      requires: ["joshlib","mediaelement"],
+      css: [
+        'css/style.css',
+        'css/targets/googletv.scss'
+      ],
+      js: [
+        'js/josh/controls/kinect.js',
+        'js/josh/targets/10feet/kinectdemo.js',
         'js/josh/uielements/video/mediaelement.js'
       ]
     },

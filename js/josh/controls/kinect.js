@@ -9,40 +9,89 @@
 		    DepthJS.init();
 
 			
-			
-			
-            DepthJS.eventHandlers.onSwipeLeft = function() {
-               // history.back();
-               self.app.publish("control",["left"]);
-            };
-
-            DepthJS.eventHandlers.onSwipeRight = function() {
-              // We interpret as "forward".
-              // history.forward();
-              self.app.publish("control",["right"]);
-            };
-
-            DepthJS.eventHandlers.onSwipeDown = function() {
-              // We interpret as "scroll down 75% of window".
-              // var scrollAmount = Math.floor($(window).height() * 0.75);
-              // $("html, body").animate({
-              //   scrollTop: ($(document).scrollTop() + scrollAmount)
-              // });
-              self.app.publish("control",["down"]);
-            };
-
-            DepthJS.eventHandlers.onSwipeUp = function() {
-              // We interpret as "scroll up 75% of window".
-              // var scrollAmount = Math.floor($(window).height() * 0.75);
-              // $("html, body").animate({
-              //   scrollTop: ($(document).scrollTop() - scrollAmount)
-              // });
-              self.app.publish("control",["up"]);
-            };
-
+        	this.cursorCanvas = document.createElement("canvas");
+            this.cursorCanvas.width= 200;
+            this.cursorCanvas.height = 200;
+            this.cursorCanvas.style.cssText="position:absolute; top:0%; left:0%; background:transparent;";
+            document.body.appendChild(this.cursorCanvas);
+            this.cursor = this.getCursor(this.cursorCanvas.getContext("2d"), 50, {x:100, y:100}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
 
 			
-		}
+			
+            DepthJS.eventHandlers.onMove = function(evt) {
+                console.log("move",evt);
+                $(self.cursorCanvas).stop().animate({"left":(100-evt.x)+"%","top":evt.y+"%"},200,"linear");
+                
+                //(100-evt.z/100);
+                
+            };
+            
+			
+		},
+		
+		
+
+        getCursor:function(context, bars, center, innerRadius, size, color) {
+            var animating = true,
+                currentOffset = 0;
+
+            function makeRGBA(){
+                return "rgba(" + [].slice.call(arguments, 0).join(",") + ")";
+            }
+            function drawBlock(ctx, barNo){
+                ctx.fillStyle = makeRGBA(color.red, color.green, color.blue, (bars+1-barNo)/(bars+1));
+                ctx.fillRect(-size.width/2, 0, size.width, size.height);
+            }
+            function calculateAngle(barNo){
+                return 2 * barNo * Math.PI / bars;
+            }
+            function calculatePosition(barNo){
+                angle = calculateAngle(barNo);
+                return {
+                    y: (innerRadius * Math.cos(-angle)),
+                    x: (innerRadius * Math.sin(-angle)),
+                    angle: angle
+                };
+            }
+            function draw(ctx, offset) {
+                clearFrame(ctx);
+                ctx.save();
+                ctx.translate(center.x, center.y);
+                for(var i = 0; i<bars; i++){
+                    var curbar = (offset+i) % bars,
+                        pos = calculatePosition(curbar);
+                    ctx.save();
+                    ctx.translate(pos.x, pos.y);
+                    ctx.rotate(pos.angle);
+                    drawBlock(context, i);
+                    ctx.restore();
+                }
+                ctx.restore();
+            }
+            function clearFrame(ctx) {
+                ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+            }
+            function nextAnimation(){
+                if (!animating) {
+                    return;
+                };
+                currentOffset = (currentOffset + 1) % bars;
+                draw(context, currentOffset);
+                setTimeout(nextAnimation, 50);
+            }
+            nextAnimation(0);
+            return {
+                stop: function (){
+                    animating = false;
+                    clearFrame(context);
+                },
+                start: function (){
+                    animating = true;
+                    nextAnimation(0);
+                }
+            };
+        }
+
 		
 	});
 	
@@ -190,14 +239,14 @@
           if (DepthJS.verbose) console.log('Unknown message: ' + data);
           return;
         }
-        DepthJS.logSortaVerbose(msg.type, msg);
+        //DepthJS.logSortaVerbose(msg.type, msg);
         var handler = DepthJS.eventHandlers["on"+msg.type];
         if (handler != null) {
           handler(msg.data);
         }
 
         msg.jsonRep = data.data;
-        console.log("msg",msg);
+        //console.log("msg",msg);
       } else if (stream == "image") {
         /*DepthJS.eventHandlers.onImageMsg(data);*/
       } else if (stream == "depth") {
@@ -239,6 +288,12 @@
     
     
     DepthJS.state = null;
+
+
+
+
+
+
 
 })(Joshlib,jQuery);
 
