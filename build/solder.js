@@ -116,6 +116,7 @@ exports.config = {
        // 'js/josh/controls/kinect.js',
         'js/josh/uielements/panel.js',
         'js/josh/uielements/list/all.js',
+        'js/josh/uielements/list/check-list.js',
         'js/josh/uielements/video/all.js',
         
         'js/josh/stress.js'
