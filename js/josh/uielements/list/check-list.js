@@ -22,13 +22,15 @@
 	getHtmlOpeningContainer:function(){return '<'+this.containerTag+' id="'+this.htmlId+'_container">';},
 	getHtmlClosingContainer:function(){return '</'+this.containerTag+'>';},
 	getHtmlValidation:function(){
-		return '<div id="'+this.htmlId+'_validation"></div>';
+		return '<div id="'+this.htmlId+'_validation" data-path="'+this.menuRoot+'--validation--"></div>';
 	},
 	getHtml:function(){
-return this.getHtmlOpeningContainer() + this.__base()+this.getHtmlValidation()+this.getHtmlClosingContainer();
+return this.__base();
+//return this.getHtmlOpeningContainer() + this.__base()+this.getHtmlValidation()+this.getHtmlClosingContainer();
 	},
 	mem_add:function(element){
 	/* Passer plutôt par window.sessionStorage si dispo */	
+console.warn("check list memory add "+element );
 		this.memory.last_save = new Date().getTime();
 		this.memory.list[this.memory.list.length] = element;
 		return true;
@@ -78,9 +80,18 @@ return this.getHtmlOpeningContainer() + this.__base()+this.getHtmlValidation()+t
 		               
 		           } else if (sens=="enter") {
 
-
 			if (self.focusedIndex!=null){
 			var valeur = self.data[self.focusedIndex].id;
+			
+			/* faute de mieux .. */
+			if (valeur==="||validation||"){
+				/* pourrait etre focusedindex = data.length-1 */
+				console.warn("checklist validation");
+				self.event("validate");
+				return true;
+
+			}
+
 			var elt_index = self.memory.list.indexOf(valeur);
 			if (elt_index==-1){
 				self.mem_add(valeur);				
@@ -98,7 +109,6 @@ return this.getHtmlOpeningContainer() + this.__base()+this.getHtmlValidation()+t
 		//return this.__base().concat(specific_controls);
 		return specific_controls;
 	},
-
 });
 	
 	
