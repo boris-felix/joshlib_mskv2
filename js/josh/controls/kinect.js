@@ -8,21 +8,42 @@
 		        
 		    DepthJS.init();
 
+
+            var cursorWidth = 50;
 			
         	this.cursorCanvas = document.createElement("canvas");
-            this.cursorCanvas.width= 200;
-            this.cursorCanvas.height = 200;
-            this.cursorCanvas.style.cssText="position:absolute; top:0%; left:0%; background:transparent;";
+            this.cursorCanvas.width= cursorWidth;
+            this.cursorCanvas.height = cursorWidth;
+            this.cursorCanvas.style.cssText="z-index:999999;position:absolute; top:0%; left:0%; background:transparent;";
             document.body.appendChild(this.cursorCanvas);
-            this.cursor = this.getCursor(this.cursorCanvas.getContext("2d"), 50, {x:100, y:100}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
+            this.cursor = this.getCursor(this.cursorCanvas.getContext("2d"), 50, {x:cursorWidth/2, y:cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
 
+
+            var mapMouse = true;
+            
+            
+            var moveTo = function(x,y) {
+                $(self.cursorCanvas).stop().animate({"left":x,"top":y},200,"linear");
+            }
+            
+            if (mapMouse) {
+                $('#'+this.app.baseUIElement.htmlId).mousemove(function(event) {
+                    moveTo((event.pageX-cursorWidth/2)+"px",(event.pageY-cursorWidth/2)+"px");
+                });
+            }
+
+            
 			
-			
+			var currentDestination = [0,0];
             DepthJS.eventHandlers.onMove = function(evt) {
-                console.log("move",evt);
-                $(self.cursorCanvas).stop().animate({"left":(100-evt.x)+"%","top":evt.y+"%"},200,"linear");
                 
-                //(100-evt.z/100);
+                //Filter the event because of not enough move ?
+                if (Math.abs(currentDestination[0]-(100-evt.x))<=1 && Math.abs(currentDestination[1]-(evt.y))<=1) {
+                    return;
+                }
+                currentDestination = [100-evt.x,evt.y];
+                
+                moveTo(currentDestination[0]+"%",currentDestination[1]+"%");
                 
             };
             
