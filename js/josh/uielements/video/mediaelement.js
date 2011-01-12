@@ -158,15 +158,27 @@ console.error('handleError',this.errorCode,this.message);
 		                self.grid.go(sens);
 		                
 		            } else if (sens=="hover") {
-		                var position = [parseInt(data[1].match(/\_([^\_]+)$/)[1].split(".")[0]),0];
-		                console.log("p hover",position);
-		                self.grid.goTo(position);
+		                var m = data[1].match(/\_([^\_]+)$/);
+		                if (m) {
+		                    var position = [parseInt(m[1].split(".")[0]),0];
+    		                console.log("p hover",position);
+    		                self.grid.goTo(position);
+		                }
+		                
 		                
 		            } else if (sens=="enter") {
 		                
 		                var position = self.grid.currentCoords;
 		                if (data[1]) {
-		                    position = [parseInt(data[1].match(/\_([^\_]+)$/)[1].split(".")[0]),0];
+		                    
+		                    var m = data[1].match(/\_([^\_]+)$/);
+		                    
+		                    //event is not for us
+		                    if (!m) {
+		                        return;
+		                    }
+		                    
+		                    position = [parseInt(m[1].split(".")[0]),0];
 		                }
 		                console.log("p enter",position,self.videoStatus);
 		                if (position[0]==0) { //previous

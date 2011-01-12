@@ -9,26 +9,48 @@
 		    DepthJS.init();
 
 
-            var cursorWidth = 50;
+            this.cursorWidth = 100;
 			
         	this.cursorCanvas = document.createElement("canvas");
-            this.cursorCanvas.width= cursorWidth;
-            this.cursorCanvas.height = cursorWidth;
+            this.cursorCanvas.width= this.cursorWidth;
+            this.cursorCanvas.height = this.cursorWidth;
             this.cursorCanvas.style.cssText="z-index:999999;position:absolute; top:0%; left:0%; background:transparent;";
-            document.body.appendChild(this.cursorCanvas);
-            this.cursor = this.getCursor(this.cursorCanvas.getContext("2d"), 50, {x:cursorWidth/2, y:cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
+            this.app.baseHtml[0].appendChild(this.cursorCanvas);
+            this.cursorWait = this.getCursorWait(this.cursorCanvas.getContext("2d"), 40, {x:this.cursorWidth/2, y:this.cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
+            this.cursorWait.stop();
+            
+            this.cursorMove = this.getCursorMove(this.cursorCanvas.getContext("2d"), 50, {x:this.cursorWidth/2, y:this.cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
+            this.cursorMove.start();
 
+            this.hoveredElement = false;
 
             var mapMouse = true;
             
             
+            this.stationaryTimer = new J.DelayedSwitch(function() {
+                self.onStationary();
+			},false,200);
+            
+            this.actionTimer = new J.DelayedSwitch(function() {
+                self.onAction();
+			},false,2000);
+            
+            
             var moveTo = function(x,y) {
-                $(self.cursorCanvas).stop().animate({"left":x,"top":y},200,"linear");
+                $(self.cursorCanvas).stop().animate({"left":x,"top":y},100,"linear");
+                self.stationaryTimer.reset();
+                self.cursorWait.stop();
+                self.cursorMove.start();
+                self.actionTimer.off();
+                $(window).trigger("joshactivity");
             }
             
+            
+            
+            
             if (mapMouse) {
-                $('#'+this.app.baseUIElement.htmlId).mousemove(function(event) {
-                    moveTo((event.pageX-cursorWidth/2)+"px",(event.pageY-cursorWidth/2)+"px");
+                $(this.app.baseHtml[0]).mousemove(function(event) {
+                    moveTo((event.pageX-self.cursorWidth/2)+"px",(event.pageY-self.cursorWidth/2)+"px");
                 });
             }
 
@@ -51,8 +73,64 @@
 		},
 		
 		
+		onAction:function() {
+		    var self=this;
+		    
+		    this.cursorWait.stop();
+		    
+		    var menuPath = $(self.hoveredElement).attr('data-path') || self.hoveredElement.id;
+		    self.app.publish("control",["enter",menuPath]);
+		
+		},
+		
+		onStationary:function() {
+		    var self=this;
+		    
+            var pointerOffset = $(self.cursorCanvas).offset();
+            pointerOffset.top+=this.cursorWidth/2;
+            pointerOffset.left+=this.cursorWidth/2;
+            
+            $('.joshover:visible',this.app.baseHtml[0]).each(function(i,elt) {
+                elt=$(elt);
+                var offset = elt.offset();
+                
+                if (
+                    (offset.left<=pointerOffset.left && (offset.left+elt.outerWidth())>=pointerOffset.left)
+                    &&
+                    (offset.top<=pointerOffset.top && (offset.top+elt.outerHeight())>=pointerOffset.top)
+                ) {
+                    self.hoveredElement=elt[0];
+                    
+                    var menuPath = elt.attr('data-path') || elt[0].id;
 
-        getCursor:function(context, bars, center, innerRadius, size, color) {
+    			    self.app.publish("control",["hover",menuPath]);
+    			    self.cursorWait.start();
+    			    self.cursorMove.stop();
+    			    self.actionTimer.reset();
+    				
+                }
+            });
+        },
+        
+        getCursorMove:function(context, bars, center, innerRadius, size, color) {
+            
+            return {
+                "start":function() {
+                    var gradObj = context.createRadialGradient(center.x,center.y,0, center.x,center.y,50);
+                    gradObj.addColorStop(0, 'rgba(255,0,0,1)');
+                    gradObj.addColorStop(1, 'rgba(255,0,0,0)');
+                    context.fillStyle = gradObj;
+                    context.rect(0,0,center.x*2,center.y*2);
+                    context.fill();
+                },
+                "stop":function() {
+                    context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
+                }
+            }
+
+        },
+        
+        getCursorWait:function(context, bars, center, innerRadius, size, color) {
             var animating = true,
                 currentOffset = 0;
 
@@ -74,6 +152,7 @@
                     angle: angle
                 };
             }
+            
             function draw(ctx, offset) {
                 clearFrame(ctx);
                 ctx.save();
@@ -107,6 +186,7 @@
                     clearFrame(context);
                 },
                 start: function (){
+                    currentOffset = parseInt(bars/2);
                     animating = true;
                     nextAnimation(0);
                 }
