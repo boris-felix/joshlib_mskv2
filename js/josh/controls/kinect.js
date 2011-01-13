@@ -83,7 +83,16 @@
                 }
                 currentDestination = [100-evt.x,evt.y];
                 
-                moveTo(currentDestination[0]+"%",currentDestination[1]+"%");
+                //use a smaller selection space, for bugs with edges
+                //margins in percents, CSS order (1.1 for 10%)
+                var margins = [1.1,1.1,1.1,1.1];
+                
+                //TODO
+                
+                var appOffset = $(this.app.baseHtml[0]).offset();
+                var appBox = [appOffset.left,appOffset.top,appOffset.left+$(this.app.baseHtml[0]).outerWidth(),appOffset.top+$(this.app.baseHtml[0]).outerHeight()]
+                
+                moveTo((appBox[2]-appBox[0])*currentDestination[0]+appBox[0],(appBox[3]-appBox[1])*currentDestination[1]+appBox[1]);
                 
             };
             
