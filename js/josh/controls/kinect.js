@@ -14,13 +14,20 @@
         	this.cursorCanvas = document.createElement("canvas");
             this.cursorCanvas.width= this.cursorWidth;
             this.cursorCanvas.height = this.cursorWidth;
-            this.cursorCanvas.style.cssText="z-index:999999;position:absolute; top:0%; left:0%; background:transparent;";
+            this.cursorCanvas.style.cssText="z-index:999998;position:absolute; top:0%; left:0%; background:transparent;";
             this.app.baseHtml[0].appendChild(this.cursorCanvas);
-            this.cursorWait = this.getCursorWait(this.cursorCanvas.getContext("2d"), 40, {x:this.cursorWidth/2, y:this.cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
+            
+            this.cursorWaitCanvas = document.createElement("canvas");
+            this.cursorWaitCanvas.width= this.cursorWidth;
+            this.cursorWaitCanvas.height = this.cursorWidth;
+            this.cursorWaitCanvas.style.cssText="z-index:999999;position:absolute; top:0%; left:0%; background:transparent;";
+            this.app.baseHtml[0].appendChild(this.cursorWaitCanvas);
+            
+            
+            this.cursorWait = this.getCursorWait(this.cursorWaitCanvas.getContext("2d"), 40, {x:this.cursorWidth/2, y:this.cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
             this.cursorWait.stop();
             
             this.cursorMove = this.getCursorMove(this.cursorCanvas.getContext("2d"), 50, {x:this.cursorWidth/2, y:this.cursorWidth/2}, 10, {width: 2, height:10}, {red: 255, green: 17, blue: 58});
-            this.cursorMove.start();
 
             this.hoveredElement = false;
 
@@ -29,18 +36,29 @@
             
             this.stationaryTimer = new J.DelayedSwitch(function() {
                 self.onStationary();
-			},false,200);
+			},false,100);
             
             this.actionTimer = new J.DelayedSwitch(function() {
                 self.onAction();
-			},false,2000);
+			},function() {
+			    $(self.cursorCanvas).show();
+			},2000);
             
             
             var moveTo = function(x,y) {
-                $(self.cursorCanvas).stop().animate({"left":x,"top":y},100,"linear");
+                //console.log("testmove",self.hoveredElement,x,y);
+                
+                //is the focus still in the current hovered element?
+                if (self.hoveredElement && self.hoveredElement[1]<=x && self.hoveredElement[3]>=x && self.hoveredElement[2]<=y && self.hoveredElement[4]>=y) {
+                    return;
+                }
+                self.hoveredElement=false;
+                
+                $(self.cursorCanvas).stop().animate({"left":x-self.cursorWidth/2,"top":y-self.cursorWidth/2},50,"linear");
+                
                 self.stationaryTimer.reset();
                 self.cursorWait.stop();
-                self.cursorMove.start();
+                $(self.cursorCanvas).show();
                 self.actionTimer.off();
                 $(window).trigger("joshactivity");
             }
@@ -50,7 +68,7 @@
             
             if (mapMouse) {
                 $(this.app.baseHtml[0]).mousemove(function(event) {
-                    moveTo((event.pageX-self.cursorWidth/2)+"px",(event.pageY-self.cursorWidth/2)+"px");
+                    moveTo(event.pageX,event.pageY);
                 });
             }
 
@@ -76,57 +94,92 @@
 		onAction:function() {
 		    var self=this;
 		    
-		    this.cursorWait.stop();
+		    $(self.cursorCanvas).hide();
+		    self.cursorWait.stop();
 		    
 		    var menuPath = $(self.hoveredElement).attr('data-path') || self.hoveredElement.id;
 		    self.app.publish("control",["enter",menuPath]);
 		
 		},
 		
-		onStationary:function() {
-		    var self=this;
+		
+		getUnderlyingJoshoverElement:function(x,y) {
 		    
-            var pointerOffset = $(self.cursorCanvas).offset();
-            pointerOffset.top+=this.cursorWidth/2;
-            pointerOffset.left+=this.cursorWidth/2;
-            
-            $('.joshover:visible',this.app.baseHtml[0]).each(function(i,elt) {
+		    var ret;
+		    $('.joshover:visible',this.app.baseHtml[0]).each(function(i,elt) {
                 elt=$(elt);
                 var offset = elt.offset();
                 
                 if (
-                    (offset.left<=pointerOffset.left && (offset.left+elt.outerWidth())>=pointerOffset.left)
+                    (offset.left<=x && (offset.left+elt.outerWidth())>=x)
                     &&
-                    (offset.top<=pointerOffset.top && (offset.top+elt.outerHeight())>=pointerOffset.top)
+                    (offset.top<=y && (offset.top+elt.outerHeight())>=y)
                 ) {
-                    self.hoveredElement=elt[0];
+                    //element, boundaries
+		            ret= [elt[0],offset.left,offset.top,offset.left+elt.outerWidth(),offset.top+elt.outerHeight()];
+		        }
+		    });
+		    return ret;
+		    
+		},
+		
+		onStationary:function() {
+		    var self=this;
+		    
+            var pointerOffset = $(self.cursorCanvas).offset();
+            pointerOffset.top+=parseInt(this.cursorWidth/2);
+            pointerOffset.left+=parseInt(this.cursorWidth/2);
+            
+            var underElement = this.getUnderlyingJoshoverElement(pointerOffset.left,pointerOffset.top);
+            
+            if (!underElement) {
+                self.hoveredElement=false;
+                return;
+            }
+            
+            //no changes
+            if (self.hoveredElement[0]==underElement[0]) return;
+            
+            self.actionTimer.reset();
+            
+            self.hoveredElement=underElement;
                     
-                    var menuPath = elt.attr('data-path') || elt[0].id;
+            var menuPath = $(underElement[0]).attr('data-path') || underElement[0].id;
 
-    			    self.app.publish("control",["hover",menuPath]);
-    			    self.cursorWait.start();
-    			    self.cursorMove.stop();
-    			    self.actionTimer.reset();
-    				
-                }
-            });
+    		self.app.publish("control",["hover",menuPath]);
+    		$(self.cursorCanvas).hide();
+    		
+    		//console.log("wait start",self.cursorWait,self.cursorWaitCanvas);
+    		
+    		self.cursorWait.start();
+    			    
+    		$(self.cursorWaitCanvas).css({"left":((underElement[1]+underElement[3])/2-self.cursorWidth/2)+"px","top":((underElement[2]+underElement[4])/2-self.cursorWidth/2)+"px"});
+    		  
+    			    
+    		
+    		
+    		
         },
         
         getCursorMove:function(context, bars, center, innerRadius, size, color) {
             
+           /* var drawn=false;
             return {
                 "start":function() {
+                    if (drawn) return;
+                    drawn=true;*/
                     var gradObj = context.createRadialGradient(center.x,center.y,0, center.x,center.y,50);
                     gradObj.addColorStop(0, 'rgba(255,0,0,1)');
                     gradObj.addColorStop(1, 'rgba(255,0,0,0)');
                     context.fillStyle = gradObj;
                     context.rect(0,0,center.x*2,center.y*2);
                     context.fill();
-                },
+                /*},
                 "stop":function() {
+                    drawn=false;
                     context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
                 }
-            }
+            }*/
 
         },
         
