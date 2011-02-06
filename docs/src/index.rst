@@ -12,8 +12,11 @@ Contents:
    :maxdepth: 2
 
    overview/index
-   jsdoc/index
-
+   events/index
+   tree/index
+   
+* `API Reference <../jsdoc-html/index.html>`_
+   
 
 
 

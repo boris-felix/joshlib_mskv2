@@ -18,7 +18,7 @@
          * @param {Object} options Options hash
          */        
 		play:function(options) {
-		    window.open(options["url"]);
+		    
 		},
 		
 		/**

@@ -90,26 +90,32 @@
 			$('.video-buttons').hide();
 			$('.video-info').show();
 			this.errorCode=this.errorCode!=0?this.errorCode:ev.srcElement.error.code;
+			
+			
 			switch (this.errorCode)
-			{
-				case ev.target.error.MEDIA_ERR_ABORTED:
-					this.message='Vous avez annulé la lecture de la vidéo.';
-				break;
-				case ev.target.error.MEDIA_ERR_NETWORK:
-					this.message='Un incident réseau a interrompu la vidéo.';
-				break;
-				case ev.target.error.MEDIA_ERR_DECODE:
-					this.message='La vidéo est corrompue ou non-reconnue.';
-				break;
-				case ev.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-					this.message='La vidéo n’a pu être chargée à cause d’un problème serveur.';
-				break;
-				default:
-					this.message='Une erreur a eu lieue.';
-				break;
-			}
-console.error('handleError',this.errorCode,this.message);
-			this.delegated('error'); // oui, l'évènement a lieu AVANT pour que vous puissiez le gérer à votre aise
+            	{
+            	case 1: //MEDIA_ERR_ABORTED
+            		this.message='<span>'+(this.options.errorMessages["aborted"]||"The loading of the video was aborted")+"</span>";
+            	break;
+            	case 2: //MEDIA_ERR_NETWORK:
+            	    this.message='<span>'+(this.options.errorMessages["network"]||"A network problem is preventing the video from loading")+"</span>";
+                
+            	break;
+            	case 3: //MEDIA_ERR_DECODE
+            		this.message='<span>'+(this.options.errorMessages["decode"]||"The video format is not recognized")+"</span>";
+            	break;
+            	case 4: //MEDIA_ERR_SRC_NOT_SUPPORTED
+            	    //TODO check this error message
+            		this.message='<span>'+(this.options.errorMessages["notsupported"]||"The video couldn't be loaded because of a server issue")+"</span>";
+            	break;
+            	default:
+            	    this.message='<span>'+(this.options.errorMessages["other"]||"Unknown error")+"</span>";
+            	break;
+            }
+			
+            console.error('handleError',this.errorCode,this.message);
+            
+			this.delegated('error');
 			$('.video-info').html(this.message);
 		},
 		
@@ -233,7 +239,22 @@ console.error('handleError',this.errorCode,this.message);
         
 		play:function(options)
 		{
-
+		    var self=this;
+            if (typeof options.url=="function") {
+                options.url(function(error,url) {
+                    if (error) {
+                        this.errorCode=4;
+                        return self.handleError();
+                    }
+                    options.url = url;
+                    self._play(options);
+                })
+            } else {
+                return self._play(options);
+            }
+        },
+        
+        _play:function(options) {
             this.playData = options;
             
             console.log("playData",options);
