@@ -1,4 +1,4 @@
-(function(J,$) {
+(function(J,$,_) {
 	
 	
     var lastUid = -1;
@@ -52,8 +52,8 @@
 		    var self=this;
 		    this.setup(function() {
 		        self.baseUIElement.insert();
-		        $.each(self.controls,function(i,v) {
-		            J.Control.create(self,v).start();
+		        _.each(self.inputs,function(input) {
+		            J.Input.create(self,input).start();
 		        });
 		        
 		    });
@@ -171,4 +171,4 @@
 	J.Apps = {};
 	
 	
-})(Joshlib,jQuery);
+})(Joshlib,jQuery,_);

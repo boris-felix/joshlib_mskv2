@@ -1,4 +1,4 @@
-(function(J,$) {
+(function(J,Ext) {
 	
 	J.App = J.Class(J.App,{
 	    setup:function(callback) {
@@ -22,4 +22,8 @@
 	    "controls":["touch"]
 	});
 	
-})(Joshlib,jQuery);
+	J.UI.List = J.UI.ListSencha;
+	J.UI.Video = J.UI.VideoPopUp;
+	
+	
+})(Joshlib,Ext);

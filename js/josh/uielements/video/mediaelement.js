@@ -1,7 +1,13 @@
 (function(J,$) {
 
-	
-	J.UI.Video = J.Class(J.UI.Video,{
+
+	/**
+     * @class MediaElementJs video backend
+     * @augments J.UI.VideoBase
+     */
+	J.UI.VideoMediaElement = J.Class(J.UI.VideoBase,
+	    /** @lends J.UI.VideoMediaElement.prototype */
+	    {
 		
 		init:function() {
 		    this.message=''; // pour la gerstion des messages d'erreurs, versions linguistiques
@@ -13,7 +19,7 @@
     		this.player = false;
     		
     		var self=this;
-     		this.grid = new J.Grid({
+     		this.grid = new J.Utils.Grid({
     		    "grid":[
     		        [{"id":"previous"}        ,{"id":"reward"}         ,{"id":"p"}     ,{"id":"foward"}         ,{"id":"next"}]
     		    ],
@@ -30,7 +36,7 @@
                 "onExit":function(side) {
                     console.log("exxxxit",side);
                     if (side[1]<0) {
-                        self.app.publish("menuGo",["focus","up"]);
+                        self.app.publish("stateGo",["focus","up"]);
                     }
                 },
                 "orientation":self.options.orientation || "up"
@@ -39,28 +45,28 @@
     		this.videoStatus = false;
     		
     		
-    		this.app.subscribe("control",function(ev,data) {
+    		this.app.subscribe("input",function(ev,data) {
     		    
     		    if (self.isDefaultPlayer) {
     		        if (data[0]=="play") {
     		            
     		            self.grid.goTo([2,0]);
-    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
-    		            self.app.publish("control",["enter"],true);
+    		            self.app.publish("stateGoTo",["focus",self.treeRoot],true);
+    		            self.app.publish("input",["enter"],true);
     		        } else if (data[0]=="stop") {
-    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+    		            self.app.publish("stateGoTo",["focus",self.treeRoot],true);
     		            self.stop();   
     		        } else if (data[0]=="pause") {
-    		            self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+    		            self.app.publish("stateGoTo",["focus",self.treeRoot],true);
         		        self.pause();   
         		    } else if (data[0]=="forward") {
-        		        self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+        		        self.app.publish("stateGoTo",["focus",self.treeRoot],true);
         		        self.grid.goTo([3,0]);
-    		            self.app.publish("control",["enter"],true);
+    		            self.app.publish("input",["enter"],true);
         		    } else if (data[0]=="rewind") {
-        		        self.app.publish("menuGoTo",["focus",self.menuRoot],true);
+        		        self.app.publish("stateGoTo",["focus",self.treeRoot],true);
         		        self.grid.goTo([1,0]);
-    		            self.app.publish("control",["enter"],true);  
+    		            self.app.publish("input",["enter"],true);  
         		    }
     		    }
     		    
@@ -148,11 +154,11 @@ console.error('handleError',this.errorCode,this.message);
 
 		    var self=this;
 		    return this.__base().concat([
-		        ["control",function(ev,data) {
+		        ["input",function(ev,data) {
 		            
 		            var sens = data[0];
 		            
-		            console.log("receiveControl",self.id,data);
+		            console.log("receiveInput",self.id,data);
 		            
 		            if (sens=="left" || sens=="right" || sens=="down" || sens=="up") {
 		                self.grid.go(sens);
@@ -337,6 +343,8 @@ console.error('handleError',this.errorCode,this.message);
                 pluginWidth: $('#'+this.htmlId+"_video").width(),
                 pluginHeight: $('#'+this.htmlId+"_video").height(),
                 
+                enablePluginSmoothing:true,
+                
                 type:options["mime"],
                 //type:"native",
                 //enablePluginDebug:true,
@@ -438,11 +446,7 @@ console.error('handleError',this.errorCode,this.message);
 			});
 			
 		},
-		/*
-		setMenuCurrent:function(menuCurrent) {
-		    this.menuCurrent = menuCurrent.replace(/\/[^\/]+$/,"");
-		},
-		*/
+
 		onBlur:function() {
 		    this.__base();
 		    
@@ -453,11 +457,11 @@ console.error('handleError',this.errorCode,this.message);
 		playNext:function() {
 		    var that=this;
 		    
-			var playlistNextMoves = that.app.menu.getData(that.menuCurrent).playlistNext || ["next"];
-			console.log("playlistNextMoves",that.menuCurrent,that.app.menu.getData(that.menuCurrent).playlistNext,JSON.stringify(playlistNextMoves));
-			that.app.menu.resolveMoves(that.menuCurrent,playlistNextMoves,function(newPath) {
-			    that.app.publish("menuGoTo",["focus",newPath],true);
-			    that.app.publish("control",["enter"]);
+			var playlistNextMoves = that.app.tree.getData(that.treeCurrent).playlistNext || ["next"];
+			console.log("playlistNextMoves",that.treeCurrent,that.app.tree.getData(that.treeCurrent).playlistNext,JSON.stringify(playlistNextMoves));
+			that.app.tree.resolveMoves(that.treeCurrent,playlistNextMoves,function(newPath) {
+			    that.app.publish("stateGoTo",["focus",newPath],true);
+			    that.app.publish("input",["enter"]);
 			});
 		},
 		

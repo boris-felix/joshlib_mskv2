@@ -10,34 +10,25 @@
 	
 	
 	/**
-     * Class description
-     * @class
+     * @class Abstract list UI Element class
      * @augments J.UIElement
      */
-	J.UI.List = J.Class(J.UIElement,{
+	J.UI.ListBase = J.Class(J.UIElement,
+	    /** @lends J.UI.ListBase.prototype */
+	    {
         type:"List",
 		data:[],
 		HtmlTag:'ul ', // style="display:none;"
-						// associer un style en dur est une très mauvaise idée : elle m'a fait tourner en rond une journée complète. Vaut mieux utiliser les events pour forcer le style.
 
         defaultOptions:{
             //where is the tree unfolding to
             "orientation":"up",
             "persistFocus":true,
+            "autoScroll":false,
             "browsingSense" :   'locale', 
             "itemTemplate":function(self,htmlId,data)
 			{
-				/** TODO itemTemplate comme étant un string . Principalement pour simplifer le bousin pour les pas trop développeurs
-						if (typeof itemTemplate==='string')
-						{
-							
-							this.forEach{
-								this.replace('<<'+tag'>>',data[tag])
-							}
-						}
-				 **/
-				
-                return "<li id='"+htmlId+"' data-path='"+self.menuRoot+data.id+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
+                return "<li id='"+htmlId+"' data-path='"+self.treeRoot+data.id+"' class='joshover'><img src='"+data["image"]+"' /><br/>"+data["label"]+"</li>";
             },
             "loadingTemplate":function(self) {
                 return "<li class='loading'>Loading...</li>";
@@ -51,7 +42,7 @@
             this.id2index = {};
             
             var self=this;
-     		this.grid = new J.Grid({
+     		this.grid = new J.Utils.Grid({
     		    "grid":[
     		        []
     		    ],
@@ -64,14 +55,14 @@
                     //go to leaf
                     console.log("onExit",side);
                     if (side[1]>0) {
-                        self.app.publish("menuGo",["focus","down"],true);
+                        self.app.publish("stateGo",["focus","down"],true);
                         
                         
                     //go to parent
                     } else if (side[1]<0) {
-                        if (self.menuRoot=='/') return false;
+                        if (self.treeRoot=='/') return false;
                         
-                        self.app.publish("menuGo",["focus","up"],true);
+                        self.app.publish("stateGo",["focus","up"],true);
                         
                     }
                 },
@@ -81,7 +72,6 @@
         
         insert:function() {
             this.__base();
-			
         },
 		
 		getHtmlOpeningTag:function()
@@ -119,8 +109,8 @@
 			return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
 		},
 		
-		setMenuRoot:function(menuRoot) {
-		    this.__base(menuRoot.replace(/\/[^\/]*$/,"/"));
+		setTreeRoot:function(treeRoot) {
+		    this.__base(treeRoot.replace(/\/[^\/]*$/,"/"));
 		},
 		
 		
@@ -128,7 +118,7 @@
 		    
 		    var self=this;
 		    return this.__base().concat([
-		        ["control",function(ev,data) {
+		        ["input",function(ev,data) {
 		            //only supports orientation=="up" for now
 		            var sens=data[0];
 					
@@ -147,8 +137,8 @@
 		           if (sens=="hover") {
 		               var split = data[1].split("/");
 					    var lastPath = split[split.length-1];
-					    if (data[1].indexOf(self.menuRoot)===0) {
-					        var subPath = data[1].substring(self.menuRoot.length);
+					    if (data[1].indexOf(self.treeRoot)===0) {
+					        var subPath = data[1].substring(self.treeRoot.length);
 					        if (subPath.indexOf("/")===-1) {
 					            if (self.id2index[subPath]!==undefined) {
 					                self.grid.goTo([self.id2index[subPath],0]);
@@ -167,11 +157,11 @@
                         if (data[1]) {
                             var split = data[1].split("/");
                             var lastPath = split[split.length-1];
-                            if (data[1].indexOf(self.menuRoot)===0) {
-                                var subPath = data[1].substring(self.menuRoot.length);
+                            if (data[1].indexOf(self.treeRoot)===0) {
+                                var subPath = data[1].substring(self.treeRoot.length);
                                 if (subPath.indexOf("/")===-1) {
                                     if (self.id2index[subPath]!==undefined) {
-                                        dest = self.menuRoot+self.data[self.id2index[subPath]]["id"];
+                                        dest = self.treeRoot+self.data[self.id2index[subPath]]["id"];
                                     }
                                 }
                             }
@@ -183,12 +173,12 @@
     
                             if (self.isLoading) return false;
     
-                            dest = self.menuRoot+self.data[self.focusedIndex]["id"];
+                            dest = self.treeRoot+self.data[self.focusedIndex]["id"];
                         }
 
                         self.event('onPanelActing');
    
-                        self.app.publish("menuGoTo",["current",dest]);
+                        self.app.publish("stateGoTo",["current",dest]);
 
                         self.event('onPanelActed');
  
@@ -215,7 +205,7 @@
 		setData:function(data) {
 		    this.__base(data);
 		    
-			//todo: do this in menu
+			//todo: do this in tree
 			for (var i=0;i<data.length;i++) {
 			    this.id2index[data[i].id]=i;
 			}
@@ -257,57 +247,53 @@
 		    if (that.data[that.focusedIndex]!==undefined)
 			{
 			    
-			    var container = that.app.baseHtml[0];
+			    var container = that.app.baseHtml;
 			    if (that.options.orientation=="up" || that.options.orientation=="down") {
-			        var totalPixels=container.width();
+			        var totalPixels=$(container).width();
 			    }
 			    
 			    var elt=$('#'+that.htmlId+'_'+that.focusedIndex);
+			    
+			    var safetyMargin=100;
+			    var animate=true;
 				
 				if (elt.length!==0)
 				{
 					var left=elt.offset().left - container.offset().left;
-					var width=img.width();
+					var width=elt.width();
 					
 					var list = $('#'+that.htmlId);
-
-					if (document.dir=='rtl')
-					{
-					    /*
-					    
-						var wright = screxx.css('right');
-						wright= wright=='auto'?0:Math.round(wright.slice(0,-2));
-						if (imgl<0)
-						{
-							//console.log('onfocused rtl imgl<0   ',imgl,imgw, wright+(wwidth-(imgw-imgl)));
-							screxx.stop().css({'right':wright-(wwidth-(imgw-imgl)) });
-						}
-						if ((imgl+imgw)>wwidth)
-						{
-							//console.log('onfocused rtl ((imgl+imgw)>wwidth)  ',wright,wwidth,(imgw-imgl));
-							var reright =wright+(wwidth-(imgw));
-							if (reright>0) reright=0;
-							screxx.stop().css({'right':reright });
-						}
-						*/
-						
+					
+                    var prop="left";
+                    
+					if (document.dir=='rtl') {
+					    prop = "right";
+					    left=totalPixels-left-width;
+					}
+					
+					var moveObj={};
+					
+                    if (left<0+safetyMargin) {
+                        moveObj[prop]=Math.min(0,width-left);
+					} else if (left+width>totalPixels-safetyMargin) {
+					    moveObj[prop]=width-left;    
+					}
+					
+					if (animate) {
+					    list.stop().animate(moveObj,200);
 					} else {
-					    
-                        if (left<0) {
-                            
-							var releft =Math.max(0,left-width);
-							list.stop().css({'left':-releft });
-							
-						} else if (left+width>totalPixels) {
-						    
-							screxx.stop().css({'left':-(imgl-imgw) });
-						}
+					    list.stop().css(moveObj);
 					}
 				}
 			}
 		    
 		},
 		
+		/**
+	     * Sets the currently focused list element
+		 * @function
+		 * @param {Integer} index Focused list element index, starting from zero
+		 */
 		focusIndex:function(index)
 		{
 		    console.log(this.id,"F",index);
@@ -317,8 +303,14 @@
 		    this.focusedIndex=index;
 		    
 		    if (!this.isLoading && index!==null)
-		        this.app.publish("menuGoTo",["focus",this.menuRoot+this.data[this.focusedIndex].id],true);
+		        this.app.publish("stateGoTo",["focus",this.treeRoot+this.data[this.focusedIndex].id],true);
 		    
+		    try {
+		    if (this.options.autoScroll)
+    		    this.autoScroll();
+    		} catch (e) {
+    		    console.log(e);
+    		}   
 		    if (index!==null)
 		        $("#"+this.htmlId+'_'+index).addClass("focused");
 

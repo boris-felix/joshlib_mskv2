@@ -1,0 +1,798 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>Joshlib 
+                v.1.0
+                : J.UI.VideoMediaElement : JsDoc Reference</title>
+
+		<style type="text/css">
+			/* default.css */
+body {
+	font: 13px Verdana, Arial, sans-serif;
+    padding: 0;
+    margin: 15px;
+}
+
+.header {
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+a:link, a:visited {
+    color: #00A;
+}
+a:hover, a:active {
+    color: #00F;
+}
+h1 {
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+}
+h3.projectTitle {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+h1.classTitle {
+	font-size:170%;
+	line-height:130%;
+}
+
+hr {
+	border: none 0;
+	border-top: 1px solid #627C9D;
+	height: 1px;
+    margin: 1em 0;
+}
+
+pre.code {
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+    overflow: auto;
+}
+
+#index {
+	float: left;
+	width: 220px;
+	position: absolute;
+    margin-bottom: 15px;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content {
+	margin-left: 260px;
+	width: 600px;
+}
+
+#index img {
+    margin: 15px 0;
+    border: 1px solid #627C9D;
+}
+
+ul.classList {
+	list-style-type: none;
+	padding: 0;
+    margin: 0;
+	font-size: 11px;
+}
+
+ul.classList li {
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+h2 , div.sectionTitle { 
+    font-weight: bold;
+	font-size: 18px;
+	padding: 15px 0 10px 0;
+    margin: 0;
+}
+div.sectionTitle {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #627C9D;
+}
+
+code {
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
+}
+pre {
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
+}
+div.toplinks {
+    font-size: 11px;
+    padding-top: 8px;
+}
+
+td.attributes, .fixedFont
+{
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
+}
+
+/* tables */
+.summaryTable {
+    text-align: left;
+	margin: 10px 0;
+	border: 1px solid #999999;
+	width: 100%;
+}
+.summaryTable th {
+	color: #FFFFFF;
+	background-color: #627C9D;
+	white-space: nowrap;
+    padding: 3px 10px;
+}
+.summaryTable th.param {
+	color: #000;
+	background-color: #F2F2F2;
+	white-space: nowrap;
+    padding: 3px 10px;
+}
+.summaryTable td {
+	border-top: #999999 1px solid;
+	vertical-align: top;
+    padding: 5px 10px;
+}
+.summaryTable.params {
+    width: auto;
+}
+.row0 {
+	background-color: #F2F2F2;
+}
+.row1 {
+	background-color: #FFFFFF;
+}
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList dt
+{
+    float: left;
+    clear: both;
+	font-weight: bold;
+	margin-left: 0;
+}
+.detailList dd { 
+	padding-bottom: .5em;
+    margin-left: 7em; 
+}
+.detailList dd.tight {
+    padding-bottom: 0;
+}
+.membertitle {
+    font-size: 1.2em;
+    padding: .5em;
+    margin: 2.5em 0px 0.2em;
+    background: #EEF;
+    border-bottom: 3px double #999;
+}
+.membername {
+    font-weight: bold;
+}
+.datatype {
+    color: #999;
+}
+.paramname {
+    font-weight: bold;
+}
+.paramconfig {
+    color: #999;
+}
+.optional {
+	font-style: italic;
+}
+.defaultvalue {
+	font-style: italic;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	font-style: italic;
+}
+
+div.indexClass {
+    border-top: 1px solid #7F8FB1;
+    margin-bottom: .5em;
+}
+
+/* syntax coloring for examples */
+.KEYW {color: #339; font-weight: bold;}
+.COMM {color: #999; font-style: italic;}
+.NUMB {color: #933;}
+.STRN {color: #393;}
+.REGX {color: #993;}
+
+.fineprint
+{
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header">
+</div>
+		<!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+            <h3 class="projectTitle">Joshlib 
+                v.1.0
+            </h3>
+            <div class="toplinks"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+            
+			<!-- begin publish.classesIndex -->
+			<ul class="classList">
+	
+	<li><a href="../symbols/J.html">J</a></li>
+	
+	<li><a href="../symbols/J.App.html">J.App</a></li>
+	
+	<li><a href="../symbols/J.Apps.html">J.Apps</a></li>
+	
+	<li><a href="../symbols/J.Classes.html">J.Classes</a></li>
+	
+	<li><a href="../symbols/J.Input.html">J.Input</a></li>
+	
+	<li><a href="../symbols/J.Inputs.html">J.Inputs</a></li>
+	
+	<li><a href="../symbols/J.Inputs.keyboard.html">J.Inputs.keyboard</a></li>
+	
+	<li><a href="../symbols/J.Inputs.kinect.html">J.Inputs.kinect</a></li>
+	
+	<li><a href="../symbols/J.Inputs.mouse.html">J.Inputs.mouse</a></li>
+	
+	<li><a href="../symbols/J.Inputs.touch.html">J.Inputs.touch</a></li>
+	
+	<li><a href="../symbols/J.Tree.html">J.Tree</a></li>
+	
+	<li><a href="../symbols/J.UI.html">J.UI</a></li>
+	
+	<li><a href="../symbols/J.UI.CheckList.html">J.UI.CheckList</a></li>
+	
+	<li><a href="../symbols/J.UI.ListBase.html">J.UI.ListBase</a></li>
+	
+	<li><a href="../symbols/J.UI.ListSencha.html">J.UI.ListSencha</a></li>
+	
+	<li><a href="../symbols/J.UI.Panel.html">J.UI.Panel</a></li>
+	
+	<li><a href="../symbols/J.UI.VideoBase.html">J.UI.VideoBase</a></li>
+	
+	<li><a href="../symbols/J.UI.VideoMediaElement.html">J.UI.VideoMediaElement</a></li>
+	
+	<li><a href="../symbols/J.UI.VideoPopUp.html">J.UI.VideoPopUp</a></li>
+	
+	<li><a href="../symbols/J.UIElement.html">J.UIElement</a></li>
+	
+	<li><a href="../symbols/J.Utils.html">J.Utils</a></li>
+	
+	<li><a href="../symbols/J.Utils.DataSource.html">J.Utils.DataSource</a></li>
+	
+	<li><a href="../symbols/J.Utils.DelayedSwitch.html">J.Utils.DelayedSwitch</a></li>
+	
+	<li><a href="../symbols/J.Utils.Grid.html">J.Utils.Grid</a></li>
+	
+	<li><a href="../symbols/J.Utils.Pool.html">J.Utils.Pool</a></li>
+	
+	<li><a href="../symbols/J.Utils.Stress.html">J.Utils.Stress</a></li>
+	
+</ul>
+			<!-- end publish.classesIndex -->
+		</div>
+		
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				
+				Class J.UI.VideoMediaElement
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+            <dl class="detailList">
+            
+                
+                
+                
+                
+                
+                    <dt>Extends:</dt> 
+                    <dd><a href="../symbols/J.UI.VideoBase.html">J.UI.VideoBase</a></dd>
+                
+                
+                
+                
+                
+                    <dt>Defined in:</dt>
+                    <dd><a href="../symbols/src/uielements_video_mediaelement.js.html">mediaelement.js</a></dd>
+                
+            
+                
+            </dl>
+
+            <p class="description">
+				MediaElementJs video backend
+			</p>
+            
+            
+
+<!-- ============================== constructor summary ==================== -->			
+			
+            <h2>Constructor</h2>
+                <div class="fixedFont">
+                    <b><a href="../symbols/J.UI.VideoMediaElement.html#constructor">J.UI.VideoMediaElement</a></b>()
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                </div>
+			
+            
+            
+
+
+<!-- ============================== static properties summary ===================== -->
+			
+
+<!-- ============================== static methods summary ======================== -->
+			
+				
+				
+			
+
+
+<!-- ============================== instance properties summary ===================== -->
+			
+
+<!-- ============================== instance methods summary ======================== -->
+			
+				
+				
+                    <h2>Methods</h2>
+                    <table class="summaryTable" cellspacing="0">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col" width="100%">Method</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#event">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#event">event</a></b>(eventname)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Calls a custom event handler
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#getHtmlId">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#getHtmlId">getHtmlId</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Gets the actual DOM ElementId of the UIElement
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#hide">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#hide">hide</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Hide the element right away
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#hideDelayed">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#hideDelayed">hideDelayed</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Hide the element, possibly with a delay
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#insert">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#insert">insert</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Insert the element in the DOM
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#onBlur">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#onBlur">onBlur</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    onBlur
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#onFocus">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#onFocus">onFocus</a></b>(treePath)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    onFocus
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UI.VideoBase.html#pause">                         <img src="inherited.gif" alt="Inherited from J.UI.VideoBase">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UI.VideoBase.html#pause">pause</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Pause the video
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UI.VideoBase.html#play">                         <img src="inherited.gif" alt="Inherited from J.UI.VideoBase">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UI.VideoBase.html#play">play</a></b>(options)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Play a video
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#refresh">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#refresh">refresh</a></b>(callback)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Refresh data in the UIElement
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#registerChild">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#registerChild">registerChild</a></b>(elt)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Registers one element as a child
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#setData">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#setData">setData</a></b>(data)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Sets the data for the UIElement
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#setLoading">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#setLoading">setLoading</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Puts the element in loading mode
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#setTreeCurrent">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#setTreeCurrent">setTreeCurrent</a></b>(treeCurrent)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Sets the current tree path associated with the element
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#setTreeRoot">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#setTreeRoot">setTreeRoot</a></b>(treeRoot)
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Sets the tree root associated with the element
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#show">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#show">show</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Show the element right away
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row0">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#showDelayed">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#showDelayed">showDelayed</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Show the element, possibly with a delay
+                </div>
+            </td>
+        </tr>
+    
+        <tr class="row1">
+            <td>
+                
+                    <a href="../symbols/J.UIElement.html#subscribes">                         <img src="inherited.gif" alt="Inherited from J.UIElement">                     </a>
+                
+            </td>
+            <td class="nameDescription">
+                <div class="fixedFont">
+                <b><a href="../symbols/J.UIElement.html#subscribes">subscribes</a></b>()
+                
+                </div>
+                <div class="description">
+                    
+                    
+                    
+                    Get the list of subscribed events when the element has focus
+                </div>
+            </td>
+        </tr>
+    
+    </tbody>
+</table>
+				
+			
+            
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont membername">
+						<b>J.UI.VideoMediaElement</b>()
+				</div>
+                
+                
+				
+                
+                
+                <dl class="detailList">
+					
+					
+					
+					
+                </dl>
+
+			</div>
+			
+
+<!-- ============================== static field details ========================== -->		
+			
+
+<!-- ============================== static method details ========================= -->		
+			
+            
+<!-- ============================== instance field details ========================== -->		
+			
+
+<!-- ============================== static method details ========================= -->		
+			
+                
+				
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+			&copy;Joshfire 2011<br />
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Feb 06 2011 21:21:52 GMT+0100 (CET)
+		</div>
+	</body>
+</html>

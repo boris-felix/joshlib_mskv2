@@ -92,18 +92,8 @@ exports.config = {
            // "css/mediaelement/mejs-skins.css"
         ],
         js:[
-            "js/libs/mediaelement.js",
-            "js/libs/mediaelementplayer.js"
-        ]
-    },
-    
-    'flarevideo': {
-        css:[
-            'css/flarevideo/flarevideo.css',
-            'css/flarevideo/flarevideo.vimeo.scss'
-        ],
-        js:[
-
+            "js/libs/mediaelement.js"/*,
+            "js/libs/mediaelementplayer.js"*/
         ]
     },
     
@@ -113,20 +103,24 @@ exports.config = {
       css: [],
       js: [
         'js/josh/main.js',
+        
+        'js/josh/utils/grid.js',
+        'js/josh/utils/delayedswitch.js',
+        'js/josh/utils/pool.js',
+        'js/josh/utils/datasource.js',
+        
         'js/josh/app.js',
-        'js/josh/menu.js',
-        'js/josh/grid.js',
-        'js/josh/ui.js',
-        'js/josh/control.js',
-        'js/josh/datasource.js',
-        'js/josh/controls/keyboard.js',
-        'js/josh/controls/mouse.js',
+        'js/josh/tree.js',        
+        'js/josh/input.js',
+        'js/josh/inputs/keyboard.js',
+        'js/josh/inputs/mouse.js',
+        'js/josh/uielement.js',
         'js/josh/uielements/panel.js',
         'js/josh/uielements/list/all.js',
         'js/josh/uielements/list/check-list.js',
         'js/josh/uielements/video/all.js',
         
-        'js/josh/stress.js'
+        'js/josh/utils/stress.js'
       ]
     },
     
@@ -137,8 +131,10 @@ exports.config = {
         'css/targets/googletv.scss'
       ],
       js: [
-        'js/josh/targets/10feet/googletv.js',
-        'js/josh/uielements/video/mediaelement.js'
+        'js/josh/uielements/video/mediaelement.js',
+        
+        
+        'js/josh/targets/10feet/googletv.js'
       ]
     },
     
@@ -149,9 +145,10 @@ exports.config = {
         'css/targets/googletv.scss'
       ],
       js: [
-        'js/josh/controls/kinect.js',
-        'js/josh/targets/10feet/kinectdemo.js',
-        'js/josh/uielements/video/mediaelement.js'
+        'js/josh/inputs/kinect.js',
+        'js/josh/uielements/video/mediaelement.js',
+        
+        'js/josh/targets/10feet/kinectdemo.js'
       ]
     },
     
@@ -161,9 +158,11 @@ exports.config = {
         "css/sencha-touch/apple.css"
       ],
       js: [
-        'js/josh/targets/smartphones/main.js',
-          'js/josh/uielements/list/smartphones.js',
-          'js/josh/uielements/video/smartphones.js'
+
+          'js/josh/uielements/list/sencha.js',
+          'js/josh/uielements/video/popup.js',
+          
+          'js/josh/targets/smartphones/main.js'
       ]
     }
 

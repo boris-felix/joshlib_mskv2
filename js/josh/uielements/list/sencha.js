@@ -1,6 +1,12 @@
 (function(J,Ext) {
-	
-	J.UI.List = J.Class(J.UI.List,{
+
+	/**
+     * @class Sencha backend for List UI Element
+     * @augments J.UI.ListBase
+     */	
+	J.UI.ListSencha = J.Class(J.UI.ListBase,
+	    /** @lends J.UI.ListSencha.prototype */
+	    {
         
 		getHtml:function() {
 			Ext.regModel('UIListEntry', {

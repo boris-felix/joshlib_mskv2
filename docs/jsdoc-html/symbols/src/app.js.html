@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="NAME">$</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="NAME">$</span><span class="PUNC">,</span><span class="NAME">_</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  2</span> </span><span class="WHIT">	
 <span class='line'>  3</span> 	
 <span class='line'>  4</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastUid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
@@ -59,8 +59,8 @@
 <span class='line'> 52</span> </span><span class="WHIT">		    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">self</span><span class="PUNC">=</span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 53</span> </span><span class="WHIT">		    </span><span class="NAME">this.setup</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 54</span> </span><span class="WHIT">		        </span><span class="NAME">self.baseUIElement.insert</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 55</span> </span><span class="WHIT">		        </span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">self.controls</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="NAME">v</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 56</span> </span><span class="WHIT">		            </span><span class="NAME">J.Control.create</span><span class="PUNC">(</span><span class="NAME">self</span><span class="PUNC">,</span><span class="NAME">v</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">start</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">		        </span><span class="NAME">_.each</span><span class="PUNC">(</span><span class="NAME">self.inputs</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">input</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">		            </span><span class="NAME">J.Input.create</span><span class="PUNC">(</span><span class="NAME">self</span><span class="PUNC">,</span><span class="NAME">input</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">start</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 57</span> </span><span class="WHIT">		        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 58</span> </span><span class="WHIT">		        
 <span class='line'> 59</span> 		    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -178,5 +178,5 @@
 <span class='line'>171</span> </span><span class="WHIT">	</span><span class="NAME">J.Apps</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>172</span> </span><span class="WHIT">	
 <span class='line'>173</span> 	
-<span class='line'>174</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="NAME">jQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="NAME">jQuery</span><span class="PUNC">,</span><span class="NAME">_</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>175</span> </span></pre></body></html>

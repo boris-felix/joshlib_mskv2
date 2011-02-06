@@ -1,6 +1,12 @@
 (function(J,$) {
-	
-	J.UI.Panel = J.Class(J.UIElement,{
+
+	/**
+     * @class UI Element container
+     * @augments J.UIElement
+     */	
+	J.UI.Panel = J.Class(J.UIElement,
+	    /** @lends J.UI.Panel.prototype */
+	    {
 		type:"Panel",
 		placeholder:"",
 		

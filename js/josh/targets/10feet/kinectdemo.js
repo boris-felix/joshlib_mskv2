@@ -5,4 +5,7 @@
 	    inputs:["keyboard","kinect"]
 	});
 	
+	J.UI.List = J.UI.ListBase;
+	J.UI.Video = J.UI.VideoMediaElement;
+
 })(Joshlib,jQuery);

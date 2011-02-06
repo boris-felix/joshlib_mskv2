@@ -41,9 +41,35 @@
     */
     J.Utils = {};
 	
+	/**
+           @namespace A Namespace for other classes
+     */
+    J.Classes = {};
+    
 	
-	
+	// Attach the namespace to the global scope
 	window.Joshlib = J;
+
+
+    /* Protect against forgotten console.logs */
+    if (typeof window.console === "undefined")
+    {
+    	window.console = {
+    		'log' : function(){},
+    		'message' : function(){},
+    		'warn' : function(){},
+    		'error' : function(){},
+    		'info' : function(){},
+    		'table' : function(){},
+    		'trace' : function(){},
+    		'debug' : function(){},
+    		'profile' : function(){},
+    		'table' : function(){},
+    		'exception' : function(){},
+    		'time' : function(){}
+    	};
+    }
+
 
 
 })(window,jQuery);

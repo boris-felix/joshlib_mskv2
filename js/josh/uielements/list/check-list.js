@@ -10,9 +10,8 @@
 	
 	
 	/**
-     * Class description
      * @class
-     * @augments J.UI.List
+     * @augments J.UI.ListBase
      */
 	J.UI.CheckList = J.Class(J.UI.List,{
         type:"CheckList",

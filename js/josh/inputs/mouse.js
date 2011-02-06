@@ -20,9 +20,9 @@
 				setTimeout(function() {
 				    
 				    //If we didn't auto-child
-				    console.log("autochild?",self.app.menu.getRegister("focus"),menuPath);
+				    console.log("autochild?",self.app.tree.getState("focus"),menuPath);
 				    
-				    if (self.app.menu.getRegister("focus")==menuPath || !menuPath) {
+				    if (self.app.tree.getState("focus")==menuPath || !menuPath) {
 				        self.app.publish("input",["enter"]); //,menuPath || event.currentTarget.id]);
 				    }
 				},100);

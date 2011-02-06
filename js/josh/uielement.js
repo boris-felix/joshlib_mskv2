@@ -83,7 +83,7 @@
 
     			        if (register=="focus") {
     			            
-    			            self.settreeRoot(path);
+    			            self.setTreeRoot(path);
     			            
     			            var mdata = self.app.tree.getData(self.treeRoot);
     			            console.log("m focus",mdata,self.treeRoot);
@@ -102,7 +102,7 @@
     			          
     			        //When we're expected to be the next focus
     			        } else if (register=="prefocus") {
-        			        self.settreeRoot(path);
+        			        self.setTreeRoot(path);
         			        
         			        var mdata = self.app.tree.getData(self.treeRoot);
     			            console.log("m prefocus",mdata,self.treeRoot);
@@ -121,7 +121,7 @@
         			        }
     			            
     			        } else if (register=="current") {
-    			            self.settreeCurrent(path);
+    			            self.setTreeCurrent(path);
     			        }
     			        
     			    //Was a focus on another element: blur us

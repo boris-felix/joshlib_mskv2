@@ -1,17 +1,37 @@
 (function(J,$) {
 	
-	J.UI.Video = J.Class(J.UIElement,{
+	/**
+     * @class Abstract video UI Element class
+     * @augments J.UIElement
+     */
+	J.UI.VideoBase = J.Class(J.UIElement,
+	    /** @lends J.UI.VideoBase.prototype */
+	    {
 		type:"Video",
 		
 		init:function() {
-		    var self=this;
-		    this.setDefaultPlayer(!(this.options.defaultPlayer===false));
-            
         },
-        
-        getHtmlInner:function() {
-            return "";
-        }
+
+    	/**
+    	 * Play a video
+         * @function
+         * @param {Object} options Options hash
+         */        
+		play:function(options) {
+		    window.open(options["url"]);
+		},
+		
+		/**
+    	 * Pause the video
+         * @function
+         */
+		pause:function() {
+		    return;
+	    },
+	    
+	    getHtml:function() {
+			return "";
+		}
 	});
 	
 	
