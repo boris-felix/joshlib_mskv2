@@ -11,11 +11,6 @@
         
         getHtmlInner:function() {
             return "";
-        },
-        
-        setDefaultPlayer:function(dft) {
-            this.isDefaultPlayer = dft;
-            
         }
 	});
 	

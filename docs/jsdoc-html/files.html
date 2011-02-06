@@ -4,140 +4,154 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		
-		<title>JsDoc Reference - File Index</title>
+		<title>Joshlib 
+            v.1.0
+            : File Index : JsDoc Reference</title>
 		<meta name="generator" content="JsDoc Toolkit" />
 		
 		<style type="text/css">
 		/* default.css */
-body
-{
-	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
-	width: 800px;
+body {
+	font: 13px Verdana, Arial, sans-serif;
+    padding: 0;
+    margin: 15px;
 }
 
-.header
-{
+.header {
 	clear: both;
 	background-color: #ccc;
 	padding: 8px;
 }
-
-h1
-{
+a:link, a:visited {
+    color: #00A;
+}
+a:hover, a:active {
+    color: #00F;
+}
+h1 {
 	font-size: 150%;
 	font-weight: bold;
 	padding: 0;
-	margin: 1em 0 0 .3em;
+}
+h3.projectTitle {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+h1.classTitle {
+	font-size:170%;
+	line-height:130%;
 }
 
-hr
-{
+hr {
 	border: none 0;
-	border-top: 1px solid #7F8FB1;
+	border-top: 1px solid #627C9D;
 	height: 1px;
+    margin: 1em 0;
 }
 
-pre.code
-{
+pre.code {
 	display: block;
 	padding: 8px;
 	border: 1px dashed #ccc;
+    overflow: auto;
 }
 
-#index
-{
-	margin-top: 24px;
+#index {
 	float: left;
-	width: 160px;
+	width: 220px;
 	position: absolute;
+    margin-bottom: 15px;
 	left: 8px;
 	background-color: #F3F3F3;
 	padding: 8px;
 }
 
-#content
-{
-	margin-left: 190px;
+#content {
+	margin-left: 260px;
 	width: 600px;
 }
 
-.classList
-{
-	list-style-type: none;
-	padding: 0;
-	margin: 0 0 0 8px;
-	font-family: arial, sans-serif;
-	font-size: 1em;
-	overflow: auto;
+#index img {
+    margin: 15px 0;
+    border: 1px solid #627C9D;
 }
 
-.classList li
-{
+ul.classList {
+	list-style-type: none;
+	padding: 0;
+    margin: 0;
+	font-size: 11px;
+}
+
+ul.classList li {
 	padding: 0;
 	margin: 0 0 8px 0;
 }
 
-.summaryTable { width: 100%; }
-
-h1.classTitle
-{
-	font-size:170%;
-	line-height:130%;
+h2 , div.sectionTitle { 
+    font-weight: bold;
+	font-size: 18px;
+	padding: 15px 0 10px 0;
+    margin: 0;
+}
+div.sectionTitle {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #627C9D;
 }
 
-h2 { font-size: 110%; }
-caption, div.sectionTitle
-{
-	background-color: #7F8FB1;
-	color: #fff;
-	font-size:130%;
-	text-align: left;
-	padding: 2px 6px 2px 6px;
-	border: 1px #7F8FB1 solid;
+code {
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
 }
-
-div.sectionTitle { margin-bottom: 8px; }
-.summaryTable thead { display: none; }
-
-.summaryTable td
-{
-	vertical-align: top;
-	padding: 4px;
-	border-bottom: 1px #7F8FB1 solid;
-	border-right: 1px #7F8FB1 solid;
+pre {
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
 }
-
-/*col#summaryAttributes {}*/
-.summaryTable td.attributes
-{
-	border-left: 1px #7F8FB1 solid;
-	width: 140px;
-	text-align: right;
+div.toplinks {
+    font-size: 11px;
+    padding-top: 8px;
 }
 
 td.attributes, .fixedFont
 {
-	line-height: 15px;
-	color: #002EBE;
-	font-family: "Courier New",Courier,monospace;
-	font-size: 13px;
+	font-family: "Lucida Console", "Courier New", Courier, monospace; 
+	font-size: 12px;
 }
 
-.summaryTable td.nameDescription
-{
-	text-align: left;
-	font-size: 13px;
-	line-height: 15px;
+/* tables */
+.summaryTable {
+    text-align: left;
+	margin: 10px 0;
+	border: 1px solid #999999;
+	width: 100%;
 }
-
-.summaryTable td.nameDescription, .description
-{
-	line-height: 15px;
-	padding: 4px;
-	padding-left: 4px;
+.summaryTable th {
+	color: #FFFFFF;
+	background-color: #627C9D;
+	white-space: nowrap;
+    padding: 3px 10px;
 }
-
-.summaryTable { margin-bottom: 8px; }
+.summaryTable th.param {
+	color: #000;
+	background-color: #F2F2F2;
+	white-space: nowrap;
+    padding: 3px 10px;
+}
+.summaryTable td {
+	border-top: #999999 1px solid;
+	vertical-align: top;
+    padding: 5px 10px;
+}
+.summaryTable.params {
+    width: auto;
+}
+.row0 {
+	background-color: #F2F2F2;
+}
+.row1 {
+	background-color: #FFFFFF;
+}
 
 ul.inheritsList
 {
@@ -146,17 +160,44 @@ ul.inheritsList
 	padding-left: 0;
 }
 
-.detailList {
-	margin-left: 20px; 
-	line-height: 15px;
-}
-.detailList dt { margin-left: 20px; }
-
-.detailList .heading
+.detailList dt
 {
+    float: left;
+    clear: both;
 	font-weight: bold;
-	padding-bottom: 6px;
 	margin-left: 0;
+}
+.detailList dd { 
+	padding-bottom: .5em;
+    margin-left: 7em; 
+}
+.detailList dd.tight {
+    padding-bottom: 0;
+}
+.membertitle {
+    font-size: 1.2em;
+    padding: .5em;
+    margin: 2.5em 0px 0.2em;
+    background: #EEF;
+    border-bottom: 3px double #999;
+}
+.membername {
+    font-weight: bold;
+}
+.datatype {
+    color: #999;
+}
+.paramname {
+    font-weight: bold;
+}
+.paramconfig {
+    color: #999;
+}
+.optional {
+	font-style: italic;
+}
+.defaultvalue {
+	font-style: italic;
 }
 
 .light, td.attributes, .light a:link, .light a:visited
@@ -164,6 +205,18 @@ ul.inheritsList
 	color: #777;
 	font-style: italic;
 }
+
+div.indexClass {
+    border-top: 1px solid #7F8FB1;
+    margin-bottom: .5em;
+}
+
+/* syntax coloring for examples */
+.KEYW {color: #339; font-weight: bold;}
+.COMM {color: #999; font-style: italic;}
+.NUMB {color: #933;}
+.STRN {color: #393;}
+.REGX {color: #993;}
 
 .fineprint
 {
@@ -178,25 +231,35 @@ ul.inheritsList
 </div>
 		
 		<div id="index">
-			<div align="center"><a href="index.html">Class Index</a>
-| <a href="files.html">File Index</a></div>
-<hr />
-<h2>Classes</h2>
-<ul class="classList">
+            <h3 class="projectTitle">Joshlib 
+                v.1.0
+            </h3>
+            <div class="toplinks"><a href="index.html">Class Index</a>
+| File Index</div>
+            
+			<ul class="classList">
 	
-	<li><i><a href="symbols/_global_.html">_global_</a></i></li>
+	<li><a href="symbols/J.html">J</a></li>
 	
 	<li><a href="symbols/J.App.html">J.App</a></li>
 	
-	<li><a href="symbols/J.Control.html">J.Control</a></li>
+	<li><a href="symbols/J.Apps.html">J.Apps</a></li>
 	
-	<li><a href="symbols/J.DataSource.html">J.DataSource</a></li>
+	<li><a href="symbols/J.Input.html">J.Input</a></li>
 	
-	<li><a href="symbols/J.Grid.html">J.Grid</a></li>
+	<li><a href="symbols/J.Inputs.html">J.Inputs</a></li>
 	
-	<li><a href="symbols/J.Menu.html">J.Menu</a></li>
+	<li><a href="symbols/J.Inputs.keyboard.html">J.Inputs.keyboard</a></li>
 	
-	<li><a href="symbols/J.Stress.html">J.Stress</a></li>
+	<li><a href="symbols/J.Inputs.kinect.html">J.Inputs.kinect</a></li>
+	
+	<li><a href="symbols/J.Inputs.mouse.html">J.Inputs.mouse</a></li>
+	
+	<li><a href="symbols/J.Inputs.touch.html">J.Inputs.touch</a></li>
+	
+	<li><a href="symbols/J.Tree.html">J.Tree</a></li>
+	
+	<li><a href="symbols/J.UI.html">J.UI</a></li>
 	
 	<li><a href="symbols/J.UI.CheckList.html">J.UI.CheckList</a></li>
 	
@@ -204,331 +267,173 @@ ul.inheritsList
 	
 	<li><a href="symbols/J.UIElement.html">J.UIElement</a></li>
 	
+	<li><a href="symbols/J.Utils.html">J.Utils</a></li>
+	
+	<li><a href="symbols/J.Utils.DataSource.html">J.Utils.DataSource</a></li>
+	
+	<li><a href="symbols/J.Utils.DelayedSwitch.html">J.Utils.DelayedSwitch</a></li>
+	
+	<li><a href="symbols/J.Utils.Grid.html">J.Utils.Grid</a></li>
+	
+	<li><a href="symbols/J.Utils.Pool.html">J.Utils.Pool</a></li>
+	
+	<li><a href="symbols/J.Utils.Stress.html">J.Utils.Stress</a></li>
+	
 </ul>
-<hr />
 		</div>
 		
 		<div id="content">
 			<h1 class="classTitle">File Index</h1>
+            
+            <hr />
 			
-			
-			<div>
-				<h2><a href="symbols/src/app.js.html">./app.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/control.js.html">./control.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/controls_keyboard.js.html">./controls/keyboard.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/controls_kinect.js.html">./controls/kinect.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/controls_mind.js.html">./controls/mind.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/controls_mouse.js.html">./controls/mouse.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/controls_touch.js.html">./controls/touch.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/datasource.js.html">./datasource.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/grid.js.html">./grid.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/main.js.html">./main.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/menu.js.html">./menu.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/playlist.js.html">./playlist.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/stress.js.html">./stress.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/targets_10feet_freeboxv6.js.html">./targets/10feet/freeboxv6.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/targets_10feet_googletv.js.html">./targets/10feet/googletv.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/targets_10feet_kinectdemo.js.html">./targets/10feet/kinectdemo.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/targets_smartphones_main.js.html">./targets/smartphones/main.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/ui.js.html">./ui.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_list_all.js.html">./uielements/list/all.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_list_check-list.js.html">./uielements/list/check-list.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_list_smartphones.js.html">./uielements/list/smartphones.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_panel.js.html">./uielements/panel.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_video_all.js.html">./uielements/video/all.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_video_flarevideo.js.html">./uielements/video/flarevideo.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_video_mediaelement.js.html">./uielements/video/mediaelement.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/src/uielements_video_smartphones.js.html">./uielements/video/smartphones.js</a></h2>
-				
-				<dl>
-					
-					
-					
-					
-				</dl>
-			</div>
-			<hr />
-			
-			
+            <table class="summaryTable" cellspacing="0" cellpadding="3"> 
+                <tr> 
+                    <th width="20%">File</th><th width="80%">Overview</th> 
+                </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/app.js.html">./app.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/input.js.html">./input.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/inputs_keyboard.js.html">./inputs/keyboard.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/inputs_kinect.js.html">./inputs/kinect.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/inputs_mouse.js.html">./inputs/mouse.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/inputs_touch.js.html">./inputs/touch.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/target.js.html">./target.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/targets_10feet_freeboxv6.js.html">./targets/10feet/freeboxv6.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/targets_10feet_googletv.js.html">./targets/10feet/googletv.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/targets_10feet_kinectdemo.js.html">./targets/10feet/kinectdemo.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/targets_smartphones_main.js.html">./targets/smartphones/main.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/tree.js.html">./tree.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/uielement.js.html">./uielement.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/uielements_list_all.js.html">./uielements/list/all.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/uielements_list_check-list.js.html">./uielements/list/check-list.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/uielements_list_smartphones.js.html">./uielements/list/smartphones.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/uielements_panel.js.html">./uielements/panel.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/uielements_video_all.js.html">./uielements/video/all.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/uielements_video_flarevideo.js.html">./uielements/video/flarevideo.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/uielements_video_mediaelement.js.html">./uielements/video/mediaelement.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/uielements_video_smartphones.js.html">./uielements/video/smartphones.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/utils_datasource.js.html">./utils/datasource.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/utils_delayedswitch.js.html">./utils/delayedswitch.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/utils_grid.js.html">./utils/grid.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/utils_pool.js.html">./utils/pool.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row1"> 
+                        <td><a href="symbols/src/utils_stress.js.html">./utils/stress.js</a></td>
+                        <td></td> 
+                    </tr> 
+                
+                    <tr class="row0"> 
+                        <td><a href="symbols/src/main.js.html">main.js</a></td>
+                        <td>
+Joshlib is a framework for developing cross-platform apps</td> 
+                    </tr> 
+                
+            </table>
+
 		</div>
 		<div class="fineprint" style="clear:both">
-			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blankt">JsDoc Toolkit</a> 2.4.0 on Sun Feb 06 2011 15:02:59 GMT+0100 (CET)
+			&copy;Joshfire 2011<br />
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blankt">JsDoc Toolkit</a> 2.4.0 on Sun Feb 06 2011 18:17:24 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

@@ -47,6 +47,7 @@
             
   <div class="section" id="j-uielement-class">
 <h1>J.UIElement (class)<a class="headerlink" href="#j-uielement-class" title="Permalink to this headline">¶</a></h1>
+<p>An abstract UI Element</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#constructor-details" id="id1">Constructor details</a></li>
@@ -56,9 +57,107 @@
 </div>
 <dl class="class">
 <dt id="J.UIElement">
-<em class="property">class </em><tt class="descclassname">J.</tt><tt class="descname">UIElement</tt><a class="headerlink" href="#J.UIElement" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">J.</tt><tt class="descname">UIElement</tt><big>(</big><em>app</em>, <em>id</em>, <em>options</em><big>)</big><a class="headerlink" href="#J.UIElement" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<blockquote>
+<div><dl class="method">
+<dt id="event">
+<tt class="descname">event</tt><big>(</big><em>eventname</em><big>)</big><a class="headerlink" href="#event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls a custom event handler</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="getHtmlId">
+<tt class="descname">getHtmlId</tt><big>(</big><big>)</big><a class="headerlink" href="#getHtmlId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the actual DOM ElementId of the UIElement</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hide">
+<tt class="descname">hide</tt><big>(</big><big>)</big><a class="headerlink" href="#hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the element right away</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hideDelayed">
+<tt class="descname">hideDelayed</tt><big>(</big><big>)</big><a class="headerlink" href="#hideDelayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the element, possibly with a delay</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="insert">
+<tt class="descname">insert</tt><big>(</big><big>)</big><a class="headerlink" href="#insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert the element in the DOM</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="onBlur">
+<tt class="descname">onBlur</tt><big>(</big><big>)</big><a class="headerlink" href="#onBlur" title="Permalink to this definition">¶</a></dt>
+<dd><p>onBlur</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="onFocus">
+<tt class="descname">onFocus</tt><big>(</big><em>treePath</em><big>)</big><a class="headerlink" href="#onFocus" title="Permalink to this definition">¶</a></dt>
+<dd><p>onFocus</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="refresh">
+<tt class="descname">refresh</tt><big>(</big><em>callback</em><big>)</big><a class="headerlink" href="#refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh data in the UIElement</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="registerChild">
+<tt class="descname">registerChild</tt><big>(</big><em>elt</em><big>)</big><a class="headerlink" href="#registerChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers one element as a child</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="setData">
+<tt class="descname">setData</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#setData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the data for the UIElement</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="setLoading">
+<tt class="descname">setLoading</tt><big>(</big><big>)</big><a class="headerlink" href="#setLoading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts the element in loading mode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="setTreeCurrent">
+<tt class="descname">setTreeCurrent</tt><big>(</big><em>treeCurrent</em><big>)</big><a class="headerlink" href="#setTreeCurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current tree path associated with the element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="setTreeRoot">
+<tt class="descname">setTreeRoot</tt><big>(</big><em>treeRoot</em><big>)</big><a class="headerlink" href="#setTreeRoot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the tree root associated with the element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="show">
+<tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the element right away</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="showDelayed">
+<tt class="descname">showDelayed</tt><big>(</big><big>)</big><a class="headerlink" href="#showDelayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the element, possibly with a delay</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="subscribes">
+<tt class="descname">subscribes</tt><big>(</big><big>)</big><a class="headerlink" href="#subscribes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of subscribed events when the element has focus</p>
+</dd></dl>
+
+</div></blockquote>
 <div class="section" id="constructor-details">
 <h2><a class="toc-backref" href="#id1">Constructor details</a><a class="headerlink" href="#constructor-details" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -67,8 +166,14 @@
 </div>
 <div class="section" id="method-details">
 <h2><a class="toc-backref" href="#id3">Method details</a><a class="headerlink" href="#method-details" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>&lt;a name=&#8221;event&#8221;&gt; &lt;/a&gt;
+&lt;div class=&#8221;fixedFont&#8221;&gt;</p>
+<p>&lt;b&gt;event&lt;/b&gt;(eventname)
+&lt;/div&gt;</p>
+</div></blockquote>
 <div class="footer container">
-Documentation generated by <a class="reference external" href="http://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a>  2.4.0 on Sun Feb 06 2011 15:05:24 GMT+0100 (CET)</div>
+Documentation generated by <a class="reference external" href="http://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a>  2.4.0 on Sun Feb 06 2011 18:17:30 GMT+0100 (CET)</div>
 </div>
 </div>
 
@@ -80,6 +185,7 @@ Documentation generated by <a class="reference external" href="http://code.googl
         <div class="sidebar">
           <h3>Table Of Contents</h3>
           <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
 </ul>
 

@@ -2,7 +2,7 @@
 	
 	J.App = J.Class(J.App,{
 	    target:"10feet/googletv",
-	    controls:["keyboard","mouse"] //,"kinect"]
+	    inputs:["keyboard","mouse"] //,"kinect"]
 	});
 	
 })(Joshlib,jQuery);

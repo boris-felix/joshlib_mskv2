@@ -4,37 +4,50 @@
     var lastUid = -1;
 
 
-	/**
-     * @class
-     */
-	J.App = J.Class({
+	J.App = J.Class(
+	    /**
+          @lends J.App.prototype
+        */
+	    {
 		
-		controls:[],
+		inputs:[],
 		
+		/** 
+		    @constructs 
+		    @class The base application class
+		    @param {String} appId Unique identifier for the app
+		*/
 		__constructor:function(appId) {
 		    this.debugEvents=true;
     	    this.subscribes={};
     	    this.id = appId;
     	    
-			this.menu = new J.Menu(this);
+			this.tree = new J.Tree(this);
 			
-			
-    	    
 		},
 		
-		
+		/** 
+		    Sets the DOM base element of the app
+		    @function 
+		    @param {String} eltId ElementID of the base HTML container element
+		*/
 		setBaseHtmlId:function(eltId) {
 			this.baseHtml = $("#"+eltId);
 		},
 		
+		/** 
+		    Sets the base UI element of the app
+		    @function 
+		    @param {J.UIElement} elt Base UI Element (Container for all others)
+		*/
 		setBaseUIElement:function(elt) {
 			this.baseUIElement = elt;
 		},
 		
-		setup:function(callback) {
-		    callback();
-		},
-		
+		/** 
+		    Inserts the app in the DOM
+		    @function 
+		*/
 		insert:function() {
 		    var self=this;
 		    this.setup(function() {
@@ -47,19 +60,26 @@
 		    
 		},
 		
-		show:function() {
-		    //test
-		},
 		
+		/** 
+		    Setups the app. Overload with app-specific init code
+		    @function 
+		    @param {Function} callback to call when finished
+		*/
+		setup:function(callback) {
+		    callback();
+		},
+        
+        
 		
 		/*https://github.com/mroderick/PubSubJS/blob/master/pubsub.js*/
 		
 		/**
-         *  PubSub.publish( message[, data] ) -> Boolean
-         *  - message (String): The message to publish
-         *  - data: The data to pass to subscribers
-         *  - sync (Boolean): Forces publication to be syncronous, which is more confusing, but faster
-         *  Publishes the the message, passing the data to it's subscribers
+         *  Send an event. Publishes the the message, passing the data to its subscribers
+         *  @function
+         *  @param {String} message The message to publish
+         *  @param data The data to pass to subscribers
+         *  @param {Boolean} sync Forces publication to be syncronous, which is more confusing, but faster
         **/
 		publish:function( message, data, sync ){
 		    
@@ -102,10 +122,11 @@
         },
         
         /**
-         *  PubSub.subscribe( message, func ) -> String
-         *  - message (String): The message to subscribe to
-         *  - func (Function): The function to call when a new message is published
-         *  Subscribes the passed function to the passed message. Every returned token is unique and should be stored if you need to unsubscribe
+         * Subscribes the passed function to the passed message. Every returned token is unique and should be stored if you need to unsubscribe
+         * @function
+         * @param {String} message The message to subscribe to
+         * @param {Function} func The function to call when a new message is published
+         * @returns {String} token for unsubscribing  
         **/
         subscribe : function( message, func ){
             // message is not registered yet
@@ -123,9 +144,9 @@
         },
         
         /**
-         *  PubSub.unsubscribe( token ) -> String | Boolean
-         *  - token (String): The token of the function to unsubscribe
-         *  Unsubscribes a specific subscriber from a specific message using the unique token
+         * Unsubscribes a specific subscriber from a specific message using the unique token
+         * @function
+         * @param {String} token The token of the function to unsubscribe
         **/
         unsubscribe : function( token ){
             for ( var m in this.subscribes ){
@@ -144,9 +165,10 @@
 		
 	});
 	
+	/** 
+	    @namespace A Namespace for Apps
+	*/
 	J.Apps = {};
-	J.Classes = {};
-	
 	
 	
 })(Joshlib,jQuery);

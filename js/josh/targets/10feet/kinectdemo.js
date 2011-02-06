@@ -2,7 +2,7 @@
 	
 	J.App = J.Class(J.App,{
 	    target:"10feet/kinectdemo",
-	    controls:["keyboard","kinect"]
+	    inputs:["keyboard","kinect"]
 	});
 	
 })(Joshlib,jQuery);
