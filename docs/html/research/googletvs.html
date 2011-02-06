@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GoogleTV study &mdash; Joshlib v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Joshlib v1.0 documentation" href="../index.html" />
+    <link rel="prev" title="Welcome to joshlib’s documentation!" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <h1><a href="../index.html">Joshlib v1.0 documentation</a></h1>
+        <div class="rel">
+          <a href="../index.html" title="Welcome to joshlib’s documentation!"
+             accesskey="P">previous</a> |
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="googletv-study">
+<h1>GoogleTV study<a class="headerlink" href="#googletv-study" title="Permalink to this headline">¶</a></h1>
+<p>Certains sites regardent le <em>User-Agent</em> du client pour rediriger vers une version de leur site optimisée pour celui-ci.
+Il est possible sous Safari de modifier son User-Agent: Develop -&gt; User Agent -&gt; Other...</p>
+<p>h2. liste de User-Agent</p>
+<ul class="simple">
+<li>Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.127 Large Screen Safari/533.4 GoogleTV/162671</li>
+<li>Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.127 Large Screen Safari/533.4 GoogleTV/b39953</li>
+</ul>
+<p>h1. Google TV Sites</p>
+<p>h3. Liste des sites optimisés pour GoogleTV avec la techno utilisé</p>
+<p># &#8220;CNN&#8221;:<a class="reference external" href="http://edition.cnn.com/xl/">http://edition.cnn.com/xl/</a> Techno: <em>Jquery</em> + <em>player en flash</em> _le player ne fonctionne <a href="#id3"><span class="problematic" id="id4">pas_</span></a>
+# &#8220;youtube leanback&#8221;:<a class="reference external" href="http://www.youtube.com/leanback">http://www.youtube.com/leanback</a> Techno: <em>flash</em>
+# &#8220;crackle&#8221;:<a class="reference external" href="http://www.crackle.com/gtv">http://www.crackle.com/gtv</a> Techno: <em>Jquery</em> + <em>player en flash</em>
+# &#8220;adultswim&#8221;:<a class="reference external" href="http://www.adultswim.com/leanback/">http://www.adultswim.com/leanback/</a> Techno: <em>flash</em>, clone de youtube leanback
+# &#8220;blip&#8221;:<a class="reference external" href="http://blip.tv/?skin=googletv">http://blip.tv/?skin=googletv</a> Techno: <em>html5</em> (usage du tag video) + <em>jquery</em> Il y a du code spécific pour safari mobile mais le rendu sur l&#8217;ipad et l&#8217;iphone est très mauvais.
+# &#8220;Amazon VOD&#8221;:<a class="reference external" href="http://www.amazon.com/b/?&amp;node=16261631">http://www.amazon.com/b/?&amp;node=16261631</a> _je ne vois pas la version <a href="#id5"><span class="problematic" id="id6">GoogleTV_</span></a>
+# &#8220;Cartoon Network&#8221;:<a class="reference external" href="http://www.cartoonnetwork.com/leanback/">http://www.cartoonnetwork.com/leanback/</a> Techno: <em>flash</em> copie du leanback de youtube
+# &#8220;Chow TV&#8221;:<a class="reference external" href="http://www.chow.com/videos?tag=main_content">http://www.chow.com/videos?tag=main_content</a> Techno: <em>css3</em> (un peu de keyframes et de transitions), <em>html5</em>, <em>jquery</em>, <em>player en flash</em>
+# &#8220;Clicker&#8221;:<a class="reference external" href="http://tv.clicker.com/">http://tv.clicker.com/</a> Techno: <em>jquery</em>, <em>player en flash</em>
+# &#8220;Cnet TV&#8221;:<a class="reference external" href="http://cnettv.cnet.com/">http://cnettv.cnet.com/</a> Techno: <em>Mootools</em>, <em>player en flash</em>
+# &#8220;Daily motion&#8221;:<a class="reference external" href="http://iptv-app.dailymotion.com/dm-front-googletv/dojoroot/app/pages/webkit/index.jsp?&amp;lang=us">http://iptv-app.dailymotion.com/dm-front-googletv/dojoroot/app/pages/webkit/index.jsp?&amp;lang=us</a> Techno: <em>Dojo</em>, player en <em>html5</em> (player de chez &#8220;wiztivi&#8221;:<a class="reference external" href="http://www.wiztivi.com/">http://www.wiztivi.com/</a>)
+# &#8220;hbogo&#8221;:<a class="reference external" href="http://www.hbogo.com">http://www.hbogo.com</a> -&gt; pas d&#8217;accès hors USA
+# &#8220;kqed.tv&#8221;:<a class="reference external" href="http://kqed.tv/">http://kqed.tv/</a> Techno: <em>jquery</em>, <em>player en flash</em> -&gt; tout le contenu de navigation est au dessus du player flash
+# &#8220;flixster&#8221;:<a class="reference external" href="http://www.flixster.com/tv/google">http://www.flixster.com/tv/google</a> Techno: <em>prototype</em> + <em>scriptaculous</em> + <em>modernizr</em> + <em>player en flash</em>
+# &#8220;meegenius&#8221;:<a class="reference external" href="http://www.meegenius.com/index-horizontal.xhtml">http://www.meegenius.com/index-horizontal.xhtml</a> Techno: mixte entre de l&#8217;<em>xhtml</em> et de l&#8217;<em>html5</em> + <em>jquery</em> -&gt; Il n&#8217;y a pas de videos sur ce site -&gt; livres pour enfant avec narration audio
+# &#8220;fraboom&#8221;:<a class="reference external" href="http://fraboom.com/google/tv/">http://fraboom.com/google/tv/</a> Techno:<em>Flash</em>
+# &#8220;mspot&#8221;:<a class="reference external" href="http://www.mspot.com/">http://www.mspot.com/</a> -&gt; pas d&#8217;accès hors USA
+# &#8220;net-a-porter&#8221;:<a class="reference external" href="http://www.net-a-porter.com/tv">http://www.net-a-porter.com/tv</a> Techno:<em>flash</em>
+# &#8220;tbs&#8221;:<a class="reference external" href="http://www.tbs.com/leanback">http://www.tbs.com/leanback</a> Techno: <em>jquery</em> + <em>player en flash</em>
+# &#8220;NY Times&#8221;:<a class="reference external" href="http://www.nytimes.com/gtv/">http://www.nytimes.com/gtv/</a> Techno: <em>jquery</em> + <em>player en html5</em>
+# &#8220;The Onion&#8221;:<a class="reference external" href="http://www.theonion.com/video/googletv/">http://www.theonion.com/video/googletv/</a> Techno: <em>jquery</em> + <em>player en html5</em>
+# &#8220;Tnt Tv&#8221;:<a class="reference external" href="http://www.tnt.tv/leanback/">http://www.tnt.tv/leanback/</a> Techno: <em>jquery</em>, <em>player en flash</em>
+# &#8220;pbskids&#8221;:<a class="reference external" href="http://pbskids.org/video/">http://pbskids.org/video/</a> Techno: <em>jquery</em> + <em>yui</em> + <em>flash</em>
+# &#8220;sidereel&#8221;:<a class="reference external" href="http://beta.sidereel.com/living_room/tv_shows">http://beta.sidereel.com/living_room/tv_shows</a> Techno: <em>jquery</em> (je ne vois aucun player video!)
+# &#8220;tunein&#8221;:<a class="reference external" href="http://tv.tunein.com/">http://tv.tunein.com/</a> Techno: <em>jquery</em> -&gt; pas de player video, il n&#8217;y a que de l&#8217;audio
+# &#8220;usatoday&#8221;:<a class="reference external" href="http://itv.usatoday.com/">http://itv.usatoday.com/</a> Techno: <em>html5</em>, <em>jquery</em> -&gt; pas de video, que du texte
+# &#8220;vevo.com&#8221;:<a class="reference external" href="http://vevo.com">http://vevo.com</a>  -&gt; pas d&#8217;accès hors USA ou Canada
+# &#8220;vimeo&#8221;:<a class="reference external" href="http://www.vimeo.com/couchmode">http://www.vimeo.com/couchmode</a> Techno: <em>html5</em>, <em>swfobject</em>, <em>jquery</em>, <em>player en html5 avec fallback en flash</em> -&gt; code de qualité</p>
+<p>h3. Bonnes idées desquelles s&#8217;inspirer</p>
+<blockquote>
+<div><ul class="simple">
+<li>TODO</li>
+</ul>
+</div></blockquote>
+<p>h3. Mauvaises idées à éviter</p>
+<blockquote>
+<div><ul class="simple">
+<li>TODO</li>
+</ul>
+</div></blockquote>
+<p>h3. Stats techno</p>
+<ul class="simple">
+<li>14% -&gt; pas d&#8217;accès</li>
+<li>8%  -&gt; sont en <em>full flash</em></li>
+<li>57% -&gt; utilise <em>jquery</em></li>
+<li>35% -&gt; utilise un <em>player en flash</em></li>
+<li>18% -&gt; utilise un <em>player en html5</em></li>
+<li>3,5% -&gt; utilise <em>prototype/scriptaculous</em> ou <em>Dojo</em> ou <em>Mootools</em></li>
+</ul>
+<p>h2. FrameWork HTML5/JS</p>
+<p>Il existe un &#8220;tableau&#8221;:<a class="reference external" href="http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks">http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks</a> (incomplet) sur wikipedia comparant les différents framework JS.</p>
+<p># &#8220;SenchTouch&#8221;:<a class="reference external" href="http://sencha.com">http://sencha.com</a> (<em>1.0 RC1</em> [9 nov. 2010], 343K) Framework dédié pour <em>les devices mobiles à base de webkit</em>.
+** <em>Point fort</em>: beaucoup de widgets classics déjà implémentés (nestedlists, carousel, dnd, overlays,...)
+** <em>Point faible</em>: il faut acheter une license pour vendre le code.
+# &#8220;ExtJS&#8221;:<a class="reference external" href="http://sencha.com">http://sencha.com</a> (<em>3.3.0</em>, 662K) Framework dédié à la création de RIA de type informatique de gestion.
+** <em>Point fort</em>: enormément de widgets de haut niveau et d&#8217;extention en tout genre. (cf. &#8220;mpa.42loops.com&#8221;:<a class="reference external" href="http://mpa.42loops.com">http://mpa.42loops.com</a>, &#8220;demos&#8221;:<a class="reference external" href="http://dev.sencha.com/deploy/dev/examples/">http://dev.sencha.com/deploy/dev/examples/</a>)
+** <em>Point faible</em>:
+<strong>* Il faut acheter une license pour vendre le code.
+*</strong> Les widgets ont un look&amp;feel très &#8220;windows&#8221; même si il est possible de les thémiser.
+<strong>* Framework volumineux
+# &#8220;Dojo&#8221;:http://www.dojotoolkit.org (*1.5.0* 90K [pour le core]) Le core apporte des fonctionnalités de bas niveau: classe, DOM query, events, effects, ajax... Il existe *Djit*: un ensemble de widgets au  dessus de Dojo.
+# &#8220;SproutCore&#8221;:http://www.sproutcore.com/ (*1.4*) MVC en javascript utilisé pour MobileMe. Projet prometteur.
+** *Point faible*
+*</strong> La documentation est aujourd&#8217;hui assez restreinte.
+** <em>Point fort</em>
+<a href="#id1"><span class="problematic" id="id2">**</span></a>* logique MVC, depuis peu &#8220;Yehuda Katz&#8221;:<a class="reference external" href="http://yehudakatz.com/">http://yehudakatz.com/</a> est rentré dans l&#8217;équipe de dev. Inclusion de Jquery
+# &#8220;Jquery&#8221;:<a class="reference external" href="http://jquery.com">http://jquery.com</a> (<em>1.4.3</em>) C&#8217;est la librairie standard du web. Utilisée partout même sur le nouveau twitter. Cette librairie est incontournable si le projet doit être cross-browser. Un grand nombre de widgets est inclus dans &#8220;Jquery UI&#8221;:<a class="reference external" href="http://docs.jquery.com/UI">http://docs.jquery.com/UI</a>
+# &#8220;MooTools&#8221;:<a class="reference external" href="http://mootools.net/">http://mootools.net/</a> (<em>1.3</em>)
+# &#8220;YUI&#8221;:<a class="reference external" href="http://developer.yahoo.com/yui">http://developer.yahoo.com/yui</a> (<em>3.2.0</em>) ExtJs est un fork de YUI. Il exsite comme chez ExtJS une multitude de widgets.
+# &#8220;Prototype&#8221;:<a class="reference external" href="http://www.prototypejs.org">http://www.prototypejs.org</a> / &#8220;Scriptaculous&#8221;:<a class="reference external" href="http://script.aculo.us/">http://script.aculo.us/</a> (proto <em>1.6.1</em> [11/09/2009]{la version 1.7 compatible pour IE9 arrive bientot} script. <em>1.8.3</em> [8/10/2009])
+# &#8220;Scripty2&#8221;:<a class="reference external" href="http://scripty2.com/">http://scripty2.com/</a> encore en beta, c&#8217;est une réimplementation de Scriptaculous par le même auteur (Thomas Fuchs) utilisant prototype 1.7 Ce qui est intéressant c&#8217;est les animations accélérées matériellement. &#8220;demos&#8221;:<a class="reference external" href="http://scripty2.com/demos/cards/">http://scripty2.com/demos/cards/</a>
+# &#8220;Zepto&#8221;:<a class="reference external" href="http://zeptojs.com/">http://zeptojs.com/</a> une librairie à la jquery like aussi par Thomas Fuchs visant les navigateurs mobiles à base de webkit.
+Thomas a commencé à faire cette lib il y a deux mois.
+# &#8220;Sammy.js&#8221;:<a class="reference external" href="http://code.quirkey.com/sammy/index.html">http://code.quirkey.com/sammy/index.html</a> framework construit sur Jquery à la Sinatra (résolution de &#8216;routes&#8217;) essayant
+de donner plus de structure à une web-app.
+# &#8220;qooxdoo&#8221;:<a class="reference external" href="http://qooxdoo.org/">http://qooxdoo.org/</a> Framework pour créer des RIA ayant pas mal de widgets (moins que ExtJS)
+# &#8220;unify&#8221;:<a class="reference external" href="http://unify.github.com/unify/">http://unify.github.com/unify/</a> Framework dont le but est d&#8217;unifier le monde du mobile et le monde desktop,il se base sur qooxdoo, phonegap, sass et adobe air
+# &#8220;cappuccino&#8221;:<a class="reference external" href="http://cappuccino.org/">http://cappuccino.org/</a> Framework pour RIA (implémentation web de Cocoa) avec le language Objective-J. Demo la plus connue est &#8220;280Slides&#8221;:<a class="reference external" href="http://280slides.com/">http://280slides.com/</a> (Clone de keynote)
+# &#8220;vapor.js&#8221;:<a class="reference external" href="http://vaporjs.com/">http://vaporjs.com/</a> C&#8217;était le buzz de la jsconf.eu de septembre... encore par Thomas Fuchs. Lib de 0 bytes... juste pour le fun ;) _The World&#8217;s Smallest &amp; Fastest JavaScript <a href="#id7"><span class="problematic" id="id8">Library_</span></a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">GoogleTV study</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="../search.html" method="get">
+            <input type="text" name="q" size="18" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="../index.html" title="Welcome to joshlib’s documentation!"
+             >previous</a> |
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="../_sources/research/googletvs.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2011, Joshfire.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

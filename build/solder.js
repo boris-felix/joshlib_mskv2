@@ -68,6 +68,14 @@ exports.config = {
       ]
     },
     
+    'underscore': {
+      requires: [ ],
+      css: [],
+      js: [
+        "js/libs/underscore.js"
+      ]
+    },
+    
     'sencha-touch': {
       requires: [ ],
       css: [],
@@ -101,7 +109,7 @@ exports.config = {
     
     
     'joshlib': {
-      requires: ["jquery"],
+      requires: ["jquery","underscore"],
       css: [],
       js: [
         'js/josh/main.js',

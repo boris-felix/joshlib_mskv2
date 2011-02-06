@@ -1,0 +1,63 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Built-In Namespace _global_
+================================================================================
+
+..
+   class-title
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+stop
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: stop(elem)
+
+
+    
+    :param  elem: 
+         
+    
+
+
+
+    
+    :returns void:
+         
+    
+
+
+Stops the idle timer. This removes appropriate event handlers
+and cancels any pending timeouts.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+

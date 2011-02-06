@@ -3,6 +3,12 @@
 cd js/josh
 JSDOCDIR="../../build/jsdoc-toolkit"
 
-CMD="java -Djsdoc.dir=$JSDOCDIR -Djsdoc.template.dir=$JSDOCDIR/templates/jsdoc/ -jar $JSDOCDIR/jsrun.jar $JSDOCDIR/app/run.js -d=../../docs/ -r=10 ."
+#rm -rf ../../docs/jsdoc-html/*
+#CMD="java -Djsdoc.dir=$JSDOCDIR -Djsdoc.template.dir=$JSDOCDIR/templates/jsdoc/ -jar $JSDOCDIR/jsrun.jar $JSDOCDIR/app/run.js -d=../../docs/jsdoc-html/ -r=10 ."
+#echo $CMD
+#$CMD
+
+rm -rf ../../docs/src/jsdoc/*
+CMD="java -Djsdoc.dir=$JSDOCDIR -Djsdoc.template.dir=$JSDOCDIR/templates/jsdoc/ -jar $JSDOCDIR/jsrun.jar $JSDOCDIR/app/run.js --template=../../docs/src/_themes/jsdoc-rst -d=../../docs/src/jsdoc/ -x=js,jsx -r=10 ."
 echo $CMD
 $CMD
