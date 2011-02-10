@@ -5,24 +5,24 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="NAME">$</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  2</span> </span><span class="WHIT">	
-<span class='line'>  3</span> 	</span><span class="COMM">/**
+	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>  4</span>      * @class Popup video backend
 <span class='line'>  5</span>      * @augments J.UI.VideoBase
 <span class='line'>  6</span>      */</span><span class="WHIT">
-<span class='line'>  7</span> </span><span class="WHIT">	</span><span class="NAME">J.UI.VideoPopUp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">J.Class</span><span class="PUNC">(</span><span class="NAME">J.UI.VideoBase</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  8</span> </span><span class="WHIT">	    </span><span class="COMM">/** @lends J.UI.VideoPopup.prototype */</span><span class="WHIT">
-<span class='line'>  9</span> </span><span class="WHIT">	    </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 10</span> </span><span class="WHIT">	
-<span class='line'> 11</span> 		</span><span class="NAME">play</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="WHIT">		    
-<span class='line'> 13</span> 		    </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">[</span><span class="STRN">"url"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">		    
-<span class='line'> 15</span> 		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">		
-<span class='line'> 17</span> 	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 18</span> </span><span class="WHIT">	
-<span class='line'> 19</span> 	
-<span class='line'> 20</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="NAME">jQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">    </span><span class="NAME">J.UI.VideoPopUp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">J.Class</span><span class="PUNC">(</span><span class="NAME">J.UI.VideoBase</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">    </span><span class="COMM">/** @lends J.UI.VideoPopup.prototype */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">    </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span> 
+<span class='line'> 11</span> </span><span class="WHIT">        </span><span class="NAME">play</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> 
+<span class='line'> 13</span> </span><span class="WHIT">            </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">[</span><span class="STRN">"url"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 18</span> 
+<span class='line'> 19</span> 
+<span class='line'> 20</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">jQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 21</span> </span></pre></body></html>

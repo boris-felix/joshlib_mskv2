@@ -35,8 +35,7 @@
                 return;
             } else {
 
-                var params = jQuery.extend(true, {},
-                args);
+                var params = jQuery.extend(true, {}, args);
                 var self = this;
                 params["success"] = function() {
                     self.cache[hash] = {

@@ -10,7 +10,10 @@ CMD="java $OPTIONS -jar $JSDOCDIR/jsrun.jar $JSDOCDIR/app/run.js --template=../.
 echo $CMD
 $CMD
 
+wkhtmltopdf ../../docs/jsdoc-html/*.html ../../docs/jsdoc-html/symbols/*.html ../../docs/jsdoc-pdf/JoshlibApiReference.pdf
+
 rm -rf ../../docs/src/jsdoc/*
 CMD="java $OPTIONS -jar $JSDOCDIR/jsrun.jar $JSDOCDIR/app/run.js --template=../../docs/src/_themes/jsdoc-rst -d=../../docs/src/jsdoc/ -x=js,jsx -r=10  -c=../../build/jsdoc.conf ."
 echo $CMD
 $CMD
+

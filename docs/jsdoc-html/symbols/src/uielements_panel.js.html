@@ -5,25 +5,26 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="NAME">$</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">J</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  2</span> 
-<span class='line'>  3</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>  3</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>  4</span>      * @class UI Element container
 <span class='line'>  5</span>      * @augments J.UIElement
-<span class='line'>  6</span>      */</span><span class="WHIT">	
-<span class='line'>  7</span> 	</span><span class="NAME">J.UI.Panel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">J.Class</span><span class="PUNC">(</span><span class="NAME">J.UIElement</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  8</span> </span><span class="WHIT">	    </span><span class="COMM">/** @lends J.UI.Panel.prototype */</span><span class="WHIT">
-<span class='line'>  9</span> </span><span class="WHIT">	    </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 10</span> </span><span class="WHIT">		</span><span class="NAME">type</span><span class="PUNC">:</span><span class="STRN">"Panel"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="NAME">placeholder</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="WHIT">		
-<span class='line'> 13</span> 		</span><span class="NAME">getHtml</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// style='display:none;'</span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"&lt;div  id='"</span><span class="PUNC">+</span><span class="NAME">this.htmlId</span><span class="PUNC">+</span><span class="STRN">"'>"</span><span class="PUNC">+</span><span class="PUNC">(</span><span class="NAME">this.options</span><span class="PUNC">[</span><span class="STRN">"content"</span><span class="PUNC">]</span><span class="PUNC">?</span><span class="NAME">this.options</span><span class="PUNC">[</span><span class="STRN">"content"</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="NAME">this.placeholder</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="STRN">"&lt;/div>"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 17</span> </span><span class="WHIT">	
-<span class='line'> 18</span> 	
-<span class='line'> 19</span> 	
-<span class='line'> 20</span> 	
-<span class='line'> 21</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="NAME">jQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 22</span> </span></pre></body></html>
+<span class='line'>  6</span>      */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">    </span><span class="NAME">J.UI.Panel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">J.Class</span><span class="PUNC">(</span><span class="NAME">J.UIElement</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">    </span><span class="COMM">/** @lends J.UI.Panel.prototype */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">    </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">        </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"Panel"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">        </span><span class="NAME">placeholder</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 12</span> 
+<span class='line'> 13</span> </span><span class="WHIT">        </span><span class="NAME">getHtml</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">            </span><span class="COMM">// style='display:none;'</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"&lt;div  id='"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.htmlId</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"'>"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.options</span><span class="PUNC">[</span><span class="STRN">"content"</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.options</span><span class="PUNC">[</span><span class="STRN">"content"</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.placeholder</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"&lt;/div>"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 18</span> 
+<span class='line'> 19</span> 
+<span class='line'> 20</span> 
+<span class='line'> 21</span> 
+<span class='line'> 22</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Joshlib</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">jQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span></pre></body></html>
