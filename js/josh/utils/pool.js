@@ -1,19 +1,19 @@
 (function(J) {
-	
-	/** 
+
+    /** 
 	    @constructor
 	    @class A Task pool, based on node-pool
 	    @param {Object} options Options hash
 	*/
-	J.Utils.Pool = function(factory) {
+    J.Utils.Pool = function(factory) {
         var self = {};
 
         var idleTimeoutMillis = factory.idleTimeoutMillis || 30000;
-        var reapInterval      = factory.reapIntervalMillis || 1000;
+        var reapInterval = factory.reapIntervalMillis || 1000;
 
         var availableObjects = [];
-        var objectTimeout    = {};
-        var waitingClients   = [];
+        var objectTimeout = {};
+        var waitingClients = [];
         var obj;
         var count = 0;
         var removeIdleScheduled = false;
@@ -70,7 +70,7 @@
                 }
                 else if (count < factory.max) {
                     count++;
-                    log("dispense() - creating obj - count="+count);
+                    log("dispense() - creating obj - count=" + count);
                     factory.create(function(obj) {
                         if (waitingClients.length > 0) {
                             waitingClients.shift()(obj);
@@ -83,12 +83,12 @@
             }
         }
 
-        self.borrow = function(callback,priority) {
+        self.borrow = function(callback, priority) {
 
-            if (!priority) priority=0;
+            if (!priority) priority = 0;
 
             // high priority, currently only supporting <0 or >=0
-            if (priority<0) {
+            if (priority < 0) {
                 waitingClients.unshift(callback);
             } else {
                 waitingClients.push(callback);

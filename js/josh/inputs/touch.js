@@ -1,23 +1,24 @@
-(function(J,$) {
-	
-	/**
+(function(J, $) {
+
+    /**
      * @class Input interface for touch events
      * @augments J.Input
      */
-	J.Inputs.touch = J.Class(J.Input,{
-		
-		//untested
-		start:function() {
-		    var self=this;
-			$(window).live('touchstart mousedown MozTouchDown',function(e){
+    J.Inputs.touch = J.Class(J.Input, {
 
-				self.app.publish("input",["enter"]);
-				
-			});
-			
-		}
-		
-	});
-	
+        //untested
+        start: function() {
+            var self = this;
+            $(window).live('touchstart mousedown MozTouchDown',
+            function(e) {
 
-})(Joshlib,jQuery);	
+                self.app.publish("input", ["enter"]);
+
+            });
+
+        }
+
+    });
+
+
+})(Joshlib, jQuery);

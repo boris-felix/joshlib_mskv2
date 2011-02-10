@@ -11,7 +11,7 @@
          */
 		__constructor:function(app) {
 			this.app = app;
-		},
+		}
 		
 	});
 	
@@ -24,7 +24,7 @@
 	 */
 	J.Input.create = function(app,inputName) {
 	    return new J.Inputs[inputName](app);
-	}
+	};
 	
 	/** 
 	    @namespace A namespace for Inputs 
