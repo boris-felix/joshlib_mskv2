@@ -12,6 +12,14 @@ Dependencies
 How to run
 ----------
 
-$ node build/solder.js
+$ node build/solder-server.js
 
-Then browse to joshlib/test/index-f24.html
+This will serve the framework at locations like :
+http://localhost:3000/solder/joshlib.js?no-minify
+http://localhost:3000/solder/joshlib-googletv.js
+
+
+Documentation
+-------------
+
+See https://github.com/joshfire/joshlib/wiki
