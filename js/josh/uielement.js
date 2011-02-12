@@ -53,8 +53,7 @@
             //Listen for any new treeData
             if (this.options.treeRoot) {
 
-                this.app.subscribe("treeDataLoading",
-                function(ev, data) {
+                this.app.subscribe("treeDataLoading",function(ev, data) {
 
                     //console.log("LOADING",self.id,self.treeRoot,data[0])
                     //This treeData is about us!
@@ -64,8 +63,7 @@
                     }
                 });
 
-                this.app.subscribe("treeData",
-                function(ev, data) {
+                this.app.subscribe("treeData",function(ev, data) {
 
                     //This treeData is about us!
                     if (self.treeRoot == data[0]) {
@@ -74,24 +72,21 @@
                     }
                 });
 
-                this.app.subscribe("stateChange",
-                function(ev, data) {
+                this.app.subscribe("stateChange",function(ev, data) {
                     var path = data[1];
                     var register = data[0];
-
-
-
 
                     //This treeData is about us!
                     if (self.options.treeRoot == path || (typeof self.options.treeRoot != "string" && self.options.treeRoot.test(path))) {
 
-                        var mdata = self.app.tree.getData(self.treeRoot);
-
-                        if (register == "focus") {
+                        if (register == "focus" || register == "prefocus") {
 
                             self.setTreeRoot(path);
 
-                            console.log("m focus", mdata, self.treeRoot);
+                            var mdata = self.app.tree.getData(self.treeRoot);
+                            
+                            console.log("m "+register, mdata, self.treeRoot);
+                            
                             if (mdata) {
                                 if (mdata == "loading") {
                                     self.setLoading();
@@ -102,26 +97,13 @@
                                 }
 
                             }
-                            console.log("m onfocus", mdata, self.treeRoot, path);
-                            self.onFocus(path);
-
-                            //When we're expected to be the next focus
-                        } else if (register == "prefocus") {
-                            self.setTreeRoot(path);
-
-                            console.log("m prefocus", mdata, self.treeRoot);
-                            if (mdata) {
-                                if (mdata == "loading") {
-                                    self.setLoading();
-                                    self.refresh();
-                                } else if (!self.data) {
-                                    self.setData(mdata);
-                                    self.refresh();
+                            
+                            if (register=="prefocus") {
+                                if (self.options.showOnPreFocus === true) {
+                                    self.show();
                                 }
-                            }
-
-                            if (self.options.showOnPreFocus === true) {
-                                self.show();
+                            } else if (register=="focus") {
+                                self.onFocus(path);
                             }
 
                         } else if (register == "current") {
