@@ -31,8 +31,7 @@
             this.beingLoaded = {};
 
             var self = this;
-            this.app.subscribe("stateGoTo",
-            function(ev, data) {
+            this.app.subscribe("stateGoTo",function(ev, data) {
                 var register = data[0];
                 var path = data[1];
 
@@ -42,8 +41,7 @@
                 //Go to first child
                 if (self.isDirectory(path)) {
                     var async = true;
-                    self.resolveMoves(path.substring(0, path.length - 1), ["down"],
-                    function(newPath) {
+                    self.resolveMoves(path.substring(0, path.length - 1), ["down"],function(newPath) {
                         //console.log("FChild callback got "+newPath,newPath);
                         async = false;
                         self.setState(register, newPath);
@@ -62,22 +60,30 @@
 
             });
 
-            this.app.subscribe("stateGo",
-            function(ev, data) {
+            // Starting at zero is just boring.
+            this.stateChangeSerial = 42;
+            
+            this.app.subscribe("stateGo",function(ev, data) {
                 var register = data[0];
                 var path = data[1];
 
+                var localSerial = ++self.stateChangeSerial;
+                
                 //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
                 if (!path) return;
 
-                //data : [ 0 : nom du registre , 1 : chemin  ]
                 var async = true;
-                self.resolveMoves(self.getState(register), path,
-                function(newPath) {
+                self.resolveMoves(self.getState(register), path,function(newPath) {
                     async = false;
-                    self.app.publish("stateGoTo", [register, newPath], true);
+                    
+                    //Don't send an event if in the meantime the state changed.
+                    if (localSerial==self.stateChangeSerial) {
+                        self.app.publish("stateGoTo", [register, newPath], true);
+                    }
                 });
 
+                // While we're loading children of /directory, set us in the temporary 
+                // /directory/ state (with final slash)
                 if (async && path == "down") {
                     self.setState(register, (self.getState(register) + "/").replace(/\/\/$/, "/"));
                 }
@@ -336,6 +342,32 @@
             this.sendTreeDataEvent(path);
         },
 
+
+        
+        /** 
+		    Insert data to a path in the tree
+		    @function 
+		    @param {String} path The path
+		    @param {Integer} index The index where to start the insertion. (0=unshift, -1=push)
+		    @param data The tree data 
+		*/
+        insertData: function(path, index, data) {
+            if (this.isDirectory(path)) {
+                
+                //unoptimized implementation for now
+                var oldData = this.getData(path);
+                
+                if (index==-1) {
+                    index=oldData.length;
+                }
+                this.setData(path,oldData.slice(0,index).concat(data,oldData.slice(index,oldData.length)));
+                
+            } else {
+                //TODO error
+            }
+
+        },
+        
         /** 
 		    Gets the data at some path in the tree
 		    @function 

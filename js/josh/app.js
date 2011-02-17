@@ -16,32 +16,76 @@
 		    @constructs 
 		    @class The base application class
 		    @param {String} appId Unique identifier for the app
+		    @param {Object} options Options for the app
 		*/
-        __constructor: function(appId) {
+        __constructor: function(appId,options) {
             this.debugEvents = true;
             this.subscribes = {};
             this.id = appId;
+            this.options = options || {};
 
             this.tree = new J.Tree(this);
+            
+            // Instanciated UI Elements
+            this.ui = {};
+
+            if (this.options.insertOnReady) {
+                var self=this;
+                $(function() {
+                    self.insert();
+                });
+            }
 
         },
 
         /** 
-		    Sets the DOM base element of the app
+		    Adds a UI Element
 		    @function 
-		    @param {String} eltId ElementID of the base HTML container element
+		    @param {String} id The ID of the 
+		    @definition {Object} definition Hash of element properties 
+            
 		*/
-        setBaseHtmlId: function(eltId) {
-            this.baseHtml = $("#" + eltId);
+        addUiElement: function(id,definition) {
+            this.ui[id] = new definition.uiElement(this,id,definition);
+            if (!definition.parent) {
+                this.baseUiElement = id;
+            }
+            
+            //Resolve static "parent" references
+            _.each(this.ui,function(elt,k) {
+                if (typeof elt.options.parent=="string") {
+                    if (this.ui[elt.options.parent]) {
+                        elt.options.parent = this.ui[elt.options.parent];
+                        elt.options.parent.registerChild(elt);
+                    }
+                }
+            },this);
         },
 
         /** 
-		    Sets the base UI element of the app
+		    Adds UI Elements
 		    @function 
-		    @param {J.UIElement} elt Base UI Element (Container for all others)
+		    @param {Object} elementDefinitions An id=>definition hash of UI Elements
+            
 		*/
-        setBaseUIElement: function(elt) {
-            this.baseUIElement = elt;
+        addUiElements: function(elements) {
+            //todo accept a javascript array with elt.id properties
+            _.each(elements,function(elt,id) {
+                this.addUiElement(id,elt);
+            },this);
+        },
+
+        /** 
+		    Setups the app. Overload with app-specific init code
+		    @function 
+		    @param {Function} callback to call when finished
+		*/
+        beforeInsert: function(callback) {
+            callback();
+        },
+        
+        afterInsert: function() {
+            
         },
 
         /** 
@@ -49,26 +93,22 @@
 		    @function 
 		*/
         insert: function() {
+            
+            this.baseHtml = $("#" + this.options.parentNodeId);
+            
             var self = this;
-            this.setup(function() {
-                self.baseUIElement.insert();
-                _.each(self.inputs,
-                function(input) {
+            this.beforeInsert(function() {
+
+                self.ui[self.baseUiElement].insert();
+                
+                _.each(self.inputs,function(input) {
                     J.Input.create(self, input).start();
                 });
+                
+                self.afterInsert();
 
             });
 
-        },
-
-
-        /** 
-		    Setups the app. Overload with app-specific init code
-		    @function 
-		    @param {Function} callback to call when finished
-		*/
-        setup: function(callback) {
-            callback();
         },
 
 

@@ -12,7 +12,15 @@
             autoInsert: true,
             showOnFocus: true,
             showOnPreFocus: true,
-            hideOnBlur: true
+            hideOnBlur: true,
+            show:function(that) {
+                $("#" + that.htmlId).css({
+                    "opacity": 1
+                }).show();
+            },
+            hide:function(that) {
+                $("#" + that.htmlId).hide();
+            }
         },
 
         /**
@@ -26,8 +34,7 @@
 
             this.app = app;
             this.id = id;
-            this.options = $.extend({},
-            this.baseDefaultOptions, this.defaultOptions, options || {});
+            this.options = $.extend({}, this.baseDefaultOptions, this.defaultOptions, options || {});
             this.htmlId = this.getHtmlId();
             this.children = [];
             this._subscribed = [];
@@ -44,11 +51,6 @@
 
             this.treeRoot = false;
             this.treeCurrent = false;
-
-
-            if (options.parent) {
-                options.parent.registerChild(this);
-            }
 
             //Listen for any new treeData
             if (this.options.treeRoot) {
@@ -264,9 +266,8 @@
                 $("#" + this.htmlId).html(this.getHtmlInner());
             }
 
-            if (typeof this.options.onAfterRefresh === 'function') {
-                continuous = this.options.onAfterRefresh(this);
-            }
+            this.event("onAfterRefresh");
+            
             if (typeof callback === 'function') {
                 callback();
             }
@@ -277,9 +278,9 @@
 		 * @function
 		 */
         show: function() {
-            $("#" + this.htmlId).css({
-                "opacity": 1
-            }).show();
+            this.event("onBeforeShow");
+            this.options.show(this);
+            this.event("onAfterShow");
             this.showHideSwitch.off();
         },
 
@@ -288,7 +289,9 @@
 		 * @function
 		 */
         hide: function() {
-            $("#" + this.htmlId).hide();
+            this.event("onBeforeHide");
+            this.options.hide(this);
+            this.event("onAfterHide");
             this.showHideSwitch.off();
         },
 
@@ -329,7 +332,7 @@
             } else {
                 parent = this.app.baseHtml;
             }
-            //			console.log(this.id,this.getHtml());
+
             parent.append(this.getHtml());
             this.inserted = true;
             if (this.options.autoShow) {

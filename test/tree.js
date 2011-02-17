@@ -18,11 +18,11 @@ test('Installation Joshlib',function(){
 	
 	equals(typeof window.Joshlib,'object','Joshlib() déclaré');
 	
-	equals(typeof myapp.menu,'object','Joshlib.Menu() instantié');
+	equals(typeof myapp.tree,'object','Joshlib.Tree() instantié');
 	
 })  
 
-test('Menu navigation',function(){
+test('tree navigation',function(){
 
 	expect(32);
 	
@@ -32,7 +32,7 @@ test('Menu navigation',function(){
 	
 	var myapp = new J.Apps.Test();
 	
-	myapp.menu.setData('/',[
+	myapp.tree.setData('/',[
 	    {'id':'leaf1'},
 	    {'id':'leaf2',
 	     'children':[
@@ -71,147 +71,147 @@ test('Menu navigation',function(){
         },
         
 	]);
-	myapp.menu.resolveMoves("/leaf1",["next"],function(path) {
+	myapp.tree.resolveMoves("/leaf1",["next"],function(path) {
 	    equals(path,"/leaf2","resolveMove next");
 	});
     
-    myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+    myapp.tree.resolveMoves("/leaf3",["next"],function(path) {
 	    equals(path,"/leaf4","resolveMove next3");
 	});
 	
-	equals(myapp.menu.getData("/leaf4").label,"test1");
+	equals(myapp.tree.getData("/leaf4").label,"test1");
 	
-	myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+	myapp.tree.resolveMoves("/leaf3",["next"],function(path) {
 	    equals(path,"/leaf4","resolveMove next3");
 	});
 	
-	same(myapp.menu.getData("/leaf2").id,"leaf2");
+	same(myapp.tree.getData("/leaf2").id,"leaf2");
 	
-	same(myapp.menu.getData("/leaf2/"),[
+	same(myapp.tree.getData("/leaf2/"),[
       {'id':'leaf21'},
       {'id':'leaf22'}
      ]);
      
 	//Change a leaf
-	myapp.menu.setData('/leaf4',{"label":"test2"});
-    equals(myapp.menu.getData("/leaf4").label,"test2");
+	myapp.tree.setData('/leaf4',{"label":"test2"});
+    equals(myapp.tree.getData("/leaf4").label,"test2");
 
-	myapp.menu.resolveMoves("/leaf3",["next"],function(path) {
+	myapp.tree.resolveMoves("/leaf3",["next"],function(path) {
 	    equals(path,"/leaf4","resolveMove next3");
 	});
     
 
 	//Change a tree
-	myapp.menu.setData('/leaf4/',[
+	myapp.tree.setData('/leaf4/',[
 	    {'id':'leaf41'},
 	    {'id':'leaf42'}
 	]);
 	
      
-     same(myapp.menu.getData("/leaf4/"),[
+     same(myapp.tree.getData("/leaf4/"),[
        {'id':'leaf41'},
        {'id':'leaf42'}
       ]);
      
-     var rootm = myapp.menu.getData("/");
+     var rootm = myapp.tree.getData("/");
      same(rootm[0],{'id':'leaf1'});
 
-	var lastMenuChange = null;
-	myapp.subscribe("menuChange",function(ev,data) {
-        console.log('menuchange ',data);
-	    lastMenuChange = data;
+	var lastStateChange = null;
+	myapp.subscribe("stateChange",function(ev,data) {
+        console.log('stateChange ',data);
+	    lastStateChange = data;
 	});
 	
 	
-    lastMenuChange=[];
+    lastStateChange=[];
 	
-	myapp.publish("menuGoTo",["current","/leaf4"],true);
+	myapp.publish("stateGoTo",["current","/leaf4"],true);
 	
-	same(lastMenuChange,["current","/leaf4"],'Menu GoTo current /leaf4');
+	same(lastStateChange,["current","/leaf4"],'tree GoTo current /leaf4');
 	
-	myapp.publish("menuGo",["current","down"],true);
+	myapp.publish("stateGo",["current","down"],true);
 	
-    same(lastMenuChange,["current","/leaf4/leaf41"],'Menu Go current down+next');
+    same(lastStateChange,["current","/leaf4/leaf41"],'tree Go current down+next');
 	
-	myapp.publish("menuGo",["current","next"],true);
+	myapp.publish("stateGo",["current","next"],true);
     
-    same(lastMenuChange,["current","/leaf4/leaf42"],'Menu Go current down+next');
+    same(lastStateChange,["current","/leaf4/leaf42"],'tree Go current down+next');
 
-    lastMenuChange=[];	
+    lastStateChange=[];	
 
-	myapp.publish("menuGoTo",["focus","/leaf1"],true);
+	myapp.publish("stateGoTo",["focus","/leaf1"],true);
     
-    same(lastMenuChange,["focus","/leaf1"],'Menu Goto');
+    same(lastStateChange,["focus","/leaf1"],'tree Goto');
 	
-    myapp.publish("menuGo",["focus","next"],true);
+    myapp.publish("stateGo",["focus","next"],true);
     
-	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus next');
+	same(lastStateChange,["focus","/leaf2"],'tree Go focus next');
 	
-	myapp.publish("menuGo",["focus","down"],true);
+	myapp.publish("stateGo",["focus","down"],true);
 	
-	same(lastMenuChange,["focus","/leaf2/leaf21"],'Menu Go focus down');
+	same(lastStateChange,["focus","/leaf2/leaf21"],'tree Go focus down');
 	
-	myapp.publish("menuGo",["focus","up"],true);
+	myapp.publish("stateGo",["focus","up"],true);
 	
-	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
+	same(lastStateChange,["focus","/leaf2"],'tree Go focus up');
 	
-	myapp.publish("menuGoTo",["focus","/leaf2/"],true);
+	myapp.publish("stateGoTo",["focus","/leaf2/"],true);
 	
-	same(lastMenuChange,["focus","/leaf2/leaf21"],'Menu Go focus down with last slash');
+	same(lastStateChange,["focus","/leaf2/leaf21"],'tree Go focus down with last slash');
 	
-	myapp.publish("menuGo",["focus","up"],true);
+	myapp.publish("stateGo",["focus","up"],true);
 	
-	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up');
+	same(lastStateChange,["focus","/leaf2"],'tree Go focus up');
 	
-	myapp.publish("menuGo",["focus","up"],true);
+	myapp.publish("stateGo",["focus","up"],true);
 	
-	same(lastMenuChange,["focus","/leaf2"],'Menu Go focus up - the same.');
+	same(lastStateChange,["focus","/leaf2"],'tree Go focus up - the same.');
 	
-	myapp.publish("menuGo",["focus","next"],true);
+	myapp.publish("stateGo",["focus","next"],true);
 	
-	same(lastMenuChange,["focus","/leaf3"],'Menu Go focus next');
+	same(lastStateChange,["focus","/leaf3"],'tree Go focus next');
 
-    myapp.publish("menuGo",["focus","down"],true);
+    myapp.publish("stateGo",["focus","down"],true);
 	
-	same(lastMenuChange,["focus","/leaf3/leaf31"],'Menu Go focus down 3');
+	same(lastStateChange,["focus","/leaf3/leaf31"],'tree Go focus down 3');
     
-    myapp.publish("menuGo",["focus","up"],true);
+    myapp.publish("stateGo",["focus","up"],true);
     
-    same(lastMenuChange,["focus","/leaf3"],'Menu Go up next ');
+    same(lastStateChange,["focus","/leaf3"],'tree Go up next ');
     
-	myapp.publish("menuGo",["focus","next"],true);
+	myapp.publish("stateGo",["focus","next"],true);
 	
-	same(lastMenuChange,["focus","/leaf4"],'Menu Go up next ');
+	same(lastStateChange,["focus","/leaf4"],'tree Go up next ');
 	
-	myapp.publish("menuGo",["focus","next"],true);
+	myapp.publish("stateGo",["focus","next"],true);
 	
-	same(lastMenuChange,["focus","/leaf5"],'Menu Go up next next');
+	same(lastStateChange,["focus","/leaf5"],'tree Go up next next');
     
     //Todo: later.
-    //myapp.publish("menuGo",["focus","down"],true);
+    //myapp.publish("stateGo",["focus","down"],true);
 
     //should not be loaded right away
-    same(lastMenuChange,["focus","/leaf5"],'Async!');
+    same(lastStateChange,["focus","/leaf5"],'Async!');
     
-    same(myapp.menu.getData("/leaf5").id,"leaf5");
+    same(myapp.tree.getData("/leaf5").id,"leaf5");
     
-    myapp.publish("menuGo",["focus","down"],true);
+    myapp.publish("stateGo",["focus","down"],true);
     
-    same(myapp.menu.getData("/leaf5/"),"loading");
+    same(myapp.tree.getData("/leaf5/"),"loading");
     
     
     stop();
     
     setTimeout(function() {
 
-        same(myapp.menu.getData("/leaf5").id,"leaf5");
+        same(myapp.tree.getData("/leaf5").id,"leaf5");
 
-        same(((myapp.menu.getData("/leaf5/") || [{"id":"noleaf5"}])[0] || {"id":"noidinzero"}).id,"leaf51");
+        same(((myapp.tree.getData("/leaf5/") || [{"id":"noleaf5"}])[0] || {"id":"noidinzero"}).id,"leaf51");
 
-        same(lastMenuChange,["focus","/leaf5/leaf51"],'Down Async');
+        same(lastStateChange,["focus","/leaf5/leaf51"],'Down Async');
         
-        myapp.publish("menuGo",["focus",["up","prev","prev","prev","down","next","down","next","prev","next"]],true);
-        same(lastMenuChange,["focus","/leaf2/leaf22/leaf222"],'Big path');
+        myapp.publish("stateGo",["focus",["up","prev","prev","prev","down","next","down","next","prev","next"]],true);
+        same(lastStateChange,["focus","/leaf2/leaf22/leaf222"],'Big path');
         
         
         start();  
@@ -221,13 +221,89 @@ test('Menu navigation',function(){
 });
 
 
-test('Async Menu navigation',function(){
+
+test('tree incremental additions',function(){
+
+	expect(8);
+	
+	//equals(testee2.index,{},'index d\'origine');
+	
+	var J = Joshlib;
+	
+	var myapp = new J.Apps.Test();
+	
+	
+	var lastTreeData = null;
+	myapp.subscribe("treeData",function(ev,data) {
+	    if (data[0]=="/") {
+	        console.log('***treeData ',data);
+    	    lastTreeData = data[1];
+	    }
+	});
+	
+	myapp.tree.setData('/',[
+	    {'id':'leaf1'}
+	]);
+	
+	stop();
+	
+	setTimeout(function() {
+	    
+	    
+    	same(lastTreeData[0].id,"leaf1",'Load');
+
+    	myapp.publish("stateGoTo",["focus","/leaf1"],true);
+
+    	myapp.tree.insertData('/',0,[
+    	    {'id':'leafbefore'}
+    	]);
+    	
+    	setTimeout(function() {
+
+        	same(lastTreeData[0].id,"leafbefore",'leafbefore');
+        	same(lastTreeData[1].id,"leaf1",'leaf1');
+
+            myapp.tree.insertData('/',2,[
+        	    {'id':'leafafter'}
+        	]);
+
+            myapp.tree.insertData('/',-1,[
+           	    {'id':'leafafterafter'}
+           	]);
+           	
+           	myapp.tree.insertData('/',2,[
+           	    {'id':'leafmiddle'}
+           	]);
+
+            setTimeout(function() {
+                
+                same(lastTreeData[0].id,"leafbefore",'leafbefore');
+            	same(lastTreeData[1].id,"leaf1",'leaf1');
+            	same(lastTreeData[2].id,"leafmiddle",'leafmiddle');
+                same(lastTreeData[3].id,"leafafter",'leafafter');
+                same(lastTreeData[4].id,"leafafterafter",'leafafterafter');
+        
+        
+                start();
+                
+            },100);
+            
+        },100);
+	    
+	},100);
+	
+});
+
+
+
+
+test('Async tree navigation',function(){
 
     var doCb;
     
     var myapp;
     
-    var lastMenuChange = null;
+    var lastStateChange = null;
     
     var rst = function() {
         
@@ -235,7 +311,7 @@ test('Async Menu navigation',function(){
         
         myapp = new J.Apps.Test();
 
-    	myapp.menu.setData('/',[
+    	myapp.tree.setData('/',[
     	    {'id':'leaf1'},
 
     	    {
@@ -254,9 +330,9 @@ test('Async Menu navigation',function(){
 
         ]);
         
-        myapp.subscribe("menuChange",function(ev,data) {
-            console.log('menuchange ',data);
-    	    lastMenuChange = data;
+        myapp.subscribe("stateChange",function(ev,data) {
+            console.log('stateChange ',data);
+    	    lastStateChange = data;
     	});
     	
     };
@@ -266,49 +342,49 @@ test('Async Menu navigation',function(){
 	
 
 	
-	myapp.publish("menuGoTo",["focus","/"],true);
+	myapp.publish("stateGoTo",["focus","/"],true);
     
-	same(lastMenuChange,["focus","/leaf1"],'Menu init - first child');
+	same(lastStateChange,["focus","/leaf1"],'tree init - first child');
 	
 	
-	myapp.publish("menuGoTo",["focus","/leaf1"],true);
+	myapp.publish("stateGoTo",["focus","/leaf1"],true);
     
-	same(lastMenuChange,["focus","/leaf1"],'Menu init');
+	same(lastStateChange,["focus","/leaf1"],'tree init');
     
-    myapp.publish("menuGo",["focus","down"],true);
+    myapp.publish("stateGo",["focus","down"],true);
     
-    same(lastMenuChange,["focus","/leaf1"],'Still');
+    same(lastStateChange,["focus","/leaf1"],'Still');
     
-    myapp.publish("menuGo",["focus","next"],true);
+    myapp.publish("stateGo",["focus","next"],true);
     
-	same(lastMenuChange,["focus","/leaf2"],'Next');
+	same(lastStateChange,["focus","/leaf2"],'Next');
 
-    myapp.publish("menuGo",["focus","down"],true);
+    myapp.publish("stateGo",["focus","down"],true);
     
-	same(lastMenuChange,["focus","/leaf2/"],'Down');
+	same(lastStateChange,["focus","/leaf2/"],'Down');
 
 	doCb();
 	
-	same(lastMenuChange,["focus","/leaf2/leaf21"],'Loaded');
+	same(lastStateChange,["focus","/leaf2/leaf21"],'Loaded');
     
     
     rst();
     
-    myapp.publish("menuGoTo",["focus","/leaf1"],true);
-    same(lastMenuChange,["focus","/leaf1"],'Menu init');
+    myapp.publish("stateGoTo",["focus","/leaf1"],true);
+    same(lastStateChange,["focus","/leaf1"],'tree init');
     
-    myapp.publish("menuGo",["focus","next"],true);
-	same(lastMenuChange,["focus","/leaf2"],'Next');
+    myapp.publish("stateGo",["focus","next"],true);
+	same(lastStateChange,["focus","/leaf2"],'Next');
     
-    myapp.publish("menuGo",["focus","down"],true);
-	same(lastMenuChange,["focus","/leaf2/"],'Down');
+    myapp.publish("stateGo",["focus","down"],true);
+	same(lastStateChange,["focus","/leaf2/"],'Down');
 	
-	myapp.publish("menuGo",["focus","up"],true);
-	same(lastMenuChange,["focus","/leaf2"],'Reup before CB');
+	myapp.publish("stateGo",["focus","up"],true);
+	same(lastStateChange,["focus","/leaf2"],'Reup before CB');
     
     doCb();
     
-    same(lastMenuChange,["focus","/leaf2"],'No change');
+    same(lastStateChange,["focus","/leaf2"],'No change');
     
 });
 
@@ -318,7 +394,7 @@ test('Grid test',function(){
 
     var lastEvent = false;
     
-    var g = new J.Grid({
+    var g = new J.Utils.Grid({
         "grid":[
             [{"id":"item11"}         , {"id":"item12"},      {"id":"item13"},      {"id":"item14"},      {"id":"item15"}],
             
@@ -367,20 +443,20 @@ test('Grid test',function(){
 */  
     
     g.go("up");
-    same(lastEvent,["onExit","up"],'up');
+    same(lastEvent,["onExit",[0,1]],'up');
 
     g.go("left");
     same(lastEvent,["onChange",[0,0],{"id":"item11"}],'left');
     
     g.go("left");
-    same(lastEvent,["onExit","left"],'left');
+    same(lastEvent,["onExit",[1,0]],'left');
 
 
     g.goTo([4,0]);
     same(lastEvent,["onChange",[4,0],{"id":"item15"}],'goTo');
     
     g.go("right");
-    same(lastEvent,["onExit","right"],'left');
+    same(lastEvent,["onExit",[-1,0]],'left');
 });
 
 
@@ -396,9 +472,9 @@ test('Preload all',function(){
 	
 	var myapp = new J.Apps.Test();
 	
-	myapp.menu.preloadAll();
+	myapp.tree.preloadAll();
 	
-	myapp.menu.setData('/',[
+	myapp.tree.setData('/',[
 	    {'id':'leaf1'},
 	    {'id':'leaf2',
 	     'children':[
@@ -460,7 +536,7 @@ test('Preload all',function(){
 	
 	
 	
-	equals(myapp.menu.getData("/leaf4").label,"test1");
+	equals(myapp.tree.getData("/leaf4").label,"test1");
 	
 	
 		
@@ -468,27 +544,27 @@ test('Preload all',function(){
     
     setTimeout(function() {
 
-        same(myapp.menu.getData("/leaf3/leaf31").id,"leaf31");
-        same(myapp.menu.getData("/leaf5/leaf51"),undefined);
+        same(myapp.tree.getData("/leaf3/leaf31").id,"leaf31");
+        same(myapp.tree.getData("/leaf5/leaf51"),undefined);
         
         setTimeout(function() {
         
-            same(myapp.menu.getData("/leaf5/leaf51").id,"leaf51");
-            same(myapp.menu.getData("/leaf3/leaf31/leaf312"),undefined);
+            same(myapp.tree.getData("/leaf5/leaf51").id,"leaf51");
+            same(myapp.tree.getData("/leaf3/leaf31/leaf312"),undefined);
             
             setTimeout(function() {
 
-                same(myapp.menu.getData("/leaf3/leaf31/leaf312").id,"leaf312");
-                same(myapp.menu.getData("/leaf5/leaf51/leaf511"),undefined);
+                same(myapp.tree.getData("/leaf3/leaf31/leaf312").id,"leaf312");
+                same(myapp.tree.getData("/leaf5/leaf51/leaf511"),undefined);
                 
                 setTimeout(function() {
 
-                    same(myapp.menu.getData("/leaf5/leaf51/leaf511").id,"leaf511");
-                    same(myapp.menu.getData("/leaf5/leaf52/leaf522"),undefined);
+                    same(myapp.tree.getData("/leaf5/leaf51/leaf511").id,"leaf511");
+                    same(myapp.tree.getData("/leaf5/leaf52/leaf522"),undefined);
                     
                     setTimeout(function() {
 
-                        same(myapp.menu.getData("/leaf5/leaf52/leaf522").id,"leaf522");
+                        same(myapp.tree.getData("/leaf5/leaf52/leaf522").id,"leaf522");
 
                         start();  
                         
@@ -680,7 +756,7 @@ test('UIElements',function(){
 									var shows=[];
 									for ( var i in data)
 									{
-										//menu.setData(i,data[i]);
+										//tree.setData(i,data[i]);
 										var showid='show-'+i;
 										//$('<li />').attr('id',showid).text(data[i].title).appendTo('#testarbre');
 										var editions = data[i]['editions']['list'];
@@ -701,7 +777,7 @@ test('UIElements',function(){
 										
 										for ( var j in editions)
 										{
-											//menu.setData(i+'-'+j,editions[j]);
+											//tree.setData(i+'-'+j,editions[j]);
 											var emissionid='show-'+i+'-'+j;
 											//$('<li />').attr('id',emissionid).text(editions[j].title).attr('data-mp4',editions[j]['video'][0]['mp4']).appendTo('#'+showid+' > ul');
 											pane.addRight(showid,emissionid);
@@ -745,7 +821,7 @@ test('UIElements',function(){
 									
 									
 //console.log('retour ',this.retour.numeros);
-//this.retour.numeros.data=this.retour.numeros.menuRoot;
+//this.retour.numeros.data=this.retour.numeros.treeRoot;
 
 
 									for ( var i in data)

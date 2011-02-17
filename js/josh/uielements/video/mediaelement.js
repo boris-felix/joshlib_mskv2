@@ -59,6 +59,11 @@
 
             this.videoStatus = false;
 
+            $(window).bind('unload',function() {
+                try {
+                    self.remove();
+                } catch (e) {}
+            });
 
             this.app.subscribe("input",
             function(ev, data) {
