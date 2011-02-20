@@ -123,6 +123,16 @@ exports.config = {
         'js/josh/utils/stress.js'
       ]
     },
+    'joshlib-web': {
+      requires: ["joshlib","mediaelement"],
+      css: [
+        'css/style.css'
+      ],
+      js: [
+        'js/josh/uielements/video/mediaelement.js',
+        'js/josh/targets/web/general.js'
+      ]
+    },
     
     'joshlib-googletv': {
       requires: ["joshlib","mediaelement"],
