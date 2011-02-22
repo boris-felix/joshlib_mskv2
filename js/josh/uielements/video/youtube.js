@@ -408,7 +408,7 @@
             
             $("#" + this.htmlId)[0].innerHTML = '<div id="ytapiplayer">Loading...</div>';
             
-            var params = { allowScriptAccess: "always" };
+            var params = { allowScriptAccess: "always", wmode:"opaque" };
             var atts = { id: "myytplayer" };
             swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3", //"http://www.youtube.com/e/"+this.playData.url+"?enablejsapi=1&version=3&playerapiid=ytplayer"
                                   "ytapiplayer", "100%", "100%", "8", null, null, params, atts);
