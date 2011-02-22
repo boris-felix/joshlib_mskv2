@@ -133,7 +133,17 @@ exports.config = {
         'js/josh/targets/web/general.js'
       ]
     },
-    
+    'joshlib-web-youtube': {
+      requires: ["joshlib"],
+      css: [
+        'css/style.css'
+      ],
+      js: [
+        'js/libs/swfobject-2.2.js',
+        'js/josh/uielements/video/youtube.js',
+        'js/josh/targets/web/general.js'
+      ]
+    },    
     'joshlib-googletv': {
       requires: ["joshlib","mediaelement"],
       css: [
@@ -147,6 +157,18 @@ exports.config = {
         'js/josh/targets/10feet/googletv.js'
       ]
     },
+    'joshlib-googletv-youtube': {
+      requires: ["joshlib"],
+      css: [
+        'css/style.css',
+        'css/targets/googletv.scss'
+      ],
+      js: [
+        'js/libs/swfobject-2.2.js',
+        'js/josh/uielements/video/youtube.js',
+        'js/josh/targets/10feet/googletv.js'
+      ]
+    },    
     
     'joshlib-kinectdemo': {
       requires: ["joshlib","mediaelement"],
