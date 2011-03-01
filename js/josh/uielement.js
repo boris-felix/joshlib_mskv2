@@ -208,7 +208,7 @@
             if (!this.hasFocus)
             {
                 var self = this;
-                this.subscribes().forEach(function(s) {
+                _.each(this.subscribes(), function(s) {
                     self._subscribed.push(self.app.subscribe(s[0], s[1]));
                 });
 
@@ -240,8 +240,8 @@
             }
 
             this.hasFocus = false;
-            var self = this;
-            this._subscribed.forEach(function(s) {
+            var self = this; 
+            _.each(this._subscribed, function(s) {
                 self.app.unsubscribe(s);
             });
 

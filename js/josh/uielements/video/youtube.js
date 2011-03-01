@@ -230,11 +230,11 @@
                     console.log("p enter", position, self.videoStatus);
                     if (position[0] == 0) {
                         //previous
-                        self.player.setCurrentTime(0);
+                        self.player.seekTo(self.player.getCurrentTime() < 60 ? 0: (self.player.getCurrentTime() - 60));
 
                     } else if (position[0] == 1) {
                         //reward
-                        self.player.setCurrentTime(self.player.currentTime < 10 ? 0: (self.player.currentTime - 10));
+                        self.player.seekTo(self.player.getCurrentTime() < 10 ? 0: (self.player.getCurrentTime() - 10));
 
                     } else if (position[0] == 2) {
                         //play pause stop
@@ -251,10 +251,10 @@
 
                     } else if (position[0] == 3) {
                         //foward
-                        self.player.setCurrentTime(self.player.currentTime + 10);
+						self.player.seekTo(self.player.getCurrentTime() + 10, true);
                     } else if (position[0] == 4) {
                         //next
-                        self.player.setCurrentTime(self.player.currentTime + 60);
+						self.player.seekTo(self.player.getCurrentTime() + 60, true);
                     }
 
                 }
@@ -307,7 +307,7 @@
             var self=this;
             window.onYouTubePlayerReady = function(playerId) {
                 console.log("ytPlayerReady", playerId);
-                self.player = document.getElementById("myytplayer");
+                self.player = document.getElementById("self.player");
 
                 var me = self.player;
                 
@@ -409,7 +409,7 @@
             $("#" + this.htmlId)[0].innerHTML = '<div id="ytapiplayer">Loading...</div>';
             
             var params = { allowScriptAccess: "always", wmode:"opaque" };
-            var atts = { id: "myytplayer" };
+            var atts = { id: "self.player" };
             swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3", //"http://www.youtube.com/e/"+this.playData.url+"?enablejsapi=1&version=3&playerapiid=ytplayer"
                                   "ytapiplayer", "100%", "100%", "8", null, null, params, atts);
             
@@ -440,7 +440,8 @@
             //Only mouse for now
             $('.video-time-rail').click(function(e) {
                 var t = $('.video-time-rail');
-                if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration * (e.pageX - t.offset().left) / t.width()));
+                // if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration * (e.pageX - t.offset().left) / t.width()));
+				if (self.player) self.player.seekTo(Math.floor(self.player.getDuration() * (e.pageX - t.offset().left) / t.width()));
             });
             
             
