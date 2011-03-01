@@ -399,7 +399,7 @@
                 
                 //self.player.loadVideoById(self.playData.url,0,"hd720");
                 
-                self.player.loadVideoById(self.playData.url,0,"hd1080");
+                self.player.loadVideoById(self.playData.url,0,self.playData.videoQuality || "default");
                 
                 //self.player.loadVideoById(self.playData.url,0,"default");
             };

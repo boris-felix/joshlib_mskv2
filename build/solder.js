@@ -4,13 +4,14 @@
 
 var path      = require('path');
 
+
 exports.config = {
 
   compressors: {
     css: [ {
         name   : 'scss',
         options: {
-          bin:"/usr/bin/sass"
+          bin:["/usr/bin/sass","/home/node/.gem/ruby/1.8/bin/sass"]
         }
     },{
       name   : 'yui',
