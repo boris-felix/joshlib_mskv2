@@ -29,24 +29,39 @@
             // Instanciated UI Elements
             this.ui = {};
 
-            if (this.options.insertOnReady) {
-                var self=this;
-                $(function() {
-                    self.insert();
-                });
-            }
+            var self=this;
+            this.setup(function(error) {
+                if (self.options.insertOnReady) {
+                    J.onReady(function() {
+                        self.insert();
+                    });
+                }
+                if (self.options.onAppReady) {
+                    self.options.onAppReady(error);
+                }
+            });
+            
 
+        },
+        
+        /** 
+		    Performs further setup of the app
+		    @function 
+		    @param {Function} callback when finished 
+		*/
+        setup:function(callback) {
+            callback();
         },
 
         /** 
 		    Adds a UI Element
 		    @function 
 		    @param {String} id The ID of the 
-		    @definition {Object} definition Hash of element properties 
-            
+		    @definition {Object} definition Hash of element properties  
 		*/
         addUiElement: function(id,definition) {
-            this.ui[id] = new definition.uiElement(this,id,definition);
+            console.log("Instanciating "+id,definition.type);
+            this.ui[id] = new definition.type(this,id,definition);
             if (!definition.parent) {
                 this.baseUiElement = id;
             }

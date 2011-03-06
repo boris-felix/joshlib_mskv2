@@ -8,7 +8,7 @@
  * @version 1.0
  */
 
- (function(window, $) {
+ (function(window) {
 
 
     var J;
@@ -32,7 +32,16 @@
          * @function 
          * @return {Class} A JavaScript class.
          */
-        Class: $.inherit
+        Class: null,
+        
+        /**
+	     * DOM Ready util
+         * @function 
+         * @param {Function} Callback
+         */
+        onReady:function(callback) {
+            window.onload=callback;
+        }
 
     };
 
@@ -71,4 +80,4 @@
 
 
 
-})(window, jQuery);
+})(window);

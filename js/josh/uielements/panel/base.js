@@ -1,10 +1,10 @@
-(function(J, $) {
+(function(J) {
 
     /**
      * @class UI Element container
      * @augments J.UIElement
      */
-    J.UI.Panel = J.Class(J.UIElement,
+    J.UI.PanelBase = J.Class(J.UIElement,
     /** @lends J.UI.Panel.prototype */
     {
         type: "Panel",
@@ -16,7 +16,6 @@
         }
     });
 
-
-
-
-})(Joshlib, jQuery);
+    J.UI.Panel = J.UI.PanelBase;
+    
+})(Joshlib);

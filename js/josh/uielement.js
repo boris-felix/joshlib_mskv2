@@ -1,6 +1,6 @@
 (function(J, $) {
 
-    J.UIElement = J.Class(
+    J.UIElementBase = J.Class(
 
     /**
             @lends J.UIElement.prototype
@@ -60,13 +60,13 @@
                     //console.log("LOADING",self.id,self.treeRoot,data[0])
                     //This treeData is about us!
                     if (self.treeRoot == data[0]) {
-                        self.setLoading();
+                        self.setLoading(true);
                         self.refresh();
                     }
                 });
 
                 this.app.subscribe("treeData",function(ev, data) {
-
+                    
                     //This treeData is about us!
                     if (self.treeRoot == data[0]) {
                         self.setData(data[1]);
@@ -91,7 +91,7 @@
                             
                             if (mdata) {
                                 if (mdata == "loading") {
-                                    self.setLoading();
+                                    self.setLoading(true);
                                     self.refresh();
                                 } else if (!self.data) {
                                     self.setData(mdata);
@@ -152,10 +152,13 @@
         /**
 		 * Puts the element in loading mode
 		 * @function
+		 * @param {Boolean} is Loading
 		 */
-        setLoading: function() {
+        setLoading: function(isLoading) {
 
-            $("#" + this.htmlId).html("Loading...");
+            if (isLoading) {
+                $("#" + this.htmlId).html("Loading...");
+            }
         },
 
         /**
@@ -365,10 +368,12 @@
 		 */
         setData: function(data) {
             this.data = data;
-            this.isLoading = false;
+            this.setLoading(false);
         }
 
     });
+
+    J.UIElement = J.UIElementBase;
 
     /**
         @namespace Namespace for UIElements

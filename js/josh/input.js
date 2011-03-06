@@ -1,4 +1,4 @@
-(function(J,$) {
+(function(J) {
 
 	J.Input = J.Class(
 	    /** @lends J.Input.prototype */
@@ -33,4 +33,4 @@
 	
 	
 	
-})(Joshlib,jQuery);
+})(Joshlib);

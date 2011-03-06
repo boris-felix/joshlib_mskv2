@@ -202,9 +202,8 @@
             }
         },
 
-        setLoading: function() {
-            //console.log("LOAD",this.id);
-            this.isLoading = true;
+        setLoading: function(isLoading) {
+            this.isLoading = isLoading;
         },
 
         setData: function(data) {

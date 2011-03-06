@@ -1,4 +1,4 @@
-(function(J, $) {
+(function(J) {
 
     J.Tree = J.Class(
     /**
@@ -427,4 +427,4 @@
 
     });
 
-})(Joshlib, jQuery);
+})(Joshlib);

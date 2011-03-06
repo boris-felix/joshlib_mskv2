@@ -98,13 +98,36 @@ exports.config = {
         ]
     },
     
+    'joshlib-bootstrap-jquery':{
+        requires: ["jquery","underscore"],
+        css: [],
+        js: [
+            'js/josh/main.js',
+            'js/josh/main_jquery.js',
+            
+            'js/josh/uielement.js'
+        ]   
+    },
+    
+    'joshlib-bootstrap-sencha':{
+        requires: ["sencha-touch","underscore"],
+        css: [],
+        js: [
+            'js/josh/main.js',
+            'js/josh/main_ext.js',
+            
+            'js/josh/uielement.js',
+            'js/josh/uielement_sencha.js'
+            
+        ]   
+    },
+    
     
     'joshlib': {
-      requires: ["jquery","underscore"],
+      requires: [],
       css: [],
       js: [
-        'js/josh/main.js',
-        
+
         'js/josh/utils/grid.js',
         'js/josh/utils/delayedswitch.js',
         'js/josh/utils/pool.js',
@@ -115,51 +138,53 @@ exports.config = {
         'js/josh/input.js',
         'js/josh/inputs/keyboard.js',
         'js/josh/inputs/mouse.js',
-        'js/josh/uielement.js',
-        'js/josh/uielements/panel.js',
-        'js/josh/uielements/list/all.js',
+        
+        'js/josh/uielements/panel/base.js',
+        'js/josh/uielements/list/base.js',
         'js/josh/uielements/list/check-list.js',
-        'js/josh/uielements/video/all.js',
+        'js/josh/uielements/video/base.js',
         
         'js/josh/utils/stress.js'
       ]
     },
+    
     'joshlib-web': {
-      requires: ["joshlib","mediaelement"],
+      requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
         'css/style.css'
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
+        
         'js/josh/targets/web/general.js'
       ]
     },
     'joshlib-web-youtube': {
-      requires: ["joshlib"],
+      requires: ["joshlib-bootstrap-jquery","joshlib"],
       css: [
         'css/style.css'
       ],
       js: [
         'js/libs/swfobject-2.2.js',
         'js/josh/uielements/video/youtube.js',
+        
         'js/josh/targets/web/general.js'
       ]
     },    
     'joshlib-googletv': {
-      requires: ["joshlib","mediaelement"],
+      requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
         'css/style.css',
         'css/targets/googletv.scss'
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
-        
         
         'js/josh/targets/10feet/googletv.js'
       ]
     },
     'joshlib-googletv-youtube': {
-      requires: ["joshlib"],
+      requires: ["joshlib-bootstrap-jquery","joshlib"],
       css: [
         'css/style.css',
         'css/targets/googletv.scss'
@@ -167,12 +192,13 @@ exports.config = {
       js: [
         'js/libs/swfobject-2.2.js',
         'js/josh/uielements/video/youtube.js',
+        
         'js/josh/targets/10feet/googletv.js'
       ]
     },    
     
     'joshlib-kinectdemo': {
-      requires: ["joshlib","mediaelement"],
+      requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
         'css/style.css',
         'css/targets/googletv.scss'
@@ -186,16 +212,19 @@ exports.config = {
     },
     
     'joshlib-iphone': {
-      requires: ["joshlib"],
+      requires: ["joshlib-bootstrap-sencha","joshlib"],
       css: [
         "css/sencha-touch/apple.css"
       ],
       js: [
-
+      
+          'js/josh/uielement_sencha.js',
+          'js/josh/uielements/panel/sencha.js',
           'js/josh/uielements/list/sencha.js',
           'js/josh/uielements/video/popup.js',
+          'js/josh/uielements/video/sencha_youtube.js',
           
-          'js/josh/targets/smartphones/main.js'
+          'js/josh/targets/smartphones/sencha.js'
       ]
     }
 
