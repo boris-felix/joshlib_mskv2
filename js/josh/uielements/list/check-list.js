@@ -121,7 +121,7 @@
             // J.UI.List fait redescendre d'un cran dans le menu
             //return this.__base().concat(specific_controls);
             return specific_controls;
-        },
+        }
     });
 
 

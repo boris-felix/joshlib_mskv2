@@ -8,6 +8,7 @@ Dependencies
  - NodeJS for development & build system
  - https://github.com/joshfire/solder checkouted/cloned in ../solder
  - SASS ( http://sass-lang.com/tutorial.html )
+ - glob 1.1.0
 
 How to run
 ----------

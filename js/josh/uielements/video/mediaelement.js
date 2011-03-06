@@ -484,7 +484,7 @@
             });
 
             $('.video-controls').remove();
-
+			
             var buttonsHtml = (typeof this.options['buttonsHtml'] !== 'undefined') ? this.options['buttonsHtml'] :
             '<span id="' + this.htmlId + '_button_0" class="video-button video-previous joshover">▐◀</span>\
 								<span id="' + this.htmlId + '_button_1" class="video-button video-reward joshover">◀◀ </span>\
