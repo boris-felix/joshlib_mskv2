@@ -333,6 +333,14 @@
         getHtmlId: function() {
             return this.app.id + "_e_" + this.id;
         },
+        
+        getHtml:function() {
+            return "<div id='" + this.htmlId + "'>"+this.getHtmlInner()+"</div>";
+        },
+        
+        getHtmlInner:function() {
+            return "";
+        },
 
         /**
 		 * Sets the data for the UIElement

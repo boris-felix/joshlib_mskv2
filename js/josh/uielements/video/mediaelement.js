@@ -18,6 +18,9 @@
 
             // Status of the video
             this.videoStatus = false;
+            
+            // Current video duration
+            this.videoDuration = 0;
 
             // Memory leak fixes
             $(window).bind('unload',function() {
@@ -26,6 +29,7 @@
                 } catch (e) {}
             });
 
+            var self=this;
             this.app.subscribe("input",function(ev, data) {
                 if (self.isDefaultPlayer) {
                     self.handleInputEvent(data);
@@ -40,16 +44,22 @@
         },
         
         handleInputEvent:function(data) {
+            
             if (data[0] == "play") {
-                self.resume();
+                this.resume();
             } else if (data[0] == "stop") {
-                self.stop();
+                this.stop();
             } else if (data[0] == "pause") {
-                self.pause();
-            } else if (data[0] == "forward") {
-                self.playNext();
-            } else if (data[0] == "rewind") {
-                self.playPrev();
+                this.pause();
+            } else if (data[0] == "next") {
+                this.playNext();
+            } else if (data[0] == "prev") {
+                this.playPrev();
+            } else if (data[0] == "seekTo") {
+                if (this.player)  this.setCurrentTime(Math.max(0,data[1]));
+            } else if (data[0] == "seekBy") {
+                if (this.player) this.player.setCurrentTime(Math.max(0,this.player.currentTime+data[1]));
+                this.playPrev();
             }
         },
 
@@ -245,6 +255,7 @@
                     that.publish('success');
 
                     that.startListening(me, 'progress', function(ev) {
+                        that.videoDuration = me.duration;
                         that.publish('progress',[{"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
                     });
                     
@@ -253,6 +264,7 @@
                     });
                     
                     that.startListening(me, 'timeupdate', function(ev) {
+                        that.videoDuration = me.duration;
                         that.publish('timeupdate',[{"currentTime":me.currentTime,"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
                     });
                     

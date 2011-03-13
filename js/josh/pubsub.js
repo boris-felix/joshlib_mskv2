@@ -2,7 +2,7 @@
     
     J.PubSub = {
         
-        _pubsub_subscribes:{},
+        _pubsub_subscribes:false,
         _pubsub_lastuid:-1,
         
         /*https://github.com/mroderick/PubSubJS/blob/master/pubsub.js*/
@@ -21,12 +21,12 @@
             }
 
             // if there are no subscribers to this message, just return here
-            if (!this._pubsub_subscribes.hasOwnProperty(message)) {
+            if (!this._pubsub_subscribes.hasOwnProperty(message) && !this._pubsub_subscribes.hasOwnProperty("*")) {
                 return false;
             }
             var self = this;
             var deliverMessage = function() {
-                var subscribers = self._pubsub_subscribes[message];
+                var subscribers = (self._pubsub_subscribes[message] || []).concat(self._pubsub_subscribes["*"] || []);
                 var throwException = function(e) {
                     return function() {
                         throw e;
@@ -60,6 +60,11 @@
          * @returns {String} token for unsubscribing  
         **/
         subscribe: function(message, func) {
+            
+            if (this._pubsub_subscribes===false) {
+                this._pubsub_subscribes = {};
+            }
+            
             // message is not registered yet
             if (!this._pubsub_subscribes.hasOwnProperty(message)) {
                 this._pubsub_subscribes[message] = [];

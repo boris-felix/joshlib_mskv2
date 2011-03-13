@@ -62,6 +62,7 @@
             
             //Resolve static "parent" references
             _.each(this.ui,function(elt,k) {
+                console.log(elt,k);
                 if (typeof elt.options.parent=="string") {
                     if (this.ui[elt.options.parent]) {
                         elt.options.parent = this.ui[elt.options.parent];

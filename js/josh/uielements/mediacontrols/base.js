@@ -84,7 +84,7 @@
         },
         
         
-        getHtml:function() {
+        getHtmlInner:function() {
             
             
             var buttonsHtml = (typeof this.options['buttonsHtml'] !== 'undefined') ? this.options['buttonsHtml'] :
@@ -104,11 +104,9 @@
     				<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
     			</div>';
     			
-    		
-            return "<div id='" + this.htmlId + "'>"+html+"</div>";
-            
-        },
-
+    		return html;
+    	},
+    	
         focus: function() {
 
             var hadFocus = this.hasFocus;
@@ -194,11 +192,11 @@
         },
         
         seekBy:function(seconds) {
-            this.player.publish("seekBy",[seconds]);
+            this.player.publish("input",["seekBy",seconds]);
         },
         
         seekTo:function(position) {
-            this.player.publish("seekTo",[position]);
+            this.player.publish("input",["seekTo",position]);
         },
         
         playpause:function() {
@@ -228,19 +226,19 @@
             this.player=elt;
             
             var self=this;
-            elt.subscribe(function(ev,data) {
-
+            elt.subscribe("*",function(ev,data) {
+                console.log("got",ev);
                 if (ev=="error") {
                     $("#" + self.htmlId + ' .video-buttons').hide();
                     $("#" + self.htmlId + ' .video-info').html(data[1]);
                     $("#" + self.htmlId + ' .video-info').show();
                     
                 } else if (ev=="playing") {
-                    $("#" + self.htmlId + ' .video-stop , .video-play').hide();
+                    $("#" + self.htmlId + ' .video-stop ,#' + self.htmlId + ' .video-play').hide();
                     $("#" + self.htmlId + ' .video-pause').show();
                     
                 } else if (ev == "paused" || ev == "stopped") {
-                    $("#" + self.htmlId + ' .video-stop , .video-pause').hide();
+                    $("#" + self.htmlId + ' .video-stop ,#' + self.htmlId + ' .video-pause').hide();
                     $("#" + self.htmlId + ' .video-play').show();
                   
                 } else if (ev=="success") {
@@ -257,7 +255,7 @@
                     $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
                     
                 } else if (ev=="ended") {
-                    $("#" + self.htmlId + ' .video-play , .video-pause').hide();
+                    $("#" + self.htmlId + ' .video-play ,#' + self.htmlId + ' .video-pause').hide();
                     $("#" + self.htmlId + ' .video-stop').show();
                     
                 } else if (ev=="canplay") {
