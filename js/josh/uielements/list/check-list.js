@@ -99,7 +99,7 @@
                         if (valeur === "||validation||") {
                             /* pourrait etre focusedindex = data.length-1 */
                             console.warn("checklist validation");
-                            self.event("validate");
+                            self.publish("validate");
                             return true;
 
                         }

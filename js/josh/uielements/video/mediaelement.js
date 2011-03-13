@@ -1,6 +1,5 @@
 (function(J, $) {
 
-
     /**
      * @class MediaElementJs video backend
      * @augments J.UI.VideoBase
@@ -10,108 +9,53 @@
     {
 
         init: function() {
-            this.message = '';
-            // pour la gerstion des messages d'erreurs, versions linguistiques
-            this.errorCode = 0;
-            // pour la gerstion des messages d'erreurs, versions linguistiques
+            
+            // Event listeners
             this.listeners = {};
 
-            //Should have an HTML5 <video>-like API
+            // Should have an HTML5 <video>-like API
             this.player = false;
 
-            var self = this;
-            this.grid = new J.Utils.Grid({
-                "grid": [
-                [{
-                    "id": "previous"
-                },
-                {
-                    "id": "reward"
-                },
-                {
-                    "id": "p"
-                },
-                {
-                    "id": "foward"
-                },
-                {
-                    "id": "next"
-                }]
-                ],
-                "dimensions": 2,
-                "onSelect": function(coords, elem) {
-                    $("div.video-controls .focused").removeClass("focused");
-
-                    if (elem.id == "p") {
-                        $(".video-play, .video-pause, .video-stop").addClass("focused");
-                    } else {
-                        $(".video-" + elem.id).addClass("focused");
-                    }
-                },
-                "onExit": function(side) {
-                    console.log("exxxxit", side);
-                    if (side[1] < 0) {
-                        self.app.publish("stateGo", ["focus", "up"]);
-                    }
-                },
-                "orientation": self.options.orientation || "up"
-            });
-
+            // Status of the video
             this.videoStatus = false;
 
+            // Memory leak fixes
             $(window).bind('unload',function() {
                 try {
                     self.remove();
                 } catch (e) {}
             });
 
-            this.app.subscribe("input",
-            function(ev, data) {
-
+            this.app.subscribe("input",function(ev, data) {
                 if (self.isDefaultPlayer) {
-                    if (data[0] == "play") {
-
-                        self.grid.goTo([2, 0]);
-                        self.app.publish("stateGoTo", ["focus", self.treeRoot], true);
-                        self.app.publish("input", ["enter"], true);
-                    } else if (data[0] == "stop") {
-                        self.app.publish("stateGoTo", ["focus", self.treeRoot], true);
-                        self.stop();
-                    } else if (data[0] == "pause") {
-                        self.app.publish("stateGoTo", ["focus", self.treeRoot], true);
-                        self.pause();
-                    } else if (data[0] == "forward") {
-                        self.app.publish("stateGoTo", ["focus", self.treeRoot], true);
-                        self.grid.goTo([3, 0]);
-                        self.app.publish("input", ["enter"], true);
-                    } else if (data[0] == "rewind") {
-                        self.app.publish("stateGoTo", ["focus", self.treeRoot], true);
-                        self.grid.goTo([1, 0]);
-                        self.app.publish("input", ["enter"], true);
-                    }
+                    self.handleInputEvent(data);
                 }
-
-
+            });
+            this.subscribe("input",function(ev,data) {
+                self.handleInputEvent(data);
             });
 
             this.__base();
 
         },
-
-        delegated: function(
-        /* eventName, [eventArguments] */
-        ) {
-            var eventName = Array.prototype.slice.call(arguments);
-
-            if (typeof this.options[eventName] == 'function')
-            {
-                return this.options[eventName].apply(this, arguments);
+        
+        handleInputEvent:function(data) {
+            if (data[0] == "play") {
+                self.resume();
+            } else if (data[0] == "stop") {
+                self.stop();
+            } else if (data[0] == "pause") {
+                self.pause();
+            } else if (data[0] == "forward") {
+                self.playNext();
+            } else if (data[0] == "rewind") {
+                self.playPrev();
             }
         },
-        handleError: function(ev)
+
+        error: function(ev)
         {
-            $('.video-buttons').hide();
-            $('.video-info').show();
+
             this.errorCode = this.errorCode != 0 ? this.errorCode: ev.srcElement.error.code;
 
 
@@ -140,10 +84,8 @@
                 break;
             }
 
-            console.error('handleError', this.errorCode, this.message);
-
-            this.delegated('error');
-            $('.video-info').html(this.message);
+            this.publish('error',[this.errorCode, this.message]);
+            
         },
 
         startListening: function(target, eventName, listener) {
@@ -161,143 +103,26 @@
             });
         },
 
-        show: function() {
-            this.__base();
-            $("#" + this.htmlId + " .video-controls").stop().css({
-                "opacity": 1
-            }).show();
-        },
-        hide: function() {
-            this.__base();
-            $("#" + this.htmlId + " .video-controls").hide();
-        },
-
         refresh: function() {
 
-            },
-
-        onFocus: function() {
-
-            var hadFocus = this.hasFocus;
-            this.__base();
-            var self = this;
-            if (!hadFocus) {
-                setTimeout(function() {
-                    self.grid.goTo([2, 0]);
-                },
-                50);
-            }
         },
 
-        subscribes: function() {
-
-            var self = this;
-            return this.__base().concat([
-            ["input",
-            function(ev, data) {
-
-                var sens = data[0];
-
-                console.log("receiveInput", self.id, data);
-
-                if (sens == "left" || sens == "right" || sens == "down" || sens == "up") {
-                    self.grid.go(sens);
-
-                } else if (sens == "hover") {
-                    var m = data[1].match(/\_([^\_]+)$/);
-                    if (m) {
-                        var position = [parseInt(m[1].split(".")[0]), 0];
-                        console.log("p hover", position);
-                        self.grid.goTo(position);
-                    }
-
-
-                } else if (sens == "enter") {
-
-                    var position = self.grid.currentCoords;
-                    if (data[1]) {
-
-                        var m = data[1].match(/\_([^\_]+)$/);
-
-                        //event is not for us
-                        if (!m) {
-                            return;
-                        }
-
-                        position = [parseInt(m[1].split(".")[0]), 0];
-                    }
-                    console.log("p enter", position, self.videoStatus);
-                    if (position[0] == 0) {
-                        //previous
-                        self.player.setCurrentTime(0);
-
-                    } else if (position[0] == 1) {
-                        //reward
-                        self.player.setCurrentTime(self.player.currentTime < 10 ? 0: (self.player.currentTime - 10));
-
-                    } else if (position[0] == 2) {
-                        //play pause stop
-                        if (self.videoStatus == "playing") {
-                            self.pause();
-
-
-                        } else if (self.videoStatus == "stopped" || self.videoStatus == "paused") {
-                            self.setVideoStatus("playing");
-                            self.player.play();
-
-
-                        }
-
-                    } else if (position[0] == 3) {
-                        //foward
-                        self.player.setCurrentTime(self.player.currentTime + 10);
-                    } else if (position[0] == 4) {
-                        //next
-                        self.player.setCurrentTime(self.player.currentTime + 60);
-                    }
-
-                }
-            }]
-            ]);
-
-        },
 
         setVideoStatus: function(status) {
             this.videoStatus = status;
-
-            if (status == "playing") {
-                $('.video-stop , .video-play').hide();
-                $('.video-pause').show();
-            } else if (status == "paused" || status == "stopped") {
-                $('.video-stop , .video-pause').hide();
-                $('.video-play').show();
-            }
-
+            this.publish(status);
         },
 
-        play: function(options)
-        {
-            var self = this;
-            if (typeof options.url == "function") {
-                options.url(function(error, url) {
-                    if (error) {
-                        this.errorCode = 4;
-                        return self.handleError();
-                    }
-                    options.url = url;
-                    self._play(options);
-                })
-            } else {
-                return self._play(options);
-            }
-        },
-
-        _play: function(options) {
+        playWithStaticUrl: function(options) {
+            
             this.playData = options;
 
-            console.log("playData", options);
-
             var isFLV = options["url"].match(/\.flv$/) || options["mime"] == "video/flv";
+
+            
+            if (options["url"] === undefined) {
+                return this.error(-1);
+            }
 
             //try to reuse existing instances because of http://code.google.com/p/chromium/issues/detail?id=68010
             if (this.player && $('#' + this.htmlId + '_video').size()) {
@@ -324,8 +149,7 @@
                 });
 
                 $('#' + this.htmlId + ' .me-plugin').remove();
-                $('#' + this.htmlId + ' .video-controls').remove();
-
+                
 
 
             } else {
@@ -354,8 +178,6 @@
                     });
                 }
             }
-
-            console.info('play', options["url"])
 
             var that = this;
 
@@ -418,130 +240,57 @@
                 error: this.handleError,
                 success: function(me, domNode) {
 
-
-
-                    //      var me = $('#'+this.htmlId+'_video')[0];
                     that.player = me;
 
-                    $('.video-buttons').show();
-                    $('.video-info').hide();
+                    that.publish('success');
 
-                    that.delegated('success');
-
-                    that.startListening(me, 'progress',
-                    function(ev) {
-                        $('.video-duration').text(isNaN(me.duration) ? '--:--': mejs.Utility.secondsToTimeCode(me.duration));
-                        $('.video-time-loaded').css('width', Math.round(100 * me.bufferedBytes / me.bytesTotal) + '%');
-                        that.delegated('progress');
+                    that.startListening(me, 'progress', function(ev) {
+                        that.publish('progress',[{"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
                     });
-                    that.startListening(me, 'playing',
-                    function(ev) {
+                    
+                    that.startListening(me, 'playing', function(ev) {
                         that.setVideoStatus("playing");
-                        that.delegated('playing');
                     });
-                    that.startListening(me, 'timeupdate',
-                    function(ev) {
-                        //that.setVideoStatus("playing");
-                        $('.video-currenttime').text(mejs.Utility.secondsToTimeCode(me.currentTime));
-                        $('.video-time-current').css('width', Math.round(100 * me.currentTime / me.duration) + '%');
-                        $('.video-time-loaded').css('width', Math.round(100 * me.bufferedBytes / me.bytesTotal) + '%');
-                        that.delegated('timeupdate');
+                    
+                    that.startListening(me, 'timeupdate', function(ev) {
+                        that.publish('timeupdate',[{"currentTime":me.currentTime,"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
                     });
-                    that.startListening(me, 'ended',
-                    function(ev) {
+                    
+                    that.startListening(me, 'ended', function(ev) {
                         that.setVideoStatus("stopped");
-                        $('.video-play , .video-pause').hide();
-                        $('.video-stop').show();
-
-                        that.delegated('ended');
-
+                        that.publish('ended');
                         that.playNext();
-
                     });
 
-                    that.startListening(me, 'canplay',
-                    function(ev) {
+                    that.startListening(me, 'canplay', function(ev) {
                         me.play();
                         that.setVideoStatus("playing");
-                        $('.video-buttons').show();
-                        $('.video-info').hide();
-                        that.delegated('canplay');
                     });
 
-                    that.startListening(me, 'error',
-                    function(ev) {
+                    that.startListening(me, 'error', function(ev) {
                         //ignore errors about the gif img unloader
                         if (ev.target.src.match(/\.gif$/)) {
                             return;
                         }
-                        console.log("ERRVIDEO", ev);
                         that.setVideoStatus("stopped");
-
-                        that.handleError(ev);
+                        that.error(ev);
                     });
 
                 }
             });
 
-            $('.video-controls').remove();
-			
-            var buttonsHtml = (typeof this.options['buttonsHtml'] !== 'undefined') ? this.options['buttonsHtml'] :
-            '<span id="' + this.htmlId + '_button_0" class="video-button video-previous joshover">▐◀</span>\
-								<span id="' + this.htmlId + '_button_1" class="video-button video-reward joshover">◀◀ </span>\
-								<span id="' + this.htmlId + '_button_2.0" class="video-button video-play joshover">▶</span>\
-								<span id="' + this.htmlId + '_button_2.1" class="video-button video-pause joshover">▮▮</span>\
-								<span id="' + this.htmlId + '_button_2.2" class="video-button video-stop joshover">■</span>\
-								<span id="' + this.htmlId + '_button_3" class="video-button video-foward joshover">▶▶</span>\
-								<span id="' + this.htmlId + '_button_4" class="video-button video-next joshover">▶▌</span>';
-
-            $('<div class="video-controls">\
-					<div class="video-info">' + ((typeof this.options['pleaseWait'] !== 'undefined') ? this.options['pleaseWait'] : 'Please wait&nbsp;⋅⋅⋅') + '</div>\
-					<div class="video-buttons">' + buttonsHtml +
-            '<span class="video-time"><span class="video-currenttime">00:00</span> / <span class="video-duration">00:00</span></span>\
-					</div>\
-					<div class="video-time-rail"><span class="video-time-total"><span class="video-time-loaded"></span><span class="video-time-current"></span></span></div>\
-				</div>').appendTo("#" + this.htmlId);
-
-            if (options["url"] === undefined)
-            {
-                this.errorCode = -1;
-                this.handleError('undefined');
-            }
-
             this.setVideoStatus("loading");
 
-            $('.video-buttons, .video-pause, .video-stop').hide();
-
-            //Only mouse for now
-            $('.video-time-rail').click(function(e) {
-                var t = $('.video-time-rail');
-                if (that.player) that.player.setCurrentTime(Math.floor(that.player.duration * (e.pageX - t.offset().left) / t.width()));
-            });
-
-        },
-
-        onBlur: function() {
-            this.__base();
-
-            $(".video-controls").hide();
-
-        },
-
-        playNext: function() {
-            var that = this;
-
-            var playlistNextMoves = that.app.tree.getData(that.treeCurrent).playlistNext || ["next"];
-            console.log("playlistNextMoves", that.treeCurrent, that.app.tree.getData(that.treeCurrent).playlistNext, JSON.stringify(playlistNextMoves));
-            that.app.tree.resolveMoves(that.treeCurrent, playlistNextMoves,
-            function(newPath) {
-                that.app.publish("stateGoTo", ["focus", newPath], true);
-                that.app.publish("input", ["enter"]);
-            });
         },
 
         pause: function() {
             this.setVideoStatus("paused");
             if (this.player) this.player.pause();
+        },
+        
+        resume: function() {
+            this.setVideoStatus("playing");
+            if (this.player) this.player.play();
         },
 
         stop: function() {
@@ -609,7 +358,8 @@
 
 
             }
-            console.log("REMOVED VIDEO", this.id);
+            
+            //console.log("REMOVED VIDEO", this.id);
             //$("#"+this.htmlId).html('');
         },
 

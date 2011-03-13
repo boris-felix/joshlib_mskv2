@@ -34,7 +34,8 @@
 
             this.app = app;
             this.id = id;
-            this.options = $.extend({}, this.baseDefaultOptions, this.defaultOptions, options || {});
+            this.options = {};
+            J.extend(this.options, this.baseDefaultOptions, this.defaultOptions, options || {});
             this.htmlId = this.getHtmlId();
             this.children = [];
             this._subscribed = [];
@@ -42,7 +43,7 @@
             this.inserted = false;
 
             this.nextShowHide = false;
-
+            
             var self = this;
             this.showHideSwitch = new J.Utils.DelayedSwitch(function() {
                 self.processShowHide();
@@ -51,6 +52,16 @@
 
             this.treeRoot = false;
             this.treeCurrent = false;
+
+            // Bind event handlers present in the options
+            _.each(this.options,function(handler,k) {
+                if (k.substring(0,2)=="on" && typeof handler=="function") {
+                    var evtName = k.charAt(2).toLowerCase()+k.substring(3);
+                    self.subscribe(evtName,function(ev,data) {
+                        handler(self,ev,data);
+                    });
+                }
+            });
 
             //Listen for any new treeData
             if (this.options.treeRoot) {
@@ -105,7 +116,7 @@
                                     self.show();
                                 }
                             } else if (register=="focus") {
-                                self.onFocus(path);
+                                self.focus(path);
                             }
 
                         } else if (register == "current") {
@@ -114,7 +125,7 @@
 
                         //Was a focus on another element: blur us
                     } else if (register == "focus" && self.hasFocus) {
-                        self.onBlur(path);
+                        self.blur(path);
                     }
                 });
             }
@@ -126,7 +137,7 @@
 
         init: function() {
 
-            },
+        },
 
         /**
 		 * Sets the tree root associated with the element
@@ -171,49 +182,16 @@
         },
 
         /**
-		 * Get the list of subscribed events when the element has focus
-		 * @function
-		 * @return {Array} list of events
-		 */
-        subscribes: function() {
-            return [];
-        },
-
-
-        /**
-		 * Calls a custom event handler
-		 * @function
-		 * @param {String} eventname Name of the event
-		 */
-        event: function(eventname)
-        {
-            // détournement d'évènements
-            if (typeof this.options[eventname] === 'function')
-            {
-                return this.options[eventname](
-                this,
-                // la List en cours
-                eventname
-                // la clé de l'évènement appelant
-                // réfléchir sur la possibilité de proposer en retour d'autres parametres
-                );
-            }
-            return false;
-        },
-
-        /**
-		 * onFocus
+		 * focus
 		 * @function
 		 * @param {String} treePath Path of the focused element in the tree
 		 */
-        onFocus: function(treePath) {
+        focus: function(treePath) {
 
+            this.publish('beforeFocus');
+            
             if (!this.hasFocus)
             {
-                var self = this;
-                _.each(this.subscribes(), function(s) {
-                    self._subscribed.push(self.app.subscribe(s[0], s[1]));
-                });
 
                 if (this.options.showOnFocus === true)
                 {
@@ -222,17 +200,17 @@
 
             }
             this.hasFocus = true;
-            this.event('onAfterFocus');
+            this.publish('afterFocus');
         },
 
         /**
-		 * onBlur
+		 * blur
 		 * @function
 		 */
-        onBlur: function() {
+        blur: function() {
             console.log("onBlur", this.id, this.options.persistFocus);
 
-            this.event("onBeforeBlur");
+            this.publish("beforeBlur");
 
             if (this.options.hideOnBlur === true) {
                 this.hideDelayed();
@@ -243,12 +221,8 @@
             }
 
             this.hasFocus = false;
-            var self = this; 
-            _.each(this._subscribed, function(s) {
-                self.app.unsubscribe(s);
-            });
 
-            this.event("onAfterBlur");
+            this.publish("afterBlur");
         },
 
         /**
@@ -269,7 +243,7 @@
                 $("#" + this.htmlId).html(this.getHtmlInner());
             }
 
-            this.event("onAfterRefresh");
+            this.publish("afterRefresh");
             
             if (typeof callback === 'function') {
                 callback();
@@ -281,9 +255,9 @@
 		 * @function
 		 */
         show: function() {
-            this.event("onBeforeShow");
+            this.publish("beforeShow");
             this.options.show(this);
-            this.event("onAfterShow");
+            this.publish("afterShow");
             this.showHideSwitch.off();
         },
 
@@ -292,9 +266,9 @@
 		 * @function
 		 */
         hide: function() {
-            this.event("onBeforeHide");
+            this.publish("beforeHide");
             this.options.hide(this);
-            this.event("onAfterHide");
+            this.publish("afterHide");
             this.showHideSwitch.off();
         },
 
@@ -342,10 +316,8 @@
                 this.show();
             }
 
-            if (this.options.onAfterInsert) {
-                this.options.onAfterInsert(this);
-            }
-
+            this.publish('afterInsert');
+            
             // Insert children elements that have the autoInsert flag
             for (var i = 0; i < this.children.length; i++) {
                 if (this.children[i].options.autoInsert) {
@@ -359,7 +331,7 @@
 		 * @returns {String} ElementId
 		 */
         getHtmlId: function() {
-            return this.app.id + "_e_" + this.type + "_" + this.id;
+            return this.app.id + "_e_" + this.id;
         },
 
         /**
@@ -372,6 +344,8 @@
         }
 
     });
+    
+    J.extend(J.UIElementBase.prototype,J.PubSub);
 
     J.UIElement = J.UIElementBase;
 

@@ -41,6 +41,15 @@
          */
         onReady:function(callback) {
             window.onload=callback;
+        },
+        
+        /**
+	     * Similar to jQuery.extend & Ext.apply
+         * @function 
+         * @param {Function} Callback
+         */        
+        extend:function() {
+            
         }
 
     };

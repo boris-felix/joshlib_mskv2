@@ -48,12 +48,20 @@
                 ],
                 "dimensions": 2,
                 "onChange": function(coords, elem) {
-                    console.log("onChange", coords, elem);
+                    //console.log("onChange", coords, elem);
+                    
                     self.focusIndex(coords[0]);
                 },
                 "onExit": function(side) {
                     //go to leaf
-                    console.log("onExit", side);
+                    //console.log("onExit", side);
+                    
+                    if (self.options.beforeGridExit) {
+                        if (!self.options.beforeGridExit(self,side)) {
+                            return;
+                        }
+                    }
+                    
                     if (side[1] > 0) {
                         self.app.publish("stateGo", ["focus", "down"], true);
 
@@ -68,58 +76,11 @@
                 },
                 "orientation": this.options.orientation
             });
-        },
-
-        insert: function() {
-            this.__base();
-        },
-
-        getHtmlOpeningTag: function()
-        {
-            return '<' + this.HtmlTag + ' id="' + this.htmlId + '" style="display:none">';
-        },
-
-        getHtmlClosingTag: function()
-        {
-            return '</' + this.HtmlTag.split(/\s/, 2)[0] + '>';
-        },
-
-        getHtmlInner: function()
-        {
-            if (this.isLoading)
-            {
-                if (typeof this.options["loadingTemplate"] == "function") {
-                    return this.options["loadingTemplate"](this);
-                } else {
-                    return this.options["loadingTemplate"];
-                }
-
-            } else {
-                var ret = [];
-                for (var i = 0; i < this.data.length; i++)
-                {
-                    ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
-                }
-                return ret.join("");
-            }
-        },
-
-        getHtml: function()
-        {
-            return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
-        },
-
-        setTreeRoot: function(treeRoot) {
-            this.__base(treeRoot.replace(/\/[^\/]*$/, "/"));
-        },
-
-
-        subscribes: function() {
-
-            var self = this;
-            return this.__base().concat([
-            ["input",
-            function(ev, data) {
+            
+            
+            this.app.subscribe("input",function(ev,data) {
+                
+                
                 //only supports orientation=="up" for now
                 var sens = data[0];
 
@@ -181,18 +142,53 @@
                         dest = self.treeRoot + self.data[self.focusedIndex]["id"];
                     }
 
-                    self.event('onPanelActing');
-
                     self.app.publish("stateGoTo", ["current", dest]);
 
-                    self.event('onPanelActed');
+                }
+                
+            });
+                
+        },
 
+        getHtmlOpeningTag: function()
+        {
+            return '<' + this.HtmlTag + ' id="' + this.htmlId + '" style="display:none">';
+        },
+
+        getHtmlClosingTag: function()
+        {
+            return '</' + this.HtmlTag.split(/\s/, 2)[0] + '>';
+        },
+
+        getHtmlInner: function()
+        {
+            if (this.isLoading)
+            {
+                if (typeof this.options["loadingTemplate"] == "function") {
+                    return this.options["loadingTemplate"](this);
+                } else {
+                    return this.options["loadingTemplate"];
                 }
 
-
-            }]
-            ]);
+            } else {
+                var ret = [];
+                for (var i = 0; i < this.data.length; i++)
+                {
+                    ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
+                }
+                return ret.join("");
+            }
         },
+
+        getHtml: function()
+        {
+            return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
+        },
+
+        setTreeRoot: function(treeRoot) {
+            this.__base(treeRoot.replace(/\/[^\/]*$/, "/"));
+        },
+
 
         refresh: function() {
             this.__base();
@@ -219,12 +215,12 @@
             //this.grid.currentCoords=false;
         },
         /*
-        onBlur:function(path) {
+        blur:function(path) {
             this.grid.currentCoords=false;
             this.__base(path);
         },
 		*/
-        onFocus: function(path)
+        focus: function(path)
         {
 
             if (path.charAt(path.length - 1) == "/") {
@@ -283,7 +279,7 @@
 						{
 							moveObj[prop] = Math.min(0, width - left);
 							// ajout debug
-							alert(moveObj[prop] + "-" + "Passage 1");  // <==============================
+							//alert(moveObj[prop] + "-" + "Passage 1");  // <==============================
 							// end
 							
 							/*
@@ -364,18 +360,18 @@
 										}
 										
 									// left0 = false;
-									alert('false');
+									//alert('false');
 								}
 						}
 					else if (left + width > totalPixels - safetyMargin) {
                         moveObj[prop] = width - left;
 						// ajout debug
-						alert(moveObj[prop] + "-" + "Passage 2"); // <================================
+						//alert(moveObj[prop] + "-" + "Passage 2"); // <================================
 						// end
 						
 						left0 = true;
 						
-						alert(prop);
+						//alert(prop);
 						/*
 						function att()
 							{
@@ -389,11 +385,11 @@
 						
 						if(moveObj[prop] == -1095 && prop == "right")
 							{
-								alert('right - ' + prop);
+								//alert('right - ' + prop);
 							}
 						else if(moveObj[prop] == -1095 && prop == "left")
 							{
-								alert('left - ' + prop);
+								//alert('left - ' + prop);
 							}
 						else if(moveObj[prop] == -614)
 							{
@@ -602,7 +598,7 @@
 								moveObj[prop] = -0;
 							}
 						
-						alert(prop);
+						//alert(prop);
 						
 
 					}

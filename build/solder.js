@@ -105,6 +105,8 @@ exports.config = {
             'js/josh/main.js',
             'js/josh/main_jquery.js',
             
+            'js/josh/pubsub.js',
+            
             'js/josh/uielement.js'
         ]   
     },
@@ -115,6 +117,8 @@ exports.config = {
         js: [
             'js/josh/main.js',
             'js/josh/main_ext.js',
+            
+            'js/josh/pubsub.js',
             
             'js/josh/uielement.js',
             'js/josh/uielement_sencha.js'
@@ -132,6 +136,8 @@ exports.config = {
         'js/josh/utils/delayedswitch.js',
         'js/josh/utils/pool.js',
         'js/josh/utils/datasource.js',
+        
+        
         
         'js/josh/app.js',
         'js/josh/tree.js',        
@@ -155,6 +161,8 @@ exports.config = {
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
+        'js/josh/uielements/mediacontrols/base.js',
+        
         
         'js/josh/targets/web/general.js'
       ]
@@ -167,6 +175,7 @@ exports.config = {
       js: [
         'js/libs/swfobject-2.2.js',
         'js/josh/uielements/video/youtube.js',
+        'js/josh/uielements/mediacontrols/base.js',
         
         'js/josh/targets/web/general.js'
       ]
@@ -179,6 +188,7 @@ exports.config = {
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
+        'js/josh/uielements/mediacontrols/base.js',
         
         'js/josh/targets/10feet/googletv.js'
       ]
@@ -192,6 +202,7 @@ exports.config = {
       js: [
         'js/libs/swfobject-2.2.js',
         'js/josh/uielements/video/youtube.js',
+        'js/josh/uielements/mediacontrols/base.js',
         
         'js/josh/targets/10feet/googletv.js'
       ]
@@ -206,6 +217,7 @@ exports.config = {
       js: [
         'js/josh/inputs/kinect.js',
         'js/josh/uielements/video/mediaelement.js',
+        'js/josh/uielements/mediacontrols/base.js',
         
         'js/josh/targets/10feet/kinectdemo.js'
       ]
