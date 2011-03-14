@@ -63,6 +63,14 @@
                 }
             });
 
+
+            // Forward global events to local listeners when focus is on us
+            this.app.subscribe("input",function(ev, data) {
+                //console.log("Element "+self.id+" catched input event, forwarding to local: ",ev,data,self.hasFocus);
+                if (!self.hasFocus) return;
+                self.publish(ev,data);
+            });
+
             //Listen for any new treeData
             if (this.options.treeRoot) {
 

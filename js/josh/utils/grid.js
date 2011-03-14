@@ -31,14 +31,29 @@
         */
         __constructor: function(options) {
             this.options = options;
-            this.grid = options.grid;
-            this.currentCoords = false;
-            this.orientation = options.orientation || "up";
+            this.options.dimensions = options.dimensions || 2;
+            this.options.orientation = options.orientation || "up";
+            this.options.direction = options.direction || "ltr"; //document.dir ?
+            this.currentCoords = this.options.defaultPosition || false;
+            this.id2coords = {};
+            this.setGrid(options.grid);
+            
+            if (this.options.inputSource) {
+                this.subscribeToInputEvents(this.options.inputSource);
+            }
         },
 
         setGrid: function(grid) {
             this.grid = grid;
-            //this.currentCoords = false;
+            
+            this.id2coords = {};
+            for (var x=0;x<this.grid.length;x++) {
+                for (var y=0;y<this.grid[x].length;y++) {
+                    if (this.grid[x][y]) {
+                        this.id2coords[this.grid[x][y].id] = [y,x];
+                    }
+                }
+            }
         },
 
         get: function(coords) {
@@ -50,22 +65,71 @@
                 this.currentCoords = coords;
                 if (this.options.onChange) this.options.onChange(this.currentCoords, this.get(this.currentCoords));
             }
-            if (this.options.onSelect) this.options.onSelect(this.currentCoords, this.get(this.currentCoords));
+            if (this.options.onMove) this.options.onMove(this.currentCoords, this.get(this.currentCoords));
         },
-
+        
+        goToId: function(id) {
+            if (this.id2coords[id]) {
+                this.goTo(this.id2coords[id]);
+                return true;
+            }
+            return false;
+        },
         go: function(move) {
-            var newx = this.moves[this.orientation][move][0] + this.currentCoords[0];
-            var newy = this.moves[this.orientation][move][1] + this.currentCoords[1];
+            
+            if (move=="default") {
+                return this.goTo(this.options.defaultPosition);
+            } else if (move=="last") { //just to re-publish event
+                return this.goTo(this.currentCoords);
+            }
+            
+            var newx = this.moves[this.options.orientation][move][0] + this.currentCoords[0];
+            var newy = this.moves[this.options.orientation][move][1] + this.currentCoords[1];
             if (
                 (newy < 0 || newy >= this.grid.length || !this.grid[newy]) ||
                 (newx < 0 || newx >= this.grid[newy].length || !this.grid[newy][newx])
             ) {
 
-                if (this.options.onExit) this.options.onExit([ - this.moves[this.orientation][move][0], -this.moves[this.orientation][move][1]]);
+                if (this.options.onExit) this.options.onExit([ - this.moves[this.options.orientation][move][0], -this.moves[this.options.orientation][move][1]]);
 
             } else {
                 this.goTo([newx, newy]);
             }
+        },
+        
+        handleInput:function(data) {
+            
+            var cmd = data[0];
+            
+            if (this.options.direction=="rtl") {
+                if (cmd=="left") {
+                    cmd = "right";
+                } else if (cmd=="right") {
+                    cmd = "left";
+                }
+            }
+            
+            if (cmd == "left" || cmd == "right" || cmd == "down" || cmd == "up") {
+                
+                this.go(cmd);
+                
+            } else if (cmd=="hover") {
+                this.goToId(data[1]);
+                
+            } else if (cmd=="enter") {
+                
+                this.goToId(data[1]);
+                if (this.options.onValidate) this.options.onValidate(this.currentCoords, this.get(this.currentCoords));
+            }
+            
+        },
+        
+        subscribeToInputEvents: function(obj) {
+            var self=this;
+            obj.subscribe("input",function(ev,data) {
+                self.handleInput(data);
+            });
+            
         }
 
     });

@@ -28,27 +28,27 @@
         
         initGrid: function() {
             var self=this;
-            this.defaultGridPosition = [2,0];
             this.grid = new J.Utils.Grid({
                 "grid": [
                 [{
-                    "id": "previous"
+                    "id": "prev"
                 },
                 {
-                    "id": "reward"
+                    "id": "rewind"
                 },
                 {
                     "id": "p"
                 },
                 {
-                    "id": "foward"
+                    "id": "forward"
                 },
                 {
                     "id": "next"
                 }]
                 ],
-                "dimensions": 2,
-                "onSelect": function(coords, elem) {
+                defaultPosition:[2,0],
+                inputSource:this,
+                "onChange": function(coords, elem) {
 
                     $("#" + self.htmlId + " div.video-controls .focused").removeClass("focused");
 
@@ -62,6 +62,21 @@
                     if (side[1] < 0) {
                         self.app.publish("stateGo", ["focus", "up"]);
                     }
+                },
+                "onValidate": function(coords,elem) {
+                    
+                    if (elem.id =="prev") {
+                        self.seekBy(-60);
+                    } else if (elem.id=="rewind") {
+                        self.seekBy(-10);
+                    } else if (elem.id=="p") {
+                        self.playpause();
+                    } else if (elem.id=="forward") {
+                        self.seekBy(10);
+                    } else if (elem.id=="next") {
+                        self.seekBy(60);
+                    }
+                    
                 },
                 "orientation": self.options.orientation || "up"
             });
@@ -114,7 +129,7 @@
             var self = this;
             if (!hadFocus) {
                 setTimeout(function() {
-                    self.grid.goTo(self.defaultGridPosition);
+                    self.grid.goTo(self.grid.options.defaultPosition);
                 },
                 50);
             }
@@ -125,64 +140,6 @@
             
             var self=this;
             
-            this.app.subscribe("input",function(ev,data) {
-                
-                var sens = data[0];
-                
-                if (sens == "left" || sens == "right" || sens == "down" || sens == "up") {
-                    if (!self.hasFocus) return false;
-                    self.grid.go(sens);
-
-                } else if (sens == "hover") {
-                    var m = data[1].match(/\_([^\_]+)$/);
-                    if (m) {
-                        var position = [parseInt(m[1].split(".")[0]), 0];
-                        self.grid.goTo(position);
-                    }
-                    
-                } else if (sens == "enter") {
-
-                    var position = self.grid.currentCoords;
-                    if (data[1]) {
-
-                        var m = data[1].match(/\_([^\_]+)$/);
-
-                        //event is not for us
-                        if (!m) {
-                            return;
-                        }
-
-                        position = [parseInt(m[1].split(".")[0]), 0];
-                    }
-                    
-                    console.log("p enter", position, self.videoStatus);
-                    
-                    if (position[0] == 0) { //previous
-                        
-                        self.seekBy(-60);
-                        
-                    } else if (position[0] == 1) { //rewind
-                        
-                        self.seekBy(-10);
-                        
-                    } else if (position[0] == 2) { //play pause stop
-                        
-                        self.playpause();
-                        
-                    } else if (position[0] == 3) { //foward
-                        
-                        self.seekBy(10);
-                    
-                    } else if (position[0] == 4) { //next
-                        
-                        self.seekBy(60);
-                        
-                    }
-
-                }
-            });
-        
-    
             //Only mouse for now, fixme
             var timeRail = $("#" + this.htmlId + ' .video-time-rail');
             timeRail.live("click",function(e) {
@@ -227,7 +184,7 @@
             
             var self=this;
             elt.subscribe("*",function(ev,data) {
-                console.log("got",ev);
+                
                 if (ev=="error") {
                     $("#" + self.htmlId + ' .video-buttons').hide();
                     $("#" + self.htmlId + ' .video-info').html(data[1]);

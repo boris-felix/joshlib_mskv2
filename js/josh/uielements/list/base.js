@@ -28,7 +28,7 @@
             "browsingSense": 'locale',
             "itemTemplate": function(self, htmlId, data)
             {
-                return "<li id='" + htmlId + "' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
+                return "<li id='" + htmlId + "' josh-ui-element='"+self.id+"' josh-grid-id='"+data.id+"' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
             },
             "loadingTemplate": function(self) {
                 return "<li class='loading'>Loading...</li>";
@@ -39,14 +39,14 @@
             this.isLoading = true;
             this.focusedIndex = null;
             this.data = [];
-            this.id2index = {};
 
             var self = this;
             this.grid = new J.Utils.Grid({
                 "grid": [
                 []
                 ],
-                "dimensions": 2,
+                defaultPosition:[0,0],
+                inputSource:this,
                 "onChange": function(coords, elem) {
                     //console.log("onChange", coords, elem);
                     
@@ -74,79 +74,15 @@
 
                     }
                 },
+                "onValidate":function(coords,elem) {
+                    
+                    var dest = self.treeRoot + elem.id;
+                    self.app.publish("stateGoTo", ["current", dest]);
+                },
                 "orientation": this.options.orientation
             });
             
             
-            this.app.subscribe("input",function(ev,data) {
-                
-                
-                //only supports orientation=="up" for now
-                var sens = data[0];
-
-                /// rtl langages for arabic, hebrew, hindi and japanese
-                if ((self.options.browsingSense == 'locale') && (document.dir == 'rtl'))
-                {
-                    switch (sens)
-                    {
-                    case 'left':
-                        sens = 'right';
-                        break;
-                    case 'right':
-                        sens = 'left';
-                        break;
-                    }
-                }
-                console.log("receiveControl", self.id, data);
-
-
-                if (sens == "hover") {
-                    var split = data[1].split("/");
-                    var lastPath = split[split.length - 1];
-                    if (data[1].indexOf(self.treeRoot) === 0) {
-                        var subPath = data[1].substring(self.treeRoot.length);
-                        if (subPath.indexOf("/") === -1) {
-                            if (self.id2index[subPath] !== undefined) {
-                                self.grid.goTo([self.id2index[subPath], 0]);
-                            }
-                        }
-                    }
-
-                } else if (sens == "left" || sens == "right" || sens == "down" || sens == "up") {
-                    if (!self.hasFocus) return false;
-                    self.grid.go(sens);
-
-                } else if (sens == "enter") {
-
-                    var dest = false;
-
-                    if (data[1]) {
-                        var split = data[1].split("/");
-                        var lastPath = split[split.length - 1];
-                        if (data[1].indexOf(self.treeRoot) === 0) {
-                            var subPath = data[1].substring(self.treeRoot.length);
-                            if (subPath.indexOf("/") === -1) {
-                                if (self.id2index[subPath] !== undefined) {
-                                    dest = self.treeRoot + self.data[self.id2index[subPath]]["id"];
-                                }
-                            }
-                        }
-                        if (!dest) {
-                            return;
-                        }
-                    } else {
-                        if (!self.hasFocus && !data[1]) return false;
-
-                        if (self.isLoading) return false;
-
-                        dest = self.treeRoot + self.data[self.focusedIndex]["id"];
-                    }
-
-                    self.app.publish("stateGoTo", ["current", dest]);
-
-                }
-                
-            });
                 
         },
 
@@ -205,11 +141,6 @@
         setData: function(data) {
             this.__base(data);
 
-            //todo: do this in tree
-            for (var i = 0; i < data.length; i++) {
-                this.id2index[data[i].id] = i;
-            }
-
             this.grid.setGrid([data]);
 
             //this.grid.currentCoords=false;
@@ -227,8 +158,7 @@
                 this.grid.goTo([0, 0]);
             } else {
                 var id = path.split("/").pop();
-                var index = this.id2index[id];
-                this.grid.goTo([index, 0]);
+                this.grid.goToId(id);
             }
 
 

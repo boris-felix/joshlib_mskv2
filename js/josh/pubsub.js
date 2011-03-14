@@ -16,7 +16,7 @@
         **/
         publish: function(message, data, sync) {
 
-            if (J.debug) {
+            if (J.debug && message!="timeupdate") {
                 console.log("publish",message,data,sync);
             }
 
