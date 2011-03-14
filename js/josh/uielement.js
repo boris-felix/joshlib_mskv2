@@ -113,7 +113,6 @@
 
                             var mdata = self.app.tree.getData(self.treeRoot);
                             
-                            console.log("m "+register, mdata, self.treeRoot);
                             
                             if (mdata) {
                                 if (mdata == "loading") {
@@ -140,7 +139,7 @@
 
                         //Was a focus on another element: blur us
                     } else if (register == "focus" && self.hasFocus) {
-                        console.log("BLUR",self.id);
+                        
                         self.blur(path);
                     }
                 });

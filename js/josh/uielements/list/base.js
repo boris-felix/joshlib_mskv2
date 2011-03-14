@@ -82,6 +82,11 @@
                 "orientation": this.options.orientation
             });
             
+            this.subscribe("*",function(ev,data) {
+                if (!self.hasFocus) {
+                    self.focus();
+                }
+            });
             
                 
         },
@@ -160,9 +165,19 @@
                 var id = path.split("/").pop();
                 this.grid.goToId(id);
             }
-
+            
+            if (this.options["persistFocus"] && this.focusedIndex !== null) {
+                $("#" + this.htmlId + '_' + this.focusedIndex).addClass("focused");
+            }
 
             this.__base(path);
+        },
+        
+        blur: function(path) {
+            this.__base(path);
+            if (this.options["persistFocus"] && this.focusedIndex !== null) {
+                $("#" + this.htmlId + '_' + this.focusedIndex).removeClass("focused");
+            }
         },
 
         resetIndex: function() {
