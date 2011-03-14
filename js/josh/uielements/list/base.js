@@ -77,7 +77,7 @@
                 "onValidate":function(coords,elem) {
                     
                     var dest = self.treeRoot + elem.id;
-                    self.app.publish("stateGoTo", ["current", dest]);
+                    self.app.publish("stateGoTo", ["current", dest+""]);
                 },
                 "orientation": this.options.orientation
             });
@@ -550,8 +550,10 @@
 		 */
         focusIndex: function(index)
         {
-            console.log(this.id, "F", index);
 
+            if (index !== null)
+            this.publish("beforeFocusItem",[this.data[index],index]);
+            
             $("#" + this.htmlId + " .focused").removeClass("focused");
 
             this.focusedIndex = index;
@@ -567,6 +569,9 @@
             }
             if (index !== null)
             $("#" + this.htmlId + '_' + index).addClass("focused");
+            
+            if (index !== null)
+            this.publish("afterFocusItem",[this.data[index],index]);
 
         }
     });

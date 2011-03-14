@@ -53,6 +53,10 @@
             this.treeRoot = false;
             this.treeCurrent = false;
 
+            if (typeof this.options.treeRoot == "string") {
+                this.treeRoot=this.options.treeRoot;
+            }
+
             // Bind event handlers present in the options
             _.each(this.options,function(handler,k) {
                 if (k.substring(0,2)=="on" && typeof handler=="function") {
@@ -96,9 +100,12 @@
                 this.app.subscribe("stateChange",function(ev, data) {
                     var path = data[1];
                     var register = data[0];
-
+                    
                     //This treeData is about us!
-                    if (self.options.treeRoot == path || (typeof self.options.treeRoot != "string" && self.options.treeRoot.test(path))) {
+                    if (self.treeRoot == path 
+                        || (typeof self.options.treeRoot != "string" && self.options.treeRoot.test(path))
+                        || (self.treeRoot && self.treeRoot.match(/\/$/) && self.treeRoot==path.replace(/\/[^\/]*$/, "/")) //directory matches item events
+                        ) {
 
                         if (register == "focus" || register == "prefocus") {
 
@@ -133,6 +140,7 @@
 
                         //Was a focus on another element: blur us
                     } else if (register == "focus" && self.hasFocus) {
+                        console.log("BLUR",self.id);
                         self.blur(path);
                     }
                 });
