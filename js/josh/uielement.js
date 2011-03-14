@@ -343,7 +343,7 @@
         },
         
         getHtml:function() {
-            return "<div id='" + this.htmlId + "'>"+this.getHtmlInner()+"</div>";
+            return "<div style='display:none;' id='" + this.htmlId + "'>"+this.getHtmlInner()+"</div>";
         },
         
         getHtmlInner:function() {

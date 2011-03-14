@@ -147,7 +147,7 @@ exports.config = {
         
         'js/josh/uielements/panel/base.js',
         'js/josh/uielements/list/base.js',
-        'js/josh/uielements/list/check-list.js',
+        'js/josh/uielements/list/multiselect.js',
         'js/josh/uielements/video/base.js',
         
         'js/josh/utils/stress.js'
