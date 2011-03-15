@@ -24,10 +24,17 @@
             "orientation": "up",
             "persistFocus": true,
             "autoScroll": false,
+            
             "autoScrollMargin":200,
+            "autoScrollMarginLeft":0,
+            "autoScrollMarginRight":0,
+            
             "autoScrollOffset":300,
-            "browsingSense": 'locale',
-            "animateScroll":200,
+            "autoScrollOffsetLeft":0,
+            "autoScrollOffsetRight":0,
+            
+            "scrollAnimate":200,
+            "scrollEasing":"swing",
             "itemTemplate": function(self, htmlId, data)
             {
                 return "<li id='" + htmlId + "' josh-ui-element='"+self.id+"' josh-grid-id='"+data.id+"' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
@@ -185,7 +192,7 @@
             if (!elt.length || !list) return;
             
             var safetyMargin = 100;
-            var animate = this.options.animateScroll;
+            var animate = this.options.scrollAnimate;
             
             if (this.options.orientation == "up" || this.options.orientation == "down") {
                 var totalPixels = $(list).width();
@@ -203,10 +210,10 @@
             
             var newOffset = currentOffset;
             
-            if (eltPixelsToStart[1]+currentOffset+this.options.autoScrollMargin>totalPixels) {
-                newOffset = -eltPixelsToStart[0] + this.options.autoScrollOffset;
-            } else if (eltPixelsToStart[0]+currentOffset-this.options.autoScrollMargin<0) {
-                newOffset = totalPixels -eltPixelsToStart[1] - this.options.autoScrollOffset;
+            if (eltPixelsToStart[1]+currentOffset+(this.options.autoScrollMarginRight || this.options.autoScrollMargin)>totalPixels) {
+                newOffset = -eltPixelsToStart[0] + (this.options.autoScrollOffsetLeft || this.options.autoScrollOffsetLeft);
+            } else if (eltPixelsToStart[0]+currentOffset-(this.options.autoScrollMarginLeft || this.options.autoScrollMargin)<0) {
+                newOffset = totalPixels -eltPixelsToStart[1] - (this.options.autoScrollOffsetRight || this.options.autoScrollOffset);
             }
             
             //console.log("autoScroll",eltPixelsToStart,totalPixels,currentOffset,newOffset);
@@ -217,14 +224,18 @@
                 var moveObj={}
                 moveObj[movingProperty] = newOffset+"px";
                 if (animate) {
-                    ul.stop().animate(moveObj, animate);
+                    var self=this;
+                    self.publish("scrollStart");
+                    ul.stop().animate(moveObj, animate,this.options.scrollEasing,function() {
+                        self.publish("scrollEnd");
+                    });
                 } else {
                     ul.stop().css(moveObj);
                 }
             }
             
         },
-
+        
         /**
 	     * Sets the currently focused list element
 		 * @function
