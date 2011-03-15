@@ -18,14 +18,16 @@
     {
         type: "List",
         data: [],
-        HtmlTag: 'ul ',
         // style="display:none;"
         defaultOptions: {
             //where is the tree unfolding to
             "orientation": "up",
             "persistFocus": true,
             "autoScroll": false,
+            "autoScrollMargin":200,
+            "autoScrollOffset":300,
             "browsingSense": 'locale',
+            "animateScroll":200,
             "itemTemplate": function(self, htmlId, data)
             {
                 return "<li id='" + htmlId + "' josh-ui-element='"+self.id+"' josh-grid-id='"+data.id+"' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
@@ -93,16 +95,6 @@
                 
         },
 
-        getHtmlOpeningTag: function()
-        {
-            return '<' + this.HtmlTag + ' id="' + this.htmlId + '" style="display:none">';
-        },
-
-        getHtmlClosingTag: function()
-        {
-            return '</' + this.HtmlTag.split(/\s/, 2)[0] + '>';
-        },
-
         getHtmlInner: function()
         {
             if (this.isLoading)
@@ -119,13 +111,8 @@
                 {
                     ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
                 }
-                return ret.join("");
+                return "<ul>"+ret.join("")+"</ul>";
             }
-        },
-
-        getHtml: function()
-        {
-            return this.getHtmlOpeningTag() + this.getHtmlInner() + this.getHtmlClosingTag();
         },
 
         setTreeRoot: function(treeRoot) {
@@ -189,375 +176,53 @@
 
         autoScroll: function() {
 
-            var that = this;
-
-            if (that.data[that.focusedIndex] !== undefined)
-            {
-
-                var container = that.app.baseHtml;
-                if (that.options.orientation == "up" || that.options.orientation == "down") {
-                    var totalPixels = $(container).width();
-                }
-
-                var elt = $('#' + that.htmlId + '_' + that.focusedIndex);
-
-                var safetyMargin = 100;
-                var animate = true;
-				
-				
-                if (elt.length !== 0)
-                {
-                    var left = elt.offset().left - container.offset().left;
-                    var width = elt.width();
-
-                    var list = $('#' + that.htmlId);
-
-                    var prop = "left";
-					
-
-                    if (document.dir == 'rtl') {
-                        prop = "right";
-                        left = totalPixels - left - width;
-                    }
-
-                    var moveObj = {};
-
-                    if (left < 0 + safetyMargin) 
-						{
-							moveObj[prop] = Math.min(0, width - left);
-							// ajout debug
-							//alert(moveObj[prop] + "-" + "Passage 1");  // <==============================
-							// end
-							
-							/*
-							if (q == false && moveObj[prop] == 0)
-								{
-									var p = moveObj[prop];
-									moveObj[prop] = p + o;
-									alert("0 - 1");
-									
-									if (moveObj[prop] == 6000)
-										{
-											alert("0 - 2");
-											moveObj[prop] = (moveObj[prop]-1220);
-										}
-									else
-										{
-											moveObj[prop] - o;
-										}
-									var q;
-								}
-							else if (q)
-								{
-									var q = false;
-								}
-								
-							
-							if (moveObj[prop] == 0 || prop)
-								{
-									moveObj[prop] - 1220;
-								}
-							else
-								{
-									alert('else');
-								}
-							
-								
-							if (moveObj[prop] == 0)
-								{
-									alert('0');
-									
-									if (animate) {
-										list.stop().animate(moveObj, 200);
-										alert('1');
-									} else {
-										list.stop().css(moveObj);
-										alert('2');
-									}
-								}
-							
-							*/
-							
-							if (moveObj[prop] == 0 && left0 == true)
-								{
-									if (left1 == 4)
-										{
-											moveObj[prop] = moveObj[prop] - 4820;
-											left1 = 3;
-										}
-									else if (left1 == 3)
-										{
-											moveObj[prop] = moveObj[prop] - 3620;
-											left1 = 2;
-										}
-									else if (left1 == 2)
-										{
-											moveObj[prop] = moveObj[prop] - 2420;
-											left1 = 1;
-										}
-									else if (left1 == 1)
-										{
-											moveObj[prop] = moveObj[prop] - 1220;
-											left1 = 0;
-										}
-									else if (left1 == 0)
-										{
-											moveObj[prop] = moveObj[prop] + 20;
-											left1 = 4;
-										}
-										
-									// left0 = false;
-									//alert('false');
-								}
-						}
-					else if (left + width > totalPixels - safetyMargin) {
-                        moveObj[prop] = width - left;
-						// ajout debug
-						//alert(moveObj[prop] + "-" + "Passage 2"); // <================================
-						// end
-						
-						left0 = true;
-						
-						//alert(prop);
-						/*
-						function att()
-							{
-								alert(moveObj[prop]);
-							}
-						
-						setInterval(att, 1000);
-						
-						il faudrait faire keyIsUp
-						*/
-						
-						if(moveObj[prop] == -1095 && prop == "right")
-							{
-								//alert('right - ' + prop);
-							}
-						else if(moveObj[prop] == -1095 && prop == "left")
-							{
-								//alert('left - ' + prop);
-							}
-						else if(moveObj[prop] == -614)
-							{
-								moveObj[prop] = -2190;
-							}
-						else if(moveObj[prop] == -957)
-							{
-								moveObj[prop] = -3285;
-							}
-						else if(moveObj[prop] == -721)
-							{
-								moveObj[prop] = -4380;
-							}
-						else if(moveObj[prop] == -1140)
-							{
-								moveObj[prop] = -5475;
-/*-------------------*/		}// AVANCE NIVEAU 2
-						else if(moveObj[prop] == -1272)
-							{
-								moveObj[prop] = -3600;
-/*-------------------*/		}// AVANCE NIVEAU 3
-						else if(moveObj[prop] == -1200 || moveObj[prop] == -1220)
-							{
-								left2 = false;
-								left1 = 0;
-							}
-						else if((moveObj[prop] == -1252 && left2 == false) || moveObj[prop] == -1232)
-							{
-								moveObj[prop] = -2400;
-								left2 = true;
-								left1 = 1;
-								left0 = true;
-							}
-						else if(moveObj[prop] == -1176 || moveObj[prop] == -1156)
-							{
-								moveObj[prop] = -3600;
-								left2 = false;
-								left1 = 2;
-								left0 = true;
-							}
-						else if(moveObj[prop] == -968 || moveObj[prop] == -948 || moveObj[prop] == -1252)
-							{
-								moveObj[prop] = -4800;
-								left2 = false; // ajout car bug
-								left1 = 3;
-								left0 = true;
-							}
-						else if(moveObj[prop] == -978 || moveObj[prop] == -958)
-							{
-								moveObj[prop] = -6000;
-								left1 = 4;
-								left0 = true;
-/*-------------------*/		}// RETOUR -----------------------------------------------------------
-						else if(moveObj[prop] == -4855)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4676)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4218)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4179)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4006)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3762)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3642)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3414)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3147)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3144)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2720)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2373)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2156)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2084)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1709)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1776)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1583)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1283)
-							{
-								moveObj[prop] = -0;
-/* ----------------- */		}// RETOUR 2
-						else if(moveObj[prop] == -5520)
-							{
-								// COME BACK 1
-								moveObj[prop] = -4300;
-							}
-						else if(moveObj[prop] == -5240)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -5088)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4872)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4568)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4427)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4195)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -4004)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3749)
-							{
-								// COME BACK 2
-								moveObj[prop] = -2529;
-							}
-						else if(moveObj[prop] == -3576)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3360)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2928)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2662)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2452)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2280)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -3147)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -2007)
-							{
-								moveObj[prop] = -787;
-							}
-						else if(moveObj[prop] == -1848)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1632)
-							{
-								moveObj[prop] = -0;
-							}
-						else if(moveObj[prop] == -1416)
-							{
-								moveObj[prop] = -0;
-							}
-						
-						//alert(prop);
-						
-
-					}
-
-                    if (animate) {
-                        list.stop().animate(moveObj, 200);
-                    } else {
-                        list.stop().css(moveObj);
-                    }
+            if (this.data[this.focusedIndex] == undefined) return;
+            
+            var elt = $('#' + this.htmlId + '_' + this.focusedIndex);
+            var list = $('#' + this.htmlId);
+            var ul = $('#' + this.htmlId+" ul");
+            
+            if (!elt.length || !list) return;
+            
+            var safetyMargin = 100;
+            var animate = this.options.animateScroll;
+            
+            if (this.options.orientation == "up" || this.options.orientation == "down") {
+                var totalPixels = $(list).width();
+                var movingProperty = "left";
+                var eltPixelsToStart = [elt.position().left,elt.position().left+elt.width()];
+                
+                
+            } else {
+                var totalPixels = $(list).height();
+                var movingProperty = "top";
+                var eltPixelsToStart = [elt.position().top,elt.position().top+elt.height()];
+            }
+            //TODO store the target offset elsewhere (when moving, we don't care about intermediate values)
+            var currentOffset = parseInt(ul.css(movingProperty));
+            
+            var newOffset = currentOffset;
+            
+            if (eltPixelsToStart[1]+currentOffset+this.options.autoScrollMargin>totalPixels) {
+                newOffset = -eltPixelsToStart[0] + this.options.autoScrollOffset;
+            } else if (eltPixelsToStart[0]+currentOffset-this.options.autoScrollMargin<0) {
+                newOffset = totalPixels -eltPixelsToStart[1] - this.options.autoScrollOffset;
+            }
+            
+            //console.log("autoScroll",eltPixelsToStart,totalPixels,currentOffset,newOffset);
+            
+            newOffset = Math.min(0,newOffset);
+            
+            if (newOffset!=currentOffset) {
+                var moveObj={}
+                moveObj[movingProperty] = newOffset+"px";
+                if (animate) {
+                    ul.stop().animate(moveObj, animate);
+                } else {
+                    ul.stop().css(moveObj);
                 }
             }
-
+            
         },
 
         /**
