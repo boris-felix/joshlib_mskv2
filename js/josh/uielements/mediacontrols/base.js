@@ -58,8 +58,10 @@
                         $("#" + self.htmlId + " .video-" + elem.id).addClass("focused");
                     }
                 },
-                "onExit": function(side) {
-                    if (side[1] < 0) {
+                
+                // Mediaplayer controls are usually at the end of the tree but it's just a default.
+                "onExit": function(move,absMove) {
+                    if (absMove=="up") {
                         self.app.publish("stateGo", ["focus", "up"]);
                     }
                 },

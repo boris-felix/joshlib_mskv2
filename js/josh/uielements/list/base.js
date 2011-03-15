@@ -52,22 +52,22 @@
                     
                     self.focusIndex(coords[0]);
                 },
-                "onExit": function(side) {
+                "onExit": function(move,absMove) {
                     //go to leaf
                     //console.log("onExit", side);
                     
                     if (self.options.beforeGridExit) {
-                        if (!self.options.beforeGridExit(self,side)) {
+                        if (!self.options.beforeGridExit(self,move,absMove)) {
                             return;
                         }
                     }
                     
-                    if (side[1] > 0) {
+                    if (absMove=="down") {
                         self.app.publish("stateGo", ["focus", "down"], true);
 
 
                         //go to parent
-                    } else if (side[1] < 0) {
+                    } else if (absMove=="up") {
                         if (self.treeRoot == '/') return false;
 
                         self.app.publish("stateGo", ["focus", "up"], true);
@@ -82,12 +82,14 @@
                 "orientation": this.options.orientation
             });
             
+            /*
             this.subscribe("*",function(ev,data) {
                 if (!self.hasFocus) {
-                    self.focus();
+                    self.hasFocus=true;
+                    self.focusIndex(self.focusedIndex || 0);
                 }
             });
-            
+            */
                 
         },
 
