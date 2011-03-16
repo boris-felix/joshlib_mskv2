@@ -277,7 +277,6 @@
 
             if (index !== null)
             this.publish("beforeFocusItem",[this.data[index],index]);
-            console.log("focus",index);
             
             $("#" + this.htmlId + " .focused").removeClass("focused");
 
