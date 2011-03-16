@@ -1,4 +1,4 @@
-(function(J, $) {
+(function(J,_, $) {
 
 
     J.Utils.Grid = J.Class(
@@ -20,6 +20,18 @@
                 "up": [0, 1],
                 "right": [1, 0],
                 "left": [ - 1, 0]
+            },
+            "right":{
+                "down":[1,0],
+                "up":[-1,0],
+                "left":[0,1],
+                "right":[0,-1]
+            },
+            "left":{
+                "down":[1,0],
+                "up":[-1,0],
+                "left":[0,-1],
+                "right":[0,1]
             }
         },
 
@@ -32,7 +44,7 @@
         __constructor: function(options) {
             this.options = options;
             this.options.dimensions = options.dimensions || 2;
-            this.options.orientation = options.orientation || "up";
+            this.options.orientation = options.orientation || "down";
             this.options.direction = options.direction || "ltr"; //document.dir ?
             this.currentCoords = this.options.defaultPosition || false;
             this.id2coords = {};
@@ -90,7 +102,16 @@
                 (newx < 0 || newx >= this.grid[newy].length || !this.grid[newy][newx])
             ) {
 
-                if (this.options.onExit) this.options.onExit([ - this.moves[this.options.orientation][move][0], -this.moves[this.options.orientation][move][1]]);
+                //absMove is the move that would have been made in the reference "down" orientation
+                var oriMove = this.moves[this.options.orientation][move].join("-");
+                var absMove = false;
+                _.each(this.moves["down"],function(elt,k) {
+                    if (elt.join("-")==oriMove) {
+                        absMove = k;
+                    }
+                });
+
+                if (this.options.onExit) this.options.onExit(move,absMove); //[ - this.moves[this.options.orientation][move][0], -this.moves[this.options.orientation][move][1]]);
 
             } else {
                 this.goTo([newx, newy]);
@@ -101,7 +122,7 @@
             
             var cmd = data[0];
             
-            if (this.options.direction=="rtl") {
+            if (this.options.direction=="rtl" && (this.options.orientation=="up" || this.options.orientation=="down")) {
                 if (cmd=="left") {
                     cmd = "right";
                 } else if (cmd=="right") {
@@ -136,4 +157,4 @@
 
 
 
-})(Joshlib, jQuery);
+})(Joshlib, _, jQuery);
