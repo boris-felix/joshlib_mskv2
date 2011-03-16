@@ -1,4 +1,4 @@
-(function(J, $) {
+(function(J, $, _) {
 
     var orientations = ["up", "right", "down", "left"];
     var inv = {
@@ -35,6 +35,9 @@
             
             "scrollAnimate":200,
             "scrollEasing":"swing",
+            
+            "incrementalRefresh":false,
+            
             "itemTemplate": function(self, htmlId, data)
             {
                 return "<li id='" + htmlId + "' josh-ui-element='"+self.id+"' josh-grid-id='"+data.id+"' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
@@ -128,7 +131,35 @@
 
 
         refresh: function() {
-            this.__base();
+            
+            if (this.options.incrementalRefresh && $("#" + this.htmlId+" ul").size()) {
+                
+                //Try to sync HTML and data incrementally
+                
+                var maxSyncedIndex = 0;
+                var liElements = $("#" + this.htmlId+" li");
+                for (var i=0;i<this.data.length;i++) {
+                    if (liElements.slice(0,1).attr("josh-grid-id")!=this.data[i].id) {
+                        maxSyncedIndex=0;
+                        break;
+                    }
+                }
+                liElements.slice(maxSyncedIndex).remove();
+                
+                //console.log("maxSynced",maxSyncedIndex,$("#" + this.htmlId+" ul"));
+                
+                var ret = [];
+                for (var i = maxSyncedIndex; i < this.data.length; i++)
+                {
+                    ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
+                }
+                
+                $("#" + this.htmlId+" ul").append(ret.join(""));
+                
+            } else {
+                this.__base();
+            }
+            
             //console.log("REF",this.id,this.focusedIndex);
             if (this.options["persistFocus"] && this.focusedIndex !== null) {
                 $("#" + this.htmlId + '_' + this.focusedIndex).addClass("focused");
@@ -269,4 +300,4 @@
         }
     });
 
-})(Joshlib, jQuery);
+})(Joshlib, jQuery, _);

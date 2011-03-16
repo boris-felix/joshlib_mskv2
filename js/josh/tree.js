@@ -326,8 +326,7 @@
                         this.data[dir][i] = data;
                     } else {
                         var self = this;
-                        _.map(data,
-                        function(value, key) {
+                        _.map(data,function(value, key) {
                             self.data[dir][i][key] = value;
                         });
 
