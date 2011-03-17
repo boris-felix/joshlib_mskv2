@@ -56,10 +56,9 @@
             } else if (data[0] == "prev") {
                 this.playPrev();
             } else if (data[0] == "seekTo") {
-                if (this.player)  this.setCurrentTime(Math.max(0,data[1]));
+                this.setCurrentTime(data[1]);
             } else if (data[0] == "seekBy") {
-                if (this.player) this.player.setCurrentTime(Math.max(0,this.player.currentTime+data[1]));
-                this.playPrev();
+                this.setCurrentTime(this.getCurrentTime()+data[1]);
             }
         },
 
@@ -309,7 +308,16 @@
             this.setVideoStatus("stopped");
             if (this.player) this.player.stop();
         },
-
+        
+        getCurrentTime:function() {
+            if (this.player) return this.player.currentTime;
+            return 0;
+        },
+        
+        setCurrentTime:function(seconds) {
+            if (this.player) this.player.setCurrentTime(Math.max(0,seconds));
+        },
+        
         remove: function()
         {
             this.playingPath = false;
