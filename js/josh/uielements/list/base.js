@@ -132,6 +132,7 @@
 
         refresh: function() {
             
+            
             if (this.options.incrementalRefresh && $("#" + this.htmlId+" ul").size()) {
                 
                 //Try to sync HTML and data incrementally
@@ -139,14 +140,13 @@
                 var maxSyncedIndex = 0;
                 var liElements = $("#" + this.htmlId+" li");
                 for (var i=0;i<this.data.length;i++) {
-                    if (liElements.slice(0,1).attr("josh-grid-id")!=this.data[i].id) {
-                        maxSyncedIndex=0;
+                    if (liElements.slice(i,i+1).attr("josh-grid-id")!=this.data[i].id) {
+                        maxSyncedIndex=i;
                         break;
                     }
                 }
-                liElements.slice(maxSyncedIndex).remove();
                 
-                //console.log("maxSynced",maxSyncedIndex,$("#" + this.htmlId+" ul"));
+                liElements.slice(maxSyncedIndex).remove();
                 
                 var ret = [];
                 for (var i = maxSyncedIndex; i < this.data.length; i++)

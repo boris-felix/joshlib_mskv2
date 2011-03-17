@@ -25,6 +25,8 @@
         setSelection:function(ids) {
             this.selection = ids;
             
+            this.publish("selectionChange",[ids]);
+            
             $("#" + this.htmlId + " .activated").removeClass("activated");
             
             _.each(this.selection,function(id) {
