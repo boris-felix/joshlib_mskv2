@@ -314,6 +314,10 @@
             return 0;
         },
         
+        getTotalTime:function() {
+            return this.videoDuration;
+        },
+        
         setCurrentTime:function(seconds) {
             if (this.player) this.player.setCurrentTime(Math.max(0,seconds));
         },
