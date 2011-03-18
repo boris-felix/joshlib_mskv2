@@ -66,6 +66,8 @@
                     }
                 }
             }
+            
+            if (this.options.onGrid) this.options.onGrid(this.grid);
         },
 
         get: function(coords) {

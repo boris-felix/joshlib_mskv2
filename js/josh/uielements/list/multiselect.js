@@ -20,6 +20,10 @@
                     self.setSelection(self.selection.concat([elem.id]));
                 }
             }
+           
+            this.subscribe("afterRefresh",function() {
+                self.setSelection(self.selection);
+            });
         },
         
         setSelection:function(ids) {
@@ -30,6 +34,7 @@
             $("#" + this.htmlId + " .activated").removeClass("activated");
             
             _.each(this.selection,function(id) {
+                if (!this.grid.id2coords[id]) return;
                 $("#" + this.htmlId + '_' + this.grid.id2coords[id][0]).addClass("activated");
             },this);
             

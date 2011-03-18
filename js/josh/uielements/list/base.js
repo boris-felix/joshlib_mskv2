@@ -132,6 +132,7 @@
 
         refresh: function() {
             
+            console.log(this.id,"ref");
             
             if (this.options.incrementalRefresh && $("#" + this.htmlId+" ul").size()) {
                 
@@ -155,6 +156,8 @@
                 }
                 
                 $("#" + this.htmlId+" ul").append(ret.join(""));
+                
+                this.publish("afterRefresh");
                 
             } else {
                 this.__base();
