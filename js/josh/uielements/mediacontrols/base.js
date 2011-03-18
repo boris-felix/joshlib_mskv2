@@ -1,4 +1,4 @@
-(function(J, $) {
+(function(J, $, _) {
 
 
     /**
@@ -17,11 +17,14 @@
             
             this.subscribeToInput();
             
+            this.subscribeToPlayerToken=false;
+            
             if (this.options.media) {
                 var self=this;
                 this.subscribe("afterInsert",function() {
                     self.subscribeToPlayer(self.app.ui[self.options.media]);
                 });
+                
             }
             
         },
@@ -159,9 +162,9 @@
         },
         
         playpause:function() {
-            
+            console.log(this.player.videoStatus);
             if (this.player.videoStatus == "playing") {
-                
+                console.log("pause");
                 this.player.publish("input",["pause"]);
 
             } else if (this.player.videoStatus == "stopped" || this.player.videoStatus == "paused") {
@@ -181,11 +184,19 @@
     	},
         
         subscribeToPlayer: function(elt) {
+
+            // Already subscribed ?
+            if (this.player && this.player.id == elt.id) return;
+            
+            // Subscribed to another player ?
+            if (this.player && this.subscribeToPlayerToken) {
+                this.player.unsubscribe(this.subscribeToPlayerToken);
+            }
             
             this.player=elt;
             
             var self=this;
-            elt.subscribe("*",function(ev,data) {
+            this.subscribeToPlayerToken = elt.subscribe("*",function(ev,data) {
                 
                 if (ev=="error") {
                     $("#" + self.htmlId + ' .video-buttons').hide();
@@ -230,4 +241,4 @@
     
     
 
-})(Joshlib, jQuery);
+})(Joshlib, jQuery, _);
