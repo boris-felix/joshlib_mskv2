@@ -152,9 +152,7 @@
                 $('#' + this.htmlId + '_video').attr("autobuffer", isFLV ? false: true);
                 $('#' + this.htmlId + '_video').attr("preload", isFLV ? false: true);
                 $('#' + this.htmlId + '_video').css({
-                    "display": isFLV ? "none": "block",
-                    "width": "",
-                    "height": ""
+                    "display": isFLV ? "none": "block"
                 });
 
                 $('#' + this.htmlId + ' .me-plugin').remove();
@@ -177,6 +175,9 @@
             $('#' + this.htmlId + '_video').css({
                 //'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
                 //'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
+                "width": $('#' + this.htmlId).width()+"px",
+                "height": $('#' + this.htmlId).height()+"px",
+                
                 'z-index': 00
             });
 
@@ -233,7 +234,6 @@
                 }
             };
 
-
             mejs.HtmlMediaElementShim.myCreate($('#' + this.htmlId + "_video")[0], {
                 pluginPath: "/swf/",
                 videoWidth: $('#' + this.htmlId + "_video").width(),
@@ -244,9 +244,11 @@
                 enablePluginSmoothing: true,
 
                 type: options["mime"],
-                //type:"native",
+                //mode:"shim",
                 //enablePluginDebug:true,
-                error: this.handleError,
+                error: function(e) {
+                    that.error(e);
+                },
                 success: function(me, domNode) {
 
                     that.player = me;
@@ -389,7 +391,7 @@
 
         getHtml: function()
         {
-            return "<div id='" + this.htmlId + "'></div>";
+            return "<div id='" + this.htmlId + "'></div>"; //"<div id='" + this.htmlId + "__overlay'></div>";
         }
 
     });

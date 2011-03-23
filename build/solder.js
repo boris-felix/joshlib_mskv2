@@ -13,12 +13,12 @@ exports.config = {
         options: {
           bin:["/usr/bin/sass","/home/node/.gem/ruby/1.8/bin/sass"]
         }
-    },{
+    }/*,{
       name   : 'yui',
       options: {
         jar: __dirname+'/yuicompressor-2.4.2.jar'
       }
-    }],
+    }*/],
 
     js: [{
       name   : 'yui',
@@ -89,7 +89,7 @@ exports.config = {
     
     'mediaelement': {
         css:[
-            "css/mediaelement/mediaelementplayer.scss"
+            //"css/mediaelement/mediaelementplayer.scss"
            // "css/mediaelement/mejs-skins.css"
         ],
         js:[
@@ -157,7 +157,7 @@ exports.config = {
     'joshlib-web': {
       requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
-        'css/style.css'
+       // 'css/style.css'
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
@@ -170,7 +170,7 @@ exports.config = {
     'joshlib-web-youtube': {
       requires: ["joshlib-bootstrap-jquery","joshlib"],
       css: [
-        'css/style.css'
+      //  'css/style.css'
       ],
       js: [
         'js/libs/swfobject-2.2.js',
@@ -183,8 +183,8 @@ exports.config = {
     'joshlib-googletv': {
       requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
-        'css/style.css',
-        'css/targets/googletv.scss'
+      //  'css/style.css',
+      //    'css/targets/googletv.scss'
       ],
       js: [
         'js/josh/uielements/video/mediaelement.js',
@@ -196,8 +196,8 @@ exports.config = {
     'joshlib-googletv-youtube': {
       requires: ["joshlib-bootstrap-jquery","joshlib"],
       css: [
-        'css/style.css',
-        'css/targets/googletv.scss'
+      //  'css/style.css',
+    //    'css/targets/googletv.scss'
       ],
       js: [
         'js/libs/swfobject-2.2.js',
@@ -211,8 +211,8 @@ exports.config = {
     'joshlib-kinectdemo': {
       requires: ["joshlib-bootstrap-jquery","joshlib","mediaelement"],
       css: [
-        'css/style.css',
-        'css/targets/googletv.scss'
+      //  'css/style.css',
+      // 'css/targets/googletv.scss'
       ],
       js: [
         'js/josh/inputs/kinect.js',

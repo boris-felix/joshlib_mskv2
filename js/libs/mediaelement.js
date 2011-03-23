@@ -15,7 +15,7 @@
 var mejs = mejs || {};
 
 // version number
-mejs.version = '2.0.6';
+mejs.version = '2.1.2';
 
 // player number (for missing, same id attr)
 mejs.meIndex = 0;
@@ -23,10 +23,10 @@ mejs.meIndex = 0;
 // media types accepted by plugins
 mejs.plugins = {
 	silverlight: [
-		{version: [3,0], types: ['video/mp4','video/m4v','video/mov','video/wmv','audio/wma','audio/m4a','audio/mp3','audio/wav']}
+		{version: [3,0], types: ['video/mp4','video/m4v','video/mov','video/wmv','audio/wma','audio/m4a','audio/mp3','audio/wav','audio/mpeg']}
 	],
 	flash: [
-		{version: [9,0,124], types: ['video/mp4','video/m4v','video/mov','video/flv','audio/flv','audio/mp3','audio/m4a']}
+		{version: [9,0,124], types: ['video/mp4','video/m4v','video/mov','video/flv','video/x-flv','audio/flv','audio/x-flv','audio/mp3','audio/m4a','audio/mpeg']}
 		//,{version: [11,0], types: ['video/webm']} // for future reference
 	]
 };
@@ -184,7 +184,7 @@ PluginDetector.addPlugin('acrobat','Adobe Acrobat','application/pdf','AcroPDF.PD
 */
 
 // special case for Android which sadly doesn't implement the canPlayType function (always returns '')
-if (mejs.PluginDetector.ua.match(/Android 2\.[12]/) !== null) {
+if (mejs.PluginDetector.ua.match(/android 2\.[12]/) !== null) {
 	HTMLMediaElement.canPlayType = function(type) {
 		return (type.match(/video\/(mp4|m4v)/gi) !== null) ? 'probably' : '';
 	};
@@ -195,17 +195,17 @@ mejs.MediaFeatures = {
 	init: function() {
 		var
 			nav = mejs.PluginDetector.nav,
-			ua = mejs.PluginDetector.ua,
+			ua = mejs.PluginDetector.ua.toLowerCase(),
 			i,
 			v,
 			html5Elements = ['source','track','audio','video'];
 
-		// detect browsers
-		this.isiPad = (ua.match(/iPad/i) !== null);
-		this.isiPhone = (ua.match(/iPhone/i) !== null);
-		this.isAndroid = (ua.match(/Android/i) !== null);
-		this.isIE = (nav.appName.indexOf("Microsoft") != -1);
-		this.isChrome = (ua.match(/Chrome/gi) !== null);
+		// detect browsers (only the ones that have some kind of quirk we need to work around)
+		this.isiPad = (ua.match(/ipad/i) !== null);
+		this.isiPhone = (ua.match(/iphone/i) !== null);
+		this.isAndroid = (ua.match(/android/i) !== null);
+		this.isIE = (nav.appName.toLowerCase().indexOf("microsoft") != -1);
+		this.isChrome = (ua.match(/chrome/gi) !== null);
 
 		// create HTML5 media elements for IE before 9, get a <video> element for fullscreen detection
 		for (i=0; i<html5Elements.length; i++) {
@@ -227,6 +227,7 @@ extension methods to <video> or <audio> object to bring it into parity with Plug
 */
 mejs.HtmlMediaElement = {
 	pluginType: 'native',
+	isFullScreen: false,
 
 	setCurrentTime: function (time) {
 		this.currentTime = time;
@@ -286,6 +287,7 @@ mejs.PluginMediaElement.prototype = {
 	// special
 	pluginElement: null,
 	pluginType: '',
+	isFullScreen: false,
 
 	// not implemented :(
 	playbackRate: -1,
@@ -298,6 +300,7 @@ mejs.PluginMediaElement.prototype = {
 	ended: false,
 	seeking: false,
 	duration: 0,
+	error: null,
 
 	// HTML5 get/set properties, but only set (updated by event handlers)
 	muted: false,
@@ -416,6 +419,19 @@ mejs.PluginMediaElement.prototype = {
 		this.events[eventName] = this.events[eventName] || [];
 		this.events[eventName].push(callback);
 	},
+	removeEventListener: function (eventName, callback) {
+		if (!eventName) { this.events = {}; return true; }
+		var callbacks = this.events[eventName];
+		if (!callbacks) return true;
+		if (!callback) { this.events[eventName] = []; return true; }
+		for (i = 0; i < callbacks.length; i++) {
+			if (callbacks[i] === callback) {
+				this.events[eventName].splice(i, 1);
+				return true;
+			}
+		}
+		return false;
+	},	
 	dispatchEvent: function (eventName) {
 		var i,
 			args,
@@ -511,11 +527,17 @@ mejs.MediaPluginBridge = {
 Default options
 */
 mejs.MediaElementDefaults = {
+	// allows testing on HTML5, flash, silverlight
+	// auto: attempts to detect what the browser can do
+	// native: forces HTML5 playback
+	// shim: disallows HTML5, will attempt either Flash or Silverlight
+	// none: forces fallback view
+	mode: 'auto',
+	// remove or reorder to change plugin priority and availability
+	plugins: ['flash','silverlight'],
 	// shows debug errors on screen
 	enablePluginDebug: false,
-	// remove or reorder to change plugin priority
-	plugins: ['flash','silverlight'],
-	// specify to force MediaElement into a mode
+	// overrides the type specified, useful for dynamic instantiation
 	type: '',
 	// path to Flash and Silverlight plugins
 	pluginPath: mejs.Utility.getScriptPath(['mediaelement.js','mediaelement.min.js','mediaelement-and-player.js','mediaelement-and-player.min.js']),
@@ -546,7 +568,7 @@ and returns either the native element or a Flash/Silverlight version that
 mimics HTML5 MediaElement
 */
 mejs.MediaElement = function (el, o) {
-	mejs.HtmlMediaElementShim.create(el,o);
+	return mejs.HtmlMediaElementShim.create(el,o);
 };
 
 mejs.HtmlMediaElementShim = {
@@ -580,10 +602,10 @@ mejs.HtmlMediaElementShim = {
 
 		if (playback.method == 'native') {
 			// add methods to native HTMLMediaElement
-			this.updateNative( htmlMediaElement, options, autoplay, preload, playback);
+			return this.updateNative( htmlMediaElement, options, autoplay, preload, playback);
 		} else if (playback.method !== '') {
 			// create plugin to mimic HTMLMediaElement
-			this.createPlugin( htmlMediaElement, options, isVideo, playback.method, (playback.url !== null) ? mejs.Utility.absolutizeUrl(playback.url) : '', poster, autoplay, preload, controls);
+			return this.createPlugin( htmlMediaElement, options, isVideo, playback.method, (playback.url !== null) ? mejs.Utility.absolutizeUrl(playback.url) : '', poster, autoplay, preload, controls);
 		} else {
 			// boo, no HTML5, no Flash, no Silverlight.
 			this.createErrorMessage( htmlMediaElement, options, (playback.url !== null) ? mejs.Utility.absolutizeUrl(playback.url) : '', poster );
@@ -605,7 +627,7 @@ mejs.HtmlMediaElementShim = {
 			pluginVersions,
 			pluginInfo;
 
-		// STEP 1: Get Files from <video src> or <source src>
+		// STEP 1: Get URL and type from <video src> or <source src>
 
 		// supplied type overrides all HTML
 		if (typeof (options.type) != 'undefined' && options.type !== '') {
@@ -632,9 +654,12 @@ mejs.HtmlMediaElementShim = {
 		// STEP 2: Test for playback method
 
 		// test for native playback first
-		if (supportsMediaTag) {
+		if (supportsMediaTag && (options.mode === 'auto' || options.mode === 'native')) {
 			for (i=0; i<mediaFiles.length; i++) {
-				if (htmlMediaElement.canPlayType(mediaFiles[i].type).replace(/no/, '') !== '') {
+				// normal check
+				if (htmlMediaElement.canPlayType(mediaFiles[i].type).replace(/no/, '') !== '' 
+					// special case for Mac/Safari 5.0.3 which answers '' to canPlayType('audio/mp3') but 'maybe' to canPlayType('audio/mpeg')
+					|| htmlMediaElement.canPlayType(mediaFiles[i].type.replace(/mp3/,'mpeg')).replace(/no/, '') !== '') {
 					result.method = 'native';
 					result.url = mediaFiles[i].url;
 					return result;
@@ -643,36 +668,38 @@ mejs.HtmlMediaElementShim = {
 		}
 
 		// if native playback didn't work, then test plugins
-		for (i=0; i<mediaFiles.length; i++) {
-			type = mediaFiles[i].type;
+		if (options.mode === 'auto' || options.mode === 'shim') {
+			for (i=0; i<mediaFiles.length; i++) {
+				type = mediaFiles[i].type;
 
-			// test all plugins in order of preference [silverlight, flash]
-			for (j=0; j<options.plugins.length; j++) {
+				// test all plugins in order of preference [silverlight, flash]
+				for (j=0; j<options.plugins.length; j++) {
 
-				pluginName = options.plugins[j];
+					pluginName = options.plugins[j];
 
-				// test version of plugin (for future features)
-				pluginVersions = mejs.plugins[pluginName];
-				for (k=0; k<pluginVersions.length; k++) {
-					pluginInfo = pluginVersions[k];
+					// test version of plugin (for future features)
+					pluginVersions = mejs.plugins[pluginName];
+					for (k=0; k<pluginVersions.length; k++) {
+						pluginInfo = pluginVersions[k];
 
-					// test if user has the correct plugin version
-					if (mejs.PluginDetector.hasPluginVersion(pluginName, pluginInfo.version)) {
+						// test if user has the correct plugin version
+						if (mejs.PluginDetector.hasPluginVersion(pluginName, pluginInfo.version)) {
 
-						// test for plugin playback types
-						for (l=0; l<pluginInfo.types.length; l++) {
-							// find plugin that can play the type
-							if (type == pluginInfo.types[l]) {
-								result.method = pluginName;
-								result.url = mediaFiles[i].url;
-								return result;
+							// test for plugin playback types
+							for (l=0; l<pluginInfo.types.length; l++) {
+								// find plugin that can play the type
+								if (type == pluginInfo.types[l]) {
+									result.method = pluginName;
+									result.url = mediaFiles[i].url;
+									return result;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-
+		
 		// what if there's nothing to play? just grab the first available
 		if (result.method === '') {
 			result.url = mediaFiles[0].url;
@@ -689,7 +716,15 @@ mejs.HtmlMediaElementShim = {
 			ext = url.substring(url.lastIndexOf('.') + 1);
 			return ((isVideo) ? 'video' : 'audio') + '/' + ext;
 		} else {
-			return type;
+			// only return the mime part of the type in case the attribute contains the codec
+			// see http://www.whatwg.org/specs/web-apps/current-work/multipage/video.html#the-source-element
+			// `video/mp4; codecs="avc1.42E01E, mp4a.40.2"` becomes `video/mp4`
+			
+			if (type && ~type.indexOf(';')) {
+				return type.substr(0, type.indexOf(';')); 
+			} else {
+				return type;
+			}
 		}
 	},
 
@@ -819,7 +854,8 @@ mejs.HtmlMediaElementShim = {
 'allowScriptAccess="always" ' +
 'allowFullScreen="true" ' +
 'type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" ' +
-'src="' + options.pluginPath + options.flashName + '?' + initVars.join('&') + '" ' +
+'src="' + options.pluginPath + options.flashName + '" ' +
+'flashvars="' + initVars.join('&') + '" ' +
 'width="' + width + '" ' +
 'height="' + height + '"></embed>';
 				}
@@ -829,6 +865,8 @@ mejs.HtmlMediaElementShim = {
 		htmlMediaElement.style.display = 'none';
 
 		// FYI: options.success will be fired by the MediaPluginBridge
+		
+		return pluginMediaElement;
 	},
 
 	updateNative: function(htmlMediaElement, options, autoplay, preload, playback) {
@@ -837,26 +875,36 @@ mejs.HtmlMediaElementShim = {
 			htmlMediaElement[m] = mejs.HtmlMediaElement[m];
 		}
 
-		// special case to enforce preload attribute (Chrome doesn't respect this)
-		if (mejs.MediaFeatures.isChrome && preload == 'none' && autoplay !== '') {
-			// forces the browser to stop loading
+		
+		if (mejs.MediaFeatures.isChrome) {
+		
+			// special case to enforce preload attribute (Chrome doesn't respect this)
+			if (preload === 'none' && !autoplay) {
+			
+				// forces the browser to stop loading (note: fails in IE9)
+				htmlMediaElement.src = '';
+				htmlMediaElement.load();
+				htmlMediaElement.canceledPreload = true;
 
-			htmlMediaElement.src = '';
-			htmlMediaElement.load();
-			htmlMediaElement.canceledPreload = true;
-
-			htmlMediaElement.addEventListener('play',function() {
-				if (htmlMediaElement.canceledPreload) {
-					htmlMediaElement.src = playback.url;
-					htmlMediaElement.load();
-					htmlMediaElement.play();
-					htmlMediaElement.canceledPreload = false;
-				}
-			}, false);
+				htmlMediaElement.addEventListener('play',function() {
+					if (htmlMediaElement.canceledPreload) {
+						htmlMediaElement.src = playback.url;
+						htmlMediaElement.load();
+						htmlMediaElement.play();
+						htmlMediaElement.canceledPreload = false;
+					}
+				}, false);
+			// for some reason Chrome forgets how to autoplay sometimes.
+			} else if (autoplay) {
+				htmlMediaElement.load();
+				htmlMediaElement.play();
+			}
 		}
 
 		// fire success code
 		options.success(htmlMediaElement, htmlMediaElement);
+		
+		return htmlMediaElement;
 	}
 };
 

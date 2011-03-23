@@ -14,9 +14,10 @@
             showOnPreFocus: true,
             hideOnBlur: true,
             show:function(that) {
-                $("#" + that.htmlId).css({
+                $("#" + that.htmlId).show(); /*
+                .css({
                     "opacity": 1
-                }).show();
+                })*/
             },
             hide:function(that) {
                 $("#" + that.htmlId).hide();
