@@ -226,8 +226,8 @@
                     $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
                     
                 } else if (ev=="ended") {
-                    $("#" + self.htmlId + ' .video-play ,#' + self.htmlId + ' .video-pause').hide();
-                    $("#" + self.htmlId + ' .video-stop').show();
+                    $("#" + self.htmlId + ' .video-stop ,#' + self.htmlId + ' .video-pause').hide();
+                    $("#" + self.htmlId + ' .video-play').show();
                     
                 } else if (ev=="canplay") {
                     $("#" + self.htmlId + ' .video-buttons').show();

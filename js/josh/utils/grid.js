@@ -104,6 +104,44 @@
                 (newx < 0 || newx >= this.grid[newy].length || !this.grid[newy][newx])
             ) {
 
+
+                // Sticky grid : try to find an item, even if it's not strictly in the same column/line
+                if (this.options.sticky) {
+                    
+                    // if x didn't change
+                    if (this.grid[newy] && this.moves[this.options.orientation][move][0]==0) {
+                        //try to find in the same y line
+                        var closestx = false;
+                        
+                        for (var i=0;i<this.grid[newy].length;i++) {
+                            if (this.grid[newy][i] && (closestx===false || Math.abs(newx-i)<Math.abs(newx-closestx))) {
+                                closestx=i;
+                            }
+                        }
+                        if (closestx!==false) {
+                            this.goTo([closestx, newy]);
+                            return;
+                        }
+                    }
+                    
+                    // if y didn't change
+                    if (this.moves[this.options.orientation][move][1]==0) {
+                        //try to find in the same x line
+                        var closesty = false;
+                        
+                        for (var i=0;i<this.grid.length;i++) {
+                            if (this.grid[i] && this.grid[i][newx] && (closesty===false || Math.abs(newy-i)<Math.abs(newy-closesty))) {
+                                closesty=i;
+                            }
+                        }
+                        if (closesty!==false) {
+                            this.goTo([newx, closesty]);
+                            return;
+                        }
+                    }
+                    
+                }
+
                 //absMove is the move that would have been made in the reference "down" orientation
                 var oriMove = this.moves[this.options.orientation][move].join("-");
                 var absMove = false;

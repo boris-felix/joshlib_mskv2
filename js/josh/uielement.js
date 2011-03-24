@@ -39,7 +39,7 @@
             J.extend(this.options, this.baseDefaultOptions, this.defaultOptions, options || {});
             this.htmlId = this.getHtmlId();
             this.children = [];
-            this._subscribed = [];
+            
             this.hasFocus = false;
             this.inserted = false;
 

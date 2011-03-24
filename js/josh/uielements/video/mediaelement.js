@@ -125,13 +125,12 @@
         playWithStaticUrl: function(options) {
             
             this.playData = options;
-
-            var isFLV = options["url"].match(/\.flv$/) || options["mime"] == "video/flv";
-
             
             if (options["url"] === undefined) {
                 return this.error(-1);
             }
+
+            var isFLV = options["url"].match(/\.flv$/) || options["mime"] == "video/flv";
 
             //try to reuse existing instances because of http://code.google.com/p/chromium/issues/detail?id=68010
             if (this.player && $('#' + this.htmlId + '_video').size()) {

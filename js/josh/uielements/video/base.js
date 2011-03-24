@@ -48,6 +48,7 @@
              //console.log("playlistNextMoves", that.treeCurrent, that.app.tree.getData(that.treeCurrent).playlistNext, JSON.stringify(playlistNextMoves));
              
              that.app.tree.resolveMoves(that.treeCurrent, playlistNextMoves,function(newPath) {
+                 //console.log("new path",newPath);
                  that.app.publish("stateGoTo", ["focus", newPath], true);
                  that.app.publish("input", ["enter"]);
              });
