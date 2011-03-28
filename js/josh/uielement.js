@@ -14,9 +14,10 @@
             showOnPreFocus: true,
             hideOnBlur: true,
             show:function(that) {
-                $("#" + that.htmlId).css({
+                $("#" + that.htmlId).show(); /*
+                .css({
                     "opacity": 1
-                }).show();
+                })*/
             },
             hide:function(that) {
                 $("#" + that.htmlId).hide();
@@ -38,7 +39,7 @@
             J.extend(this.options, this.baseDefaultOptions, this.defaultOptions, options || {});
             this.htmlId = this.getHtmlId();
             this.children = [];
-            this._subscribed = [];
+            
             this.hasFocus = false;
             this.inserted = false;
 

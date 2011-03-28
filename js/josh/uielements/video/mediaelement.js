@@ -125,13 +125,12 @@
         playWithStaticUrl: function(options) {
             
             this.playData = options;
-
-            var isFLV = options["url"].match(/\.flv$/) || options["mime"] == "video/flv";
-
             
             if (options["url"] === undefined) {
                 return this.error(-1);
             }
+
+            var isFLV = options["url"].match(/\.flv$/) || options["mime"] == "video/flv";
 
             //try to reuse existing instances because of http://code.google.com/p/chromium/issues/detail?id=68010
             if (this.player && $('#' + this.htmlId + '_video').size()) {
@@ -152,9 +151,7 @@
                 $('#' + this.htmlId + '_video').attr("autobuffer", isFLV ? false: true);
                 $('#' + this.htmlId + '_video').attr("preload", isFLV ? false: true);
                 $('#' + this.htmlId + '_video').css({
-                    "display": isFLV ? "none": "block",
-                    "width": "",
-                    "height": ""
+                    "display": isFLV ? "none": "block"
                 });
 
                 $('#' + this.htmlId + ' .me-plugin').remove();
@@ -177,6 +174,9 @@
             $('#' + this.htmlId + '_video').css({
                 //'width'		: (typeof this.options['width'] !== 'undefined') ? this.options['width'] : '100%',
                 //'height'	: (typeof this.options['height'] !== 'undefined') ? this.options['height'] : '100%',
+                "width": $('#' + this.htmlId).width()+"px",
+                "height": $('#' + this.htmlId).height()+"px",
+                
                 'z-index': 00
             });
 
@@ -233,7 +233,6 @@
                 }
             };
 
-
             mejs.HtmlMediaElementShim.myCreate($('#' + this.htmlId + "_video")[0], {
                 pluginPath: "/swf/",
                 videoWidth: $('#' + this.htmlId + "_video").width(),
@@ -244,9 +243,11 @@
                 enablePluginSmoothing: true,
 
                 type: options["mime"],
-                //type:"native",
+                //mode:"shim",
                 //enablePluginDebug:true,
-                error: this.handleError,
+                error: function(e) {
+                    that.error(e);
+                },
                 success: function(me, domNode) {
 
                     that.player = me;
@@ -312,6 +313,10 @@
         getCurrentTime:function() {
             if (this.player) return this.player.currentTime;
             return 0;
+        },
+        
+        getTotalTime:function() {
+            return this.videoDuration;
         },
         
         setCurrentTime:function(seconds) {
@@ -385,7 +390,7 @@
 
         getHtml: function()
         {
-            return "<div id='" + this.htmlId + "'></div>";
+            return "<div id='" + this.htmlId + "'></div>"; //"<div id='" + this.htmlId + "__overlay'></div>";
         }
 
     });

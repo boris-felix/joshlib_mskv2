@@ -15,18 +15,17 @@
             
             this.initGrid();
             
-            this.subscribeToInput();
-            
             this.subscribeToPlayerToken=false;
             
-            if (this.options.media) {
-                var self=this;
-                this.subscribe("afterInsert",function() {
-                    self.subscribeToPlayer(self.app.ui[self.options.media]);
-                });
-                
-            }
             
+            var self=this;
+            this.subscribe("afterInsert",function() {
+                if (self.options.media) {
+                    self.subscribeToPlayer(self.app.ui[self.options.media]);
+                }
+                self.subscribeToInput();
+            });
+             
         },
         
         initGrid: function() {
@@ -147,8 +146,9 @@
             
             //Only mouse for now, fixme
             var timeRail = $("#" + this.htmlId + ' .video-time-rail');
+            
             timeRail.live("click",function(e) {
-                self.doSeek((e.pageX - timeRail.offset().left) / timeRail.width());
+                self.seekTo((e.pageX - timeRail.offset().left) / timeRail.width()*self.player.getTotalTime());
             });
 
         },
@@ -162,9 +162,9 @@
         },
         
         playpause:function() {
-            console.log(this.player.videoStatus);
+            
             if (this.player.videoStatus == "playing") {
-                console.log("pause");
+                
                 this.player.publish("input",["pause"]);
 
             } else if (this.player.videoStatus == "stopped" || this.player.videoStatus == "paused") {
@@ -220,13 +220,14 @@
                     $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
                     
                 } else if (ev=="timeupdate") {
-                    $("#" + self.htmlId + ' .video-currenttime').text(self.secondsToTimeCode(data[0].totalTime));
+                    $("#" + self.htmlId + ' .video-duration').text(isNaN(data[0].totalTime) ? '--:--': self.secondsToTimeCode(data[0].totalTime));
+                    $("#" + self.htmlId + ' .video-currenttime').text(self.secondsToTimeCode(data[0].currentTime));
                     $("#" + self.htmlId + ' .video-time-current').css('width', Math.round(100 * data[0].currentTime / data[0].totalTime) + '%');
                     $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
                     
                 } else if (ev=="ended") {
-                    $("#" + self.htmlId + ' .video-play ,#' + self.htmlId + ' .video-pause').hide();
-                    $("#" + self.htmlId + ' .video-stop').show();
+                    $("#" + self.htmlId + ' .video-stop ,#' + self.htmlId + ' .video-pause').hide();
+                    $("#" + self.htmlId + ' .video-play').show();
                     
                 } else if (ev=="canplay") {
                     $("#" + self.htmlId + ' .video-buttons').show();

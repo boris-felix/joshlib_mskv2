@@ -17,7 +17,7 @@
         publish: function(message, data, sync) {
 
             if (J.debug && message!="timeupdate") {
-                console.log("publish",message,data,sync);
+                console.log("publish",this.id,message,data,sync);
             }
 
             // if there are no subscribers to this message, just return here
