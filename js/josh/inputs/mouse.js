@@ -10,7 +10,7 @@
         {
             var self = this;
 
-            $('.joshover', this.app.baseHtml[0]).live('mousedown',
+            $('.joshover', this.app.baseHtml).live('mousedown',
             function(event) {
                 
                 var uiElement = $(this).attr('josh-ui-element');
@@ -45,7 +45,7 @@
                 return false;
             });
 
-            $('.joshover', this.app.baseHtml[0]).live('mouseenter',function(event) {
+            $('.joshover', this.app.baseHtml).live('mouseenter',function(event) {
                 
                 var uiElement = $(this).attr('josh-ui-element');
                 if (uiElement) {

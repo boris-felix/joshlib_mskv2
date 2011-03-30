@@ -1,7 +1,7 @@
-(function(J, $) {
+(function(J) {
 
 
-    J.Utils.DataSource = J.Class(
+    J.Utils.DataSourceBase = J.Class(
     /**
     	  @lends J.Utils.DataSource.prototype
         */
@@ -14,61 +14,62 @@
         __constructor: function(options) {
             this.options = options;
             this.cache = {};
-            this.pools = {};
-        },
-
-        setupPool: function(name, maxItems) {
-            this.pools[name] = new J.Pool({
-                'name': name,
+            
+            this.pool = new J.Utils.Pool({
+                'name': "joshlib",
                 //idleTimeoutMillis : 30000,
                 //priorityRange : 3,
-                'max': maxItems || 1
+                'max': options.concurrency || 1,
+                'create':function(callback) {
+                    callback();
+                },
+                'destroy':function() {}
             });
+            
         },
 
-        //todo queue, etc.
-        query: function(args) {
+
+        request: function(args) {
             var hash = this.hash(args);
 
-            if (this.cache[hash]) {
+            if (this.cache[hash] && this.options.cache) {
                 args.success.apply(null, this.cache[hash]["result"]);
                 return;
             } else {
 
-                var params = jQuery.extend(true, {}, args);
+                var params = J.extend({},args);
                 var self = this;
                 params["success"] = function() {
-                    self.cache[hash] = {
-                        "result": arguments
-                    };
-                    if (params["pool"]) {
-                        self.pools[params["pool"]].returnToPool();
+                    if (self.options.cache) {
+                        self.cache[hash] = {
+                            "result": arguments
+                        };
                     }
+                    
+                    self.pool.release();
+                    
                     args["success"].apply(null, arguments);
                 };
 
                 var makeTheQuery = function() {
                     //Been cached in the meantime?
-                    if (self.cache[hash]) {
+                    if (self.cache[hash] && self.options.cache) {
                         params["success"].apply(null, self.cache[hash]["result"]);
                         return;
                     } else {
-                        return $.ajax(params);
+                        return self._request(params);
                     }
 
                 };
 
-                if (params["pool"]) {
-                    this.pools[params["pool"]].borrow(makeTheQuery);
-                } else {
-                    return makeTheQuery();
-                }
-
-
-
+                this.pool.acquire(makeTheQuery);
+                
             }
         },
 
+        _request:function(params) {
+            params.error("no backend included!");
+        },
 
 
         hash: function(args) {
@@ -78,4 +79,4 @@
     });
 
 
-})(Joshlib, jQuery);
+})(Joshlib);
