@@ -1,4 +1,4 @@
-(function(J, $, _) {
+(function(J, _) {
 
 
     J.App = J.Class(
@@ -104,7 +104,7 @@
 		*/
         insert: function() {
             
-            this.baseHtml = $("#" + this.options.parentNodeId);
+            this.baseHtml = document.getElementById(this.options.parentNodeId);
             
             var self = this;
             this.beforeInsert(function() {
@@ -134,4 +134,4 @@
     J.Apps = {};
 
 
-})(Joshlib, jQuery, _);
+})(Joshlib, _);

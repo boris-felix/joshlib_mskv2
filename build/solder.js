@@ -82,8 +82,18 @@ exports.config = {
       css: [],
       js: [
         "js/libs/sencha-touch-debug.js",
-         "js/libs/jquery-1.4.4.js",
+         "js/libs/jquery-1.5.1.js",
          "js/libs/jquery.inherit-1.3.2.M.js"
+      ]
+    },
+    
+    'historyjs-jquery': {
+      requires: [ ],
+      css: [],
+      js: [
+        "js/libs/historyjs/history.adapter.jquery.js",
+         "js/libs/historyjs/history.js",
+         "js/libs/historyjs/history.html4.js"
       ]
     },
     
@@ -136,6 +146,8 @@ exports.config = {
         'js/josh/utils/delayedswitch.js',
         'js/josh/utils/pool.js',
         'js/josh/utils/datasource.js',
+        'js/josh/utils/datasource.jquery.js',
+        
         
         
         

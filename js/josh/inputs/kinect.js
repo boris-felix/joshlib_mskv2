@@ -19,13 +19,13 @@
             this.cursorCanvas.width = this.cursorWidth;
             this.cursorCanvas.height = this.cursorWidth;
             this.cursorCanvas.style.cssText = "z-index:999998;position:absolute; top:0%; left:0%; background:transparent;";
-            this.app.baseHtml[0].appendChild(this.cursorCanvas);
+            this.app.baseHtml.appendChild(this.cursorCanvas);
 
             this.cursorWaitCanvas = document.createElement("canvas");
             this.cursorWaitCanvas.width = this.cursorWidth;
             this.cursorWaitCanvas.height = this.cursorWidth;
             this.cursorWaitCanvas.style.cssText = "z-index:999999;position:absolute; top:0%; left:0%; background:transparent;";
-            this.app.baseHtml[0].appendChild(this.cursorWaitCanvas);
+            this.app.baseHtml.appendChild(this.cursorWaitCanvas);
 
 
             this.cursorWait = this.getCursorWait(this.cursorWaitCanvas.getContext("2d"), 40, {
@@ -101,7 +101,7 @@
 
 
             if (mapMouse) {
-                $(this.app.baseHtml[0]).mousemove(function(event) {
+                $(this.app.baseHtml).mousemove(function(event) {
                     moveTo(event.pageX, event.pageY);
                 });
             }
@@ -122,8 +122,8 @@
                 var margins = [1.1, 1.1, 1.1, 1.1];
 
                 //TODO
-                var appOffset = $(this.app.baseHtml[0]).offset();
-                var appBox = [appOffset.left, appOffset.top, appOffset.left + $(this.app.baseHtml[0]).outerWidth(), appOffset.top + $(this.app.baseHtml[0]).outerHeight()]
+                var appOffset = $(this.app.baseHtml).offset();
+                var appBox = [appOffset.left, appOffset.top, appOffset.left + $(this.app.baseHtml).outerWidth(), appOffset.top + $(this.app.baseHtml).outerHeight()]
 
                 moveTo((appBox[2] - appBox[0]) * currentDestination[0] + appBox[0], (appBox[3] - appBox[1]) * currentDestination[1] + appBox[1]);
 
@@ -148,7 +148,7 @@
         getUnderlyingJoshoverElement: function(x, y) {
 
             var ret;
-            $('.joshover:visible', this.app.baseHtml[0]).each(function(i, elt) {
+            $('.joshover:visible', this.app.baseHtml).each(function(i, elt) {
                 elt = $(elt);
                 var offset = elt.offset();
 

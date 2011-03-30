@@ -1,4 +1,4 @@
-(function(J,_, $) {
+(function(J,_) {
 
 
     J.Utils.Grid = J.Class(
@@ -197,4 +197,4 @@
 
 
 
-})(Joshlib, _, jQuery);
+})(Joshlib, _);

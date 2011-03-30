@@ -323,7 +323,7 @@
             if (this.options.parent) {
                 parent = $("#" + this.options.parent.htmlId);
             } else {
-                parent = this.app.baseHtml;
+                parent = $(this.app.baseHtml);
             }
 
             parent.append(this.getHtml());
