@@ -13,11 +13,12 @@
             $('.joshover', this.app.baseHtml).live('mousedown',
             function(event) {
                 
+                //console.log("click",this,event);
+                
                 var uiElement = $(this).attr('josh-ui-element');
                 if (uiElement) {
                     
                     self.app.ui[uiElement].publish("input",["enter",$(this).attr('josh-grid-id')]);
-                    
                     
                 } else {
                     var menuPath = $(this).attr('data-path');

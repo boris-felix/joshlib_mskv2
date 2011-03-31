@@ -47,6 +47,7 @@
             this.options.orientation = options.orientation || "down";
             this.options.direction = options.direction || "ltr"; //document.dir ?
             this.currentCoords = this.options.defaultPosition || false;
+            this.lastCoords = this.options.defaultPosition || false;
             this.id2coords = {};
             this.setGrid(options.grid);
             
@@ -75,8 +76,10 @@
         },
 
         goTo: function(coords) {
+            
             if (!this.currentCoords || coords[0] !== this.currentCoords[0] || coords[1] !== this.currentCoords[1]) {
                 this.currentCoords = coords;
+                this.lastCoords = coords;
                 if (this.options.onChange) this.options.onChange(this.currentCoords, this.get(this.currentCoords));
             }
             if (this.options.onMove) this.options.onMove(this.currentCoords, this.get(this.currentCoords));
@@ -94,7 +97,7 @@
             if (move=="default") {
                 return this.goTo(this.options.defaultPosition);
             } else if (move=="last") { //just to re-publish event
-                return this.goTo(this.currentCoords);
+                return this.goTo(this.lastCoords);
             }
             
             var newx = this.moves[this.options.orientation][move][0] + this.currentCoords[0];

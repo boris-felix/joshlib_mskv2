@@ -10,7 +10,7 @@
     {
         type: "MediaControls", 
         init: function() {
-            
+            window._dbg=this;
             var self = this;
             
             this.initGrid();
@@ -125,7 +125,7 @@
     			
     		return html;
     	},
-    	
+/*    	
         focus: function() {
 
             var hadFocus = this.hasFocus;
@@ -138,7 +138,7 @@
                 50);
             }
         },
-
+*/
 
         subscribeToInput:function() {
             
@@ -217,13 +217,14 @@
                     
                 } else if (ev=="progress") {
                     $("#" + self.htmlId + ' .video-duration').text(isNaN(data[0].totalTime) ? '--:--': self.secondsToTimeCode(data[0].totalTime));
-                    $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
+                    $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedTime / data[0].totalTime) + '%');
                     
                 } else if (ev=="timeupdate") {
                     $("#" + self.htmlId + ' .video-duration').text(isNaN(data[0].totalTime) ? '--:--': self.secondsToTimeCode(data[0].totalTime));
                     $("#" + self.htmlId + ' .video-currenttime').text(self.secondsToTimeCode(data[0].currentTime));
                     $("#" + self.htmlId + ' .video-time-current').css('width', Math.round(100 * data[0].currentTime / data[0].totalTime) + '%');
-                    $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
+                    
+                    //$("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
                     
                 } else if (ev=="ended") {
                     $("#" + self.htmlId + ' .video-stop ,#' + self.htmlId + ' .video-pause').hide();
