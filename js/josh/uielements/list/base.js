@@ -1,5 +1,9 @@
 (function(J, $, _) {
 
+    _.templateSettings = {
+      interpolate : /\{\{(.+?)\}\}/g
+    };
+
     var orientations = ["up", "right", "down", "left"];
     var inv = {
         "up": "down",
@@ -38,13 +42,10 @@
             
             "incrementalRefresh":false,
             
-            "itemTemplate": function(self, htmlId, data)
-            {
-                return "<li id='" + htmlId + "' josh-ui-element='"+self.id+"' josh-grid-id='"+data.id+"' data-path='" + self.treeRoot + data.id + "' class='joshover'><img src='" + data["image"] + "' /><br/>" + data["label"] + "</li>";
-            },
-            "loadingTemplate": function(self) {
-                return "<li class='loading'>Loading...</li>";
-            }
+            "itemTemplate": "<li id='{{ htmlId }}_{{ i }}' josh-ui-element='{{ id }}' josh-grid-id='{{ item.id }}' data-path='{{ treeRoot }}{{ item.id }}' class='joshover'><img src='{{ item.image }}' /><br/>{{ item.label }}</li>",
+
+            "loadingTemplate": "<li class='loading'>Loading...</li>"
+            
         },
 
         init: function() {
@@ -109,20 +110,32 @@
         {
             if (this.isLoading)
             {
-                if (typeof this.options["loadingTemplate"] == "function") {
-                    return this.options["loadingTemplate"](this);
+                if (typeof this.options.loadingTemplate == "function") {
+                    return this.options.loadingTemplate(this);
                 } else {
-                    return this.options["loadingTemplate"];
+                    return _.template(this.options.loadingTemplate,this);
                 }
 
             } else {
-                var ret = [];
-                for (var i = 0; i < this.data.length; i++)
-                {
-                    ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
-                }
-                return "<ul>"+ret.join("")+"</ul>";
+                return "<ul>"+this._getItemsHtml(0)+"</ul>";
             }
+        },
+        
+        _getItemsHtml:function(itemFrom) {
+            var ret = [];
+            if (typeof this.options.loadingTemplate == "function") {
+                for (var i = itemFrom,l=this.data.length; i < l; i++) {
+                    ret.push(this.options.itemTemplate(this,this.htmlId,this.data[i]));
+                }
+            } else {
+                var tmpl = _.template(this.options.itemTemplate);
+                for (var i = itemFrom,l=this.data.length; i < l; i++) {
+                    this.item=this.data[i];
+                    this.i = i;
+                    ret.push(tmpl(this));
+                }
+            }
+            return ret.join("");
         },
 
         setTreeRoot: function(treeRoot) {
@@ -146,14 +159,8 @@
                 }
                 
                 liElements.slice(maxSyncedIndex).remove();
-                
-                var ret = [];
-                for (var i = maxSyncedIndex; i < this.data.length; i++)
-                {
-                    ret.push(this.options["itemTemplate"](this, this.htmlId + "_" + i, this.data[i]));
-                }
-                
-                $("#" + this.htmlId+" ul").append(ret.join(""));
+
+                $("#" + this.htmlId+" ul").append(this._getItemsHtml(maxSyncedIndex));
                 
                 this.publish("afterRefresh");
                 
@@ -293,8 +300,9 @@
             this.app.publish("stateGoTo", ["focus", this.treeRoot + this.data[this.focusedIndex].id], true);
 
             try {
-                if (this.options.autoScroll)
-                this.autoScroll();
+                if (this.options.autoScroll) {
+                    this.autoScroll();
+                }
             } catch(e) {
                 console.log(e);
             }

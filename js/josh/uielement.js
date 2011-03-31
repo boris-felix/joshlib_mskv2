@@ -1,4 +1,8 @@
-(function(J, $) {
+(function(J, $, _, document) {
+
+    _.templateSettings = {
+      interpolate : /\{\{(.+?)\}\}/g
+    };
 
     J.UIElementBase = J.Class(
 
@@ -21,7 +25,8 @@
             },
             hide:function(that) {
                 $("#" + that.htmlId).hide();
-            }
+            },
+            template:"<div style='display:none;' id='{{ htmlId }}'>{{ htmlInner }}</div>"
         },
 
         /**
@@ -38,6 +43,7 @@
             this.options = {};
             J.extend(this.options, this.baseDefaultOptions, this.defaultOptions, options || {});
             this.htmlId = this.getHtmlId();
+            this.htmlEl = false;
             this.children = [];
             
             this.hasFocus = false;
@@ -149,6 +155,8 @@
 
 
             this.init();
+            
+            this.publish("afterInit");
         },
 
         init: function() {
@@ -328,6 +336,9 @@
 
             parent.append(this.getHtml());
             this.inserted = true;
+            
+            this.htmlEl = document.getElementById(this.htmlId);
+            
             if (this.options.autoShow) {
                 this.show();
             }
@@ -351,7 +362,8 @@
         },
         
         getHtml:function() {
-            return "<div style='display:none;' id='" + this.htmlId + "'>"+this.getHtmlInner()+"</div>";
+            this.htmlInner = this.getHtmlInner();
+            return _.template(this.options.template,this);
         },
         
         getHtmlInner:function() {
@@ -380,4 +392,4 @@
 
 
 
-})(Joshlib, jQuery);
+})(Joshlib, jQuery, _, document);
