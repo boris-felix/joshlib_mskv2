@@ -57,7 +57,7 @@
                 "grid": [
                 []
                 ],
-                defaultPosition:[0,0],
+                //defaultPosition:[0,0],
                 inputSource:this,
                 "onChange": function(coords, elem) {
                     //console.log("onChange", coords, elem);
@@ -132,8 +132,6 @@
 
         refresh: function() {
             
-            console.log(this.id,"ref");
-            
             if (this.options.incrementalRefresh && $("#" + this.htmlId+" ul").size()) {
                 
                 //Try to sync HTML and data incrementally
@@ -163,10 +161,11 @@
                 this.__base();
             }
             
-            //console.log("REF",this.id,this.focusedIndex);
-            if (this.options["persistFocus"] && this.focusedIndex !== null) {
+            if (this.focusedIndex !== null) {
                 $("#" + this.htmlId + '_' + this.focusedIndex).addClass("focused");
             }
+            //autoscroll ?
+            
         },
 
         setLoading: function(isLoading) {
@@ -195,18 +194,23 @@
                 var id = path.split("/").pop();
                 this.grid.goToId(id);
             }
-            
+            /*
             if (this.options["persistFocus"] && this.focusedIndex !== null) {
                 $("#" + this.htmlId + '_' + this.focusedIndex).addClass("focused");
             }
+            */
 
             this.__base(path);
         },
         
         blur: function(path) {
             this.__base(path);
-            if (this.options["persistFocus"] && this.focusedIndex !== null) {
-                $("#" + this.htmlId + '_' + this.focusedIndex).removeClass("focused");
+            this.grid.currentCoords=false;
+            
+            $("#" + this.htmlId + '_' + this.focusedIndex).removeClass("focused");
+            
+            if (!this.options["persistFocus"]) {
+                this.focusedIndex=null;
             }
         },
 

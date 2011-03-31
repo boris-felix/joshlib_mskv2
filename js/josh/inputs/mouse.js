@@ -18,7 +18,6 @@
                     
                     self.app.ui[uiElement].publish("input",["enter",$(this).attr('josh-grid-id')]);
                     
-                    
                 } else {
                     var menuPath = $(this).attr('data-path');
                     console.log("click", menuPath);

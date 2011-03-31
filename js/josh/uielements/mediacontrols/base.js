@@ -10,7 +10,7 @@
     {
         type: "MediaControls", 
         init: function() {
-            
+            window._dbg=this;
             var self = this;
             
             this.initGrid();
@@ -125,7 +125,7 @@
     			
     		return html;
     	},
-    	
+/*    	
         focus: function() {
 
             var hadFocus = this.hasFocus;
@@ -138,7 +138,7 @@
                 50);
             }
         },
-
+*/
 
         subscribeToInput:function() {
             

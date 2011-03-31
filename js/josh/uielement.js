@@ -101,7 +101,7 @@
                 this.app.subscribe("stateChange",function(ev, data) {
                     var path = data[1];
                     var register = data[0];
-                    
+
                     //This treeData is about us!
                     if (self.treeRoot == path 
                         || (typeof self.options.treeRoot != "string" && self.options.treeRoot.test(path))
@@ -204,7 +204,7 @@
 		 */
         focus: function(treePath) {
 
-            this.publish('beforeFocus');
+            this.publish('beforeFocus',null,true);
             
             if (!this.hasFocus)
             {
@@ -226,7 +226,7 @@
         blur: function() {
             console.log("onBlur", this.id, this.options.persistFocus);
 
-            this.publish("beforeBlur");
+            this.publish("beforeBlur",null,true);
 
             if (this.options.hideOnBlur === true) {
                 this.hideDelayed();
@@ -271,7 +271,7 @@
 		 * @function
 		 */
         show: function() {
-            this.publish("beforeShow");
+            this.publish("beforeShow",null,true);
             this.options.show(this);
             this.publish("afterShow");
             this.showHideSwitch.off();
@@ -282,7 +282,7 @@
 		 * @function
 		 */
         hide: function() {
-            this.publish("beforeHide");
+            this.publish("beforeHide",null,true);
             this.options.hide(this);
             this.publish("afterHide");
             this.showHideSwitch.off();
