@@ -255,8 +255,21 @@
                     that.publish('success');
 
                     that.startListening(me, 'progress', function(ev) {
+                        
                         that.videoDuration = me.duration;
-                        that.publish('progress',[{"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
+                        
+                        var progressTime = 0;
+                        if (me.bufferedBytes && me.bytesTotal>0) {
+                            progressTime = (me.bufferedBytes/me.bytesTotal)*me.duration;
+                        } else if (me.loaded && me.total>0) {
+                            progressTime = (me.loaded/me.total)*me.duration;
+                        } else if (me.buffered && me.buffered.end) {
+                            try {
+                            progressTime = me.buffered.end();
+                            } catch (e) {}
+                        }
+                        
+                        that.publish('progress',[{"totalTime":me.duration,"bufferedTime":progressTime}]);
                     });
                     
                     that.startListening(me, 'playing', function(ev) {
@@ -265,7 +278,7 @@
                     
                     that.startListening(me, 'timeupdate', function(ev) {
                         that.videoDuration = me.duration;
-                        that.publish('timeupdate',[{"currentTime":me.currentTime,"totalTime":me.duration,"bufferedBytes":me.bufferedBytes,"totalBytes":me.bytesTotal}]);
+                        that.publish('timeupdate',[{"currentTime":me.currentTime,"totalTime":me.duration}]);
                     });
                     
                     that.startListening(me, 'ended', function(ev) {
