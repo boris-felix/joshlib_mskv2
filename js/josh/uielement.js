@@ -363,6 +363,7 @@
         
         getHtml:function() {
             this.htmlInner = this.getHtmlInner();
+            console.log(this.id,this.options.template);
             return _.template(this.options.template,this);
         },
         
