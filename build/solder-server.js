@@ -20,8 +20,8 @@ app.configure(function(){
     //app.use(connect.methodOverride());
     app.use(app.router);
     
-    app.use(connect.staticProvider({ root: path.normalize(__dirname + '/../'), cache: false }));
-    app.use(connect.staticProvider({ root: path.normalize(__dirname + '/../public'), cache: false }));
+    app.use((connect.static?connect.static:connect.staticProvider)({ root: path.normalize(__dirname + '/../'), cache: false }));
+    app.use((connect.static?connect.static:connect.staticProvider)({ root: path.normalize(__dirname + '/../public'), cache: false }));
     
     solder.expressRoute(app, {
         configFile:path.normalize(__dirname+"/../build/solder.js")
