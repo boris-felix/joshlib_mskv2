@@ -26,7 +26,7 @@
             hide:function(that) {
                 $("#" + that.htmlId).hide();
             },
-            template:"<div style='display:none;' id='{{ htmlId }}'>{{ htmlInner }}</div>"
+            innerTemplate:"{{ htmlInner }}"
         },
 
         /**
@@ -264,7 +264,10 @@
                     this.insert();
                 }
             } else {
-                $("#" + this.htmlId).html(this.getHtmlInner());
+                
+                this.htmlInner = this.getHtmlInner();
+                $("#" + this.htmlId).html(_.template(this.options.innerTemplate,this));
+                
             }
 
             this.publish("afterRefresh");
@@ -363,8 +366,7 @@
         
         getHtml:function() {
             this.htmlInner = this.getHtmlInner();
-            console.log(this.id,this.options.template);
-            return _.template(this.options.template,this);
+            return "<div style='display:none;' id='"+this.htmlId+"'>"+_.template(this.options.innerTemplate,this)+"</div>";
         },
         
         getHtmlInner:function() {

@@ -125,77 +125,77 @@ test('tree navigation',function(){
 	
     lastStateChange=[];
 	
-	myapp.publish("stateGoTo",["current","/leaf4"],true);
+	myapp.tree.moveTo("current","/leaf4");
 	
 	same(lastStateChange,["current","/leaf4"],'tree GoTo current /leaf4');
 	
-	myapp.publish("stateGo",["current","down"],true);
+	myapp.tree.move("current","down");
 	
     same(lastStateChange,["current","/leaf4/leaf41"],'tree Go current down+next');
 	
-	myapp.publish("stateGo",["current","next"],true);
+	myapp.tree.move("current","next");
     
     same(lastStateChange,["current","/leaf4/leaf42"],'tree Go current down+next');
 
     lastStateChange=[];	
 
-	myapp.publish("stateGoTo",["focus","/leaf1"],true);
+	myapp.tree.moveTo("focus","/leaf1");
     
     same(lastStateChange,["focus","/leaf1"],'tree Goto');
 	
-    myapp.publish("stateGo",["focus","next"],true);
+    myapp.tree.move("focus","next");
     
 	same(lastStateChange,["focus","/leaf2"],'tree Go focus next');
 	
-	myapp.publish("stateGo",["focus","down"],true);
+	myapp.tree.move("focus","down");
 	
 	same(lastStateChange,["focus","/leaf2/leaf21"],'tree Go focus down');
 	
-	myapp.publish("stateGo",["focus","up"],true);
+	myapp.tree.move("focus","up");
 	
 	same(lastStateChange,["focus","/leaf2"],'tree Go focus up');
 	
-	myapp.publish("stateGoTo",["focus","/leaf2/"],true);
+	myapp.tree.moveTo("focus","/leaf2/");
 	
 	same(lastStateChange,["focus","/leaf2/leaf21"],'tree Go focus down with last slash');
 	
-	myapp.publish("stateGo",["focus","up"],true);
+	myapp.tree.move("focus","up");
 	
 	same(lastStateChange,["focus","/leaf2"],'tree Go focus up');
 	
-	myapp.publish("stateGo",["focus","up"],true);
+	myapp.tree.move("focus","up");
 	
 	same(lastStateChange,["focus","/leaf2"],'tree Go focus up - the same.');
 	
-	myapp.publish("stateGo",["focus","next"],true);
+	myapp.tree.move("focus","next");
 	
 	same(lastStateChange,["focus","/leaf3"],'tree Go focus next');
 
-    myapp.publish("stateGo",["focus","down"],true);
+    myapp.tree.move("focus","down");
 	
 	same(lastStateChange,["focus","/leaf3/leaf31"],'tree Go focus down 3');
     
-    myapp.publish("stateGo",["focus","up"],true);
+    myapp.tree.move("focus","up");
     
     same(lastStateChange,["focus","/leaf3"],'tree Go up next ');
     
-	myapp.publish("stateGo",["focus","next"],true);
+	myapp.tree.move("focus","next");
 	
 	same(lastStateChange,["focus","/leaf4"],'tree Go up next ');
 	
-	myapp.publish("stateGo",["focus","next"],true);
+	myapp.tree.move("focus","next");
 	
 	same(lastStateChange,["focus","/leaf5"],'tree Go up next next');
     
     //Todo: later.
-    //myapp.publish("stateGo",["focus","down"],true);
+    //myapp.tree.move("focus","down");
 
     //should not be loaded right away
     same(lastStateChange,["focus","/leaf5"],'Async!');
     
     same(myapp.tree.getData("/leaf5").id,"leaf5");
     
-    myapp.publish("stateGo",["focus","down"],true);
+    myapp.tree.move("focus","down");
     
     same(myapp.tree.getData("/leaf5/"),"loading");
     
@@ -210,7 +210,7 @@ test('tree navigation',function(){
 
         same(lastStateChange,["focus","/leaf5/leaf51"],'Down Async');
         
-        myapp.publish("stateGo",["focus",["up","prev","prev","prev","down","next","down","next","prev","next"]],true);
+        myapp.tree.move("focus",["up","prev","prev","prev","down","next","down","next","prev","next"]);
         same(lastStateChange,["focus","/leaf2/leaf22/leaf222"],'Big path');
         
         
@@ -252,7 +252,7 @@ test('tree incremental additions',function(){
 	    
     	same(lastTreeData[0].id,"leaf1",'Load');
 
-    	myapp.publish("stateGoTo",["focus","/leaf1"],true);
+    	myapp.tree.moveTo("focus","/leaf1");
 
     	myapp.tree.insertData('/',0,[
     	    {'id':'leafbefore'}
@@ -342,24 +342,24 @@ test('Async tree navigation',function(){
 	
 
 	
-	myapp.publish("stateGoTo",["focus","/"],true);
+	myapp.tree.moveTo("focus","/");
     
 	same(lastStateChange,["focus","/leaf1"],'tree init - first child');
 	
 	
-	myapp.publish("stateGoTo",["focus","/leaf1"],true);
+	myapp.tree.moveTo("focus","/leaf1");
     
 	same(lastStateChange,["focus","/leaf1"],'tree init');
     
-    myapp.publish("stateGo",["focus","down"],true);
+    myapp.tree.move("focus","down");
     
     same(lastStateChange,["focus","/leaf1"],'Still');
     
-    myapp.publish("stateGo",["focus","next"],true);
+    myapp.tree.move("focus","next");
     
 	same(lastStateChange,["focus","/leaf2"],'Next');
 
-    myapp.publish("stateGo",["focus","down"],true);
+    myapp.tree.move("focus","down");
     
 	same(lastStateChange,["focus","/leaf2/"],'Down');
 
@@ -370,16 +370,16 @@ test('Async tree navigation',function(){
     
     rst();
     
-    myapp.publish("stateGoTo",["focus","/leaf1"],true);
+    myapp.tree.moveTo("focus","/leaf1");
     same(lastStateChange,["focus","/leaf1"],'tree init');
     
-    myapp.publish("stateGo",["focus","next"],true);
+    myapp.tree.move("focus","next");
 	same(lastStateChange,["focus","/leaf2"],'Next');
     
-    myapp.publish("stateGo",["focus","down"],true);
+    myapp.tree.move("focus","down");
 	same(lastStateChange,["focus","/leaf2/"],'Down');
 	
-	myapp.publish("stateGo",["focus","up"],true);
+	myapp.tree.move("focus","up");
 	same(lastStateChange,["focus","/leaf2"],'Reup before CB');
     
     doCb();

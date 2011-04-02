@@ -64,7 +64,7 @@
                 // Mediaplayer controls are usually at the end of the tree but it's just a default.
                 "onExit": function(move,absMove) {
                     if (absMove=="up") {
-                        self.app.publish("stateGo", ["focus", "up"]);
+                        self.app.tree.move("focus", "up");
                     }
                 },
                 "onValidate": function(coords,elem) {

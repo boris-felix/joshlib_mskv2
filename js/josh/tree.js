@@ -30,66 +30,10 @@
 
             this.beingLoaded = {};
 
-            var self = this;
-            this.app.subscribe("stateGoTo",function(ev, data) {
-                var register = data[0];
-                var path = data[1];
-
-                //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
-                if (!path) return;
-
-                //Go to first child
-                if (self.isDirectory(path)) {
-                    var async = true;
-                    self.resolveMoves(path.substring(0, path.length - 1), ["down"],function(newPath) {
-                        //console.log("FChild callback got "+newPath,newPath);
-                        async = false;
-                        self.setState(register, newPath);
-                    });
-                    //Set the temporary register
-                    if (async) {
-                        //console.log("FChild callback was async, setting "+path,path);
-                        self.setState(register, path);
-                    }
-                } else {
-                    self.setState(register, path);
-                }
-
-
-
-
-            });
 
             // Starting at zero is just boring.
             this.stateChangeSerial = 42;
             
-            this.app.subscribe("stateGo",function(ev, data) {
-                var register = data[0];
-                var path = data[1];
-
-                var localSerial = ++self.stateChangeSerial;
-                
-                //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
-                if (!path) return;
-
-                var async = true;
-                self.resolveMoves(self.getState(register), path,function(newPath) {
-                    async = false;
-                    
-                    //Don't send an event if in the meantime the state changed.
-                    if (localSerial==self.stateChangeSerial) {
-                        self.app.publish("stateGoTo", [register, newPath], true);
-                    }
-                });
-
-                // While we're loading children of /directory, set us in the temporary 
-                // /directory/ state (with final slash)
-                if (async && path == "down") {
-                    self.setState(register, (self.getState(register) + "/").replace(/\/\/$/, "/"));
-                }
-
-            });
-
         },
 
         /** 
@@ -114,6 +58,56 @@
 		*/
         getState: function(register) {
             return this.registers[register];
+        },
+
+        moveTo:function(register, path) {
+            var self = this;
+            
+            //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
+            if (!path) return;
+
+            //Go to first child
+            if (self.isDirectory(path)) {
+                var async = true;
+                self.resolveMoves(path.substring(0, path.length - 1), ["down"],function(newPath) {
+                    //console.log("FChild callback got "+newPath,newPath);
+                    async = false;
+                    self.setState(register, newPath);
+                });
+                //Set the temporary register
+                if (async) {
+                    //console.log("FChild callback was async, setting "+path,path);
+                    self.setState(register, path);
+                }
+            } else {
+                self.setState(register, path);
+            }
+        },
+        
+        move:function(register,path) {
+            var self = this;
+            
+            var localSerial = ++self.stateChangeSerial;
+            
+            //self.app.publish("control",["enter",menuPath || event.currentTarget.id]); ?
+            if (!path) return;
+
+            var async = true;
+            self.resolveMoves(self.getState(register), path,function(newPath) {
+                async = false;
+                
+                //Don't send an event if in the meantime the state changed.
+                if (localSerial==self.stateChangeSerial) {
+                    self.moveTo(register,newPath);
+                }
+            });
+
+            // While we're loading children of /directory, set us in the temporary 
+            // /directory/ state (with final slash)
+            if (async && path == "down") {
+                self.setState(register, (self.getState(register) + "/").replace(/\/\/$/, "/"));
+            }
+
         },
 
         /** 
@@ -415,7 +409,7 @@
                 var path = data[0];
                 if (!self.isDirectory(path) && (typeof data[1].getChildren == "function")) {
 
-                    self.app.publish("stateGoTo", ["preload", data[0] + "/"]);
+                    self.app.tree.moveTo("preload", data[0] + "/");
 
                 }
 

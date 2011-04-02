@@ -76,21 +76,21 @@
                     }
                     
                     if (absMove=="down") {
-                        self.app.publish("stateGo", ["focus", "down"], true);
+                        self.app.tree.move("focus", "down");
 
 
                         //go to parent
                     } else if (absMove=="up") {
                         if (self.treeRoot == '/') return false;
 
-                        self.app.publish("stateGo", ["focus", "up"], true);
+                        self.app.tree.move("focus", "up");
 
                     }
                 },
                 "onValidate":function(coords,elem) {
                     
                     var dest = self.treeRoot + elem.id;
-                    self.app.publish("stateGoTo", ["current", dest+""]);
+                    self.app.tree.move("current", dest+"");
                 },
                 "orientation": this.options.orientation
             });
@@ -157,7 +157,6 @@
                         break;
                     }
                 }
-                
                 liElements.slice(maxSyncedIndex).remove();
 
                 $("#" + this.htmlId+" ul").append(this._getItemsHtml(maxSyncedIndex));
@@ -297,7 +296,7 @@
             this.focusedIndex = index;
 
             if (!this.isLoading && index !== null)
-            this.app.publish("stateGoTo", ["focus", this.treeRoot + this.data[this.focusedIndex].id], true);
+            this.app.tree.moveTo("focus", this.treeRoot + this.data[this.focusedIndex].id);
 
             try {
                 if (this.options.autoScroll) {

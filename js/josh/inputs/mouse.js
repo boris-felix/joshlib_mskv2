@@ -24,7 +24,7 @@
                     var menuPath = $(this).attr('data-path');
                     console.log("click", menuPath);
                     if (menuPath) {
-                        self.app.publish("stateGoTo", ["focus", menuPath], true);
+                        self.app.tree.moveTo("focus",menuPath);
                     }
 
                     setTimeout(function() {

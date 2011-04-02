@@ -55,7 +55,7 @@
                 
                 self.focusedIndex=self.id2index[records[0].data.id];
 
-                self.app.publish("stateGoTo", ["focus", self.treeRoot + records[0].data.id],true);
+                self.app.tree.moveTo("focus", self.treeRoot + records[0].data.id);
                 self.app.publish("input",["enter"]);
             });
 
