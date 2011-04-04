@@ -50,6 +50,14 @@
                     
                     args["success"].apply(null, arguments);
                 };
+                
+                params["error"] = function() {
+                    self.pool.release();
+                    
+                    if (args["error"]) {
+                        args["error"].apply(null, arguments);
+                    }
+                };
 
                 var makeTheQuery = function() {
                     //Been cached in the meantime?
