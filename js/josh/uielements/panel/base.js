@@ -8,10 +8,13 @@
     /** @lends J.UI.Panel.prototype */
     {
         type: "Panel",
-        placeholder: "",
 
         getHtml: function() {
-            return "<div style='display:none;' id='" + this.htmlId + "'>" + (this.options["content"] ? this.options["content"] : this.placeholder) + "</div>";
+            return "<div style='display:none;' id='" + this.htmlId + "'>" + (this.options["content"] ? this.options["content"] : this.getInnerHtml()) + "</div>";
+        },
+        
+        getInnerHtml:function() {
+            return "";
         },
         
         // Don't empty content on new data

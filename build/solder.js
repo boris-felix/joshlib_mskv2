@@ -63,9 +63,9 @@ exports.config = {
       js: [
         "js/libs/jquery-1.4.4.js",
         "js/libs/jquery.inherit-1.3.2.M.js",
-        "js/libs/jquery.ui.slider.js",
-        "js/libs/jquery.flash.js",
-        "js/libs/jquery.cookie.js"
+        //"js/libs/jquery.ui.slider.js",
+        //"js/libs/jquery.flash.js",
+        //"js/libs/jquery.cookie.js"
       ]
     },
     

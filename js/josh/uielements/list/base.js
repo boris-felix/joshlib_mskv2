@@ -90,7 +90,7 @@
                 "onValidate":function(coords,elem) {
                     
                     var dest = self.treeRoot + elem.id;
-                    self.app.tree.move("current", dest+"");
+                    self.app.tree.moveTo("current", dest+"");
                 },
                 "orientation": this.options.orientation
             });
