@@ -11,7 +11,7 @@ exports.config = {
     css: [ {
         name   : 'scss',
         options: {
-          bin:["/usr/bin/sass","/home/node/.gem/ruby/1.8/bin/sass"]
+          bin:["/usr/bin/sass","/home/node/.gem/ruby/1.8/bin/sass", "/home/joshfire/.gem/ruby/1.9.1/bin/sass"]
         }
     }/*,{
       name   : 'yui',
