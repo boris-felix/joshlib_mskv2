@@ -109,7 +109,9 @@
             var self = this;
             this.beforeInsert(function() {
 
-                self.ui[self.baseUiElement].insert();
+                if (self.baseUiElement) {
+                    self.ui[self.baseUiElement].insert();
+                }
                 
                 _.each(self.inputs,function(input) {
                     J.Input.create(self, input).start();
