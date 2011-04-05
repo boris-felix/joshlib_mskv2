@@ -8,7 +8,7 @@
  * @version 1.0
  */
 
- (function(window) {
+ (function() {
 
 
     var J;
@@ -65,12 +65,16 @@
     J.Classes = {};
 
 
-    // Attach the namespace to the global scope
-    window.Joshlib = J;
+    // Attach the namespace to the global scope or for nodeJS
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports.Joshlib = J;
+    } else {
+        this.Joshlib = J;
+    }
 
 
     /* Protect against forgotten console.logs */
-    if (typeof window.console === "undefined")
+    if (window && typeof window.console === "undefined")
     {
         window.console = {
             'log': function() {},
@@ -89,4 +93,4 @@
 
 
 
-})(window);
+})();

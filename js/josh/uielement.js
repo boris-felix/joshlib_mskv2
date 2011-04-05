@@ -1,9 +1,5 @@
 (function(J, $, _, document) {
 
-    _.templateSettings = {
-      interpolate : /\{\{(.+?)\}\}/g
-    };
-
     J.UIElementBase = J.Class(
 
     /**
@@ -26,7 +22,7 @@
             hide:function(that) {
                 $("#" + that.htmlId).hide();
             },
-            innerTemplate:"{{ htmlInner }}"
+            innerTemplate:"<%= htmlInner %>"
         },
 
         /**

@@ -1,8 +1,5 @@
 (function(J, $, _) {
 
-    _.templateSettings = {
-      interpolate : /\{\{(.+?)\}\}/g
-    };
 
     var orientations = ["up", "right", "down", "left"];
     var inv = {
@@ -42,7 +39,7 @@
             
             "incrementalRefresh":false,
             
-            "itemTemplate": "<li id='{{ htmlId }}_{{ i }}' josh-ui-element='{{ id }}' josh-grid-id='{{ item.id }}' data-path='{{ treeRoot }}{{ item.id }}' class='joshover'><img src='{{ item.image }}' /><br/>{{ item.label }}</li>",
+            "itemTemplate": "<li id='<%= htmlId %>_<%= i %>' josh-ui-element='<%= id %>' josh-grid-id='<%= item.id %>' data-path='<%= treeRoot %><%= item.id %>' class='joshover'><img src='<%= item.image %>' /><br/><%= item.label %></li>",
 
             "loadingTemplate": "<li class='loading'>Loading...</li>"
             
