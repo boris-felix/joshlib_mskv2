@@ -61,8 +61,8 @@ exports.config = {
       requires: [ ],
       css: [],
       js: [
-        "js/libs/jquery-1.4.4.js",
-        "js/libs/jquery.inherit-1.3.2.M.js",
+        "js/libs/jquery-1.5.2.js",
+        //"js/libs/jquery.inherit-1.3.2.M.js",
         //"js/libs/jquery.ui.slider.js",
         //"js/libs/jquery.flash.js",
         //"js/libs/jquery.cookie.js"
@@ -82,7 +82,7 @@ exports.config = {
       css: [],
       js: [
         "js/libs/sencha-touch-debug.js",
-         "js/libs/jquery-1.5.1.js"/*,
+         "js/libs/jquery-1.5.2.js"/*,
          "js/libs/jquery.inherit-1.3.2.M.js"*/
       ]
     },
