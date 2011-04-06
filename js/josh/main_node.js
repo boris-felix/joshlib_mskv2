@@ -1,8 +1,9 @@
-(function(J,_) {
+(function(J) {
 
-    J.onReady = function(f) {
-        f();
-    };
+    _ = module.exports._;
+    jQuery = false;
+    document = false;
+
     J.extend = _.extend;
 
-})(Joshlib,_);
+})(Joshlib);

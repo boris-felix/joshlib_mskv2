@@ -269,7 +269,7 @@ exports.config = {
             'js/josh/main.js',
             'js/josh/main_node.js',
             
-            'js/josh/inheritance.js',
+            'js/josh/inheritance_node.js',
             'js/josh/pubsub.js',
             
             'js/josh/utils/grid.js',

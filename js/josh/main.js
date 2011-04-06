@@ -40,7 +40,7 @@
          * @param {Function} Callback
          */
         onReady:function(callback) {
-            window.onload=callback;
+            callback();
         },
         
         /**
@@ -64,32 +64,15 @@
      */
     J.Classes = {};
 
-
+    this.Joshlib = J;
+    
     // Attach the namespace to the global scope or for nodeJS
     if (typeof module !== 'undefined' && module.exports) {
         module.exports.Joshlib = J;
     } else {
-        this.Joshlib = J;
+        
     }
 
-
-    /* Protect against forgotten console.logs */
-    if (window && typeof window.console === "undefined")
-    {
-        window.console = {
-            'log': function() {},
-            'message': function() {},
-            'warn': function() {},
-            'error': function() {},
-            'info': function() {},
-            'table': function() {},
-            'trace': function() {},
-            'debug': function() {},
-            'profile': function() {},
-            'exception': function() {},
-            'time': function() {}
-        };
-    }
 
 
 
