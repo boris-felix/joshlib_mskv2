@@ -5,5 +5,6 @@
     document = false;
 
     J.extend = _.extend;
+    J.isNode = true;
 
 })(Joshlib);
