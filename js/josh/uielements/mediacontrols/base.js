@@ -148,8 +148,8 @@
             var timeRail = $("#" + this.htmlId + ' .video-time-rail');
             
             timeRail.live("click",function(e) {
-                //console.log("seek",(e.pageX - timeRail.offset().left) / timeRail.width(),self.player.getTotalTime());
-                self.seekTo(((e.pageX - timeRail.offset().left) / timeRail.width()),self.player.getTotalTime());
+                // console.log("seek",(e.pageX - timeRail.offset().left) / timeRail.width(),self.player.getTotalTime(),(e.pageX - timeRail.offset().left),timeRail.width());
+                self.seekTo(((e.pageX - timeRail.offset().left) / timeRail.width())*self.player.getTotalTime());
             });
 
         },
@@ -163,8 +163,8 @@
         },
         
         playpause:function() {
-            console.log("pp",this.player,this.player.videoStatus);
-            if (this.player.videoStatus == "playing") {
+            
+            if (this.player.videoStatus == "playing" || this.player.videoStatus == "loading") {
                 
                 this.player.publish("input",["pause"]);
 
