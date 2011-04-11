@@ -10,7 +10,7 @@
     {
         type: "MediaControls", 
         init: function() {
-            window._dbg=this;
+            
             var self = this;
             
             this.initGrid();
@@ -20,9 +20,11 @@
             
             var self=this;
             this.subscribe("afterInsert",function() {
+                
                 if (self.options.media) {
                     self.subscribeToPlayer(self.app.ui[self.options.media]);
                 }
+                
                 self.subscribeToInput();
             });
              
@@ -221,8 +223,12 @@
                     $("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedTime / data[0].totalTime) + '%');
                     
                 } else if (ev=="timeupdate") {
+                    
+                    $("#" + self.htmlId + ' .video-buttons').show();
+                    $("#" + self.htmlId + ' .video-info').hide();
+                    
                     $("#" + self.htmlId + ' .video-duration').text(isNaN(data[0].totalTime) ? '--:--': self.secondsToTimeCode(data[0].totalTime));
-                    $("#" + self.htmlId + ' .video-currenttime').text(self.secondsToTimeCode(data[0].currentTime));
+                    $("#" + self.htmlId + ' .video-currenttime').text(self.secondsToTimeCode(isNaN(data[0].currentTime)?0:data[0].currentTime));
                     $("#" + self.htmlId + ' .video-time-current').css('width', Math.round(100 * data[0].currentTime / data[0].totalTime) + '%');
                     
                     //$("#" + self.htmlId + ' .video-time-loaded').css('width', Math.round(100 * data[0].bufferedBytes / data[0].totalBytes) + '%');
