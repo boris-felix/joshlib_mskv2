@@ -58,7 +58,9 @@
 
         setGrid: function(grid) {
             this.grid = grid;
-            
+            console.log("this.grid is ==> " + typeof(this.grid));
+            console.log("this.grid[0] is ==> " + typeof(this.grid[0]));
+            console.log("this.grid[1] is ==> " + typeof(this.grid[1]));
             this.id2coords = {};
             for (var x=0;x<this.grid.length;x++) {
                 for (var y=0;y<this.grid[x].length;y++) {

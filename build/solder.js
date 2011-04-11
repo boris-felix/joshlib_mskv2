@@ -20,10 +20,17 @@ exports.config = {
       }
     }*/],
 
-    js: [{
-      name   : 'yui',
+    // js: [{
+      // name   : 'yui',
+      // options: {
+        // jar: __dirname+'/yuicompressor-2.4.2.jar'
+      // }
+    // }]
+	
+	js: [{
+      name   : 'uglify',
       options: {
-        jar: __dirname+'/yuicompressor-2.4.2.jar'
+        
       }
     }]
 
