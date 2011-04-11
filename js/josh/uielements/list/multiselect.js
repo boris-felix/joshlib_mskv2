@@ -9,7 +9,7 @@
         init:function() {
             this.__base();
             
-            this.setSelection(this.options.defaultSelection || []);
+            this.selection = this.options.defaultSelection || [];
             
             var self=this;
             this.grid.options.onValidate = function(coords,elem) {
@@ -24,12 +24,19 @@
             this.subscribe("afterRefresh",function() {
                 self.setSelection(self.selection);
             });
+            
+            this.subscribe("afterInsert",function() {
+                self.setSelection(self.selection);
+            });
         },
         
         setSelection:function(ids) {
-            this.selection = ids;
             
-            this.publish("selectionChange",[ids]);
+            if (!_.isEqual(this.selection,ids)) {
+                this.publish("selectionChange",[ids]);
+            }
+            
+            this.selection = ids;
             
             $("#" + this.htmlId + " .activated").removeClass("activated");
             

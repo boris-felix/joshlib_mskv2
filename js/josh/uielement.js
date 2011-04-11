@@ -1,9 +1,5 @@
 (function(J, $, _, document) {
 
-    _.templateSettings = {
-      interpolate : /\{\{(.+?)\}\}/g
-    };
-
     J.UIElementBase = J.Class(
 
     /**
@@ -26,7 +22,7 @@
             hide:function(that) {
                 $("#" + that.htmlId).hide();
             },
-            innerTemplate:"{{ htmlInner }}"
+            innerTemplate:"<%= htmlInner %>"
         },
 
         /**
@@ -268,6 +264,8 @@
                 this.htmlInner = this.getHtmlInner();
                 $("#" + this.htmlId).html(_.template(this.options.innerTemplate,this));
                 
+                this.insertChildren(true);
+                
             }
 
             this.publish("afterRefresh");
@@ -348,9 +346,13 @@
 
             this.publish('afterInsert');
             
+            this.insertChildren(false);
+        },
+        
+        insertChildren:function(forceInsert) {
             // Insert children elements that have the autoInsert flag
             for (var i = 0; i < this.children.length; i++) {
-                if (this.children[i].options.autoInsert) {
+                if (forceInsert || this.children[i].options.autoInsert) {
                     this.children[i].insert();
                 }
             }

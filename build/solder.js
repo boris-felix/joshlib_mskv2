@@ -68,8 +68,8 @@ exports.config = {
       requires: [ ],
       css: [],
       js: [
-        "js/libs/jquery-1.4.4.js",
-        "js/libs/jquery.inherit-1.3.2.M.js",
+        "js/libs/jquery-1.5.2.js",
+        //"js/libs/jquery.inherit-1.3.2.M.js",
         //"js/libs/jquery.ui.slider.js",
         //"js/libs/jquery.flash.js",
         //"js/libs/jquery.cookie.js"
@@ -89,8 +89,8 @@ exports.config = {
       css: [],
       js: [
         "js/libs/sencha-touch-debug.js",
-         "js/libs/jquery-1.5.1.js",
-         "js/libs/jquery.inherit-1.3.2.M.js"
+         "js/libs/jquery-1.5.2.js"/*,
+         "js/libs/jquery.inherit-1.3.2.M.js"*/
       ]
     },
     
@@ -120,8 +120,10 @@ exports.config = {
         css: [],
         js: [
             'js/josh/main.js',
+            
             'js/josh/main_jquery.js',
             
+            'js/josh/inheritance.js',
             'js/josh/pubsub.js',
             
             'js/josh/uielement.js'
@@ -135,6 +137,7 @@ exports.config = {
             'js/josh/main.js',
             'js/josh/main_ext.js',
             
+            'js/josh/inheritance.js',
             'js/josh/pubsub.js',
             
             'js/josh/uielement.js',
@@ -257,7 +260,39 @@ exports.config = {
           
           'js/josh/targets/smartphones/sencha.js'
       ]
-    }
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    'joshlib-node':{
+        requires: ["underscore"],
+        css: [],
+        js: [
+            'js/josh/main.js',
+            'js/josh/main_node.js',
+            
+            'js/josh/inheritance_node.js',
+            'js/josh/pubsub.js',
+            
+            'js/josh/utils/grid.js',
+            'js/josh/utils/delayedswitch.js',
+            'js/josh/utils/pool.js',
+            'js/josh/utils/datasource.js',
+            'js/josh/utils/datasource.node.js',
+       
+            'js/josh/app.js',
+            'js/josh/tree.js',        
+            'js/josh/input.js'
+      ]
+    },
+    
+    
+    
 
     
   }

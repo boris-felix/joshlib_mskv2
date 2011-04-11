@@ -10,7 +10,7 @@
         type: "Panel",
 
         getHtml: function() {
-            return "<div style='display:none;' id='" + this.htmlId + "'>" + (this.options["content"] ? this.options["content"] : this.getInnerHtml()) + "</div>";
+            return "<div style='display:none;' id='" + this.htmlId + "'>" + (this.options["content"] ? this.options["content"] : this.getHtmlInner()) + "</div>";
         },
         
         getInnerHtml:function() {
