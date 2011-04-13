@@ -59,7 +59,7 @@
             if (typeof this.options.treeRoot == "string") {
                 this.treeRoot=this.options.treeRoot;
             }
-
+            
             // Bind event handlers present in the options
             _.each(this.options,function(handler,k) {
                 if (k.substring(0,2)=="on" && typeof handler=="function") {

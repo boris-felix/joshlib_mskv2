@@ -5,6 +5,13 @@
 var path      = require('path');
 
 
+var COMP_JS_YUI = {
+  name   : 'yui',
+  options: {
+    jar: __dirname+'/yuicompressor-2.4.2.jar'
+  }
+};
+
 exports.config = {
 
   compressors: {
@@ -20,12 +27,7 @@ exports.config = {
       }
     }*/],
 
-    js: [{
-      name   : 'yui',
-      options: {
-        jar: __dirname+'/yuicompressor-2.4.2.jar'
-      }
-    }]
+    js: [COMP_JS_YUI]
 
     // js: {
     //   name   : 'closure',
@@ -251,8 +253,17 @@ exports.config = {
           'js/josh/uielements/video/popup.js',
           'js/josh/uielements/video/sencha_youtube.js',
           
+          
+          'js/josh/uielements/map/base.js',
+          'js/josh/uielements/map/sencha.js',
+          
           'js/josh/targets/smartphones/sencha.js'
-      ]
+      ],
+      compressors: {
+          css: [],
+
+          js: [COMP_JS_YUI]
+        }
     },
     
     

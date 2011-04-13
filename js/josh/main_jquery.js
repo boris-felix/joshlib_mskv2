@@ -1,7 +1,7 @@
-(function(J, $) {
+(function(J, $, _) {
 
     J.onReady = $;
-    J.extend = $.extend;
+    J.extend = _.extend;
 
 
 
@@ -24,4 +24,4 @@
     }
 
 
-})(Joshlib, jQuery);
+})(Joshlib, jQuery, _);

@@ -1,7 +1,7 @@
-(function(J, Ext) {
+(function(J, Ext,_) {
 
     J.onReady = Ext.onReady;
-    J.extend = Ext.apply;
+    J.extend = _.extend;
 
 
 
@@ -24,4 +24,4 @@
     }
 
 
-})(Joshlib, Ext);
+})(Joshlib, Ext, _);

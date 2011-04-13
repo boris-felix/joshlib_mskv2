@@ -49,7 +49,11 @@
             this.currentCoords = this.options.defaultPosition || false;
             this.lastCoords = this.options.defaultPosition || false;
             this.id2coords = {};
-            this.setGrid(options.grid);
+            
+            if (options.grid) {
+                this.setGrid(options.grid);
+            }
+            
             
             if (this.options.inputSource) {
                 this.subscribeToInputEvents(this.options.inputSource);

@@ -36,9 +36,9 @@
     	 * @function
     	 */
         show: function() {
-            this.event("onBeforeShow");
+            this.publish("beforeShow");
             this.senchaElement.show();
-            this.event("onAfterShow");
+            this.publish("afterShow");
         },
 
         /**
@@ -47,9 +47,9 @@
     	 */
         hide: function() {
             
-            this.event("onBeforeHide");
+            this.publish("beforeHide");
             this.senchaElement.hide();
-            this.event("onAfterHide");
+            this.publish("afterHide");
         },
         
         /**
