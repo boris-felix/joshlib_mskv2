@@ -82,6 +82,8 @@
     
         init: function() {
             
+            var self = this;
+            
             this.isLoading = true;
             this.focusedIndex = null;
             this.data = [];
@@ -98,11 +100,18 @@
             
             this.senchaElement = new Ext.TabBar({
                 dock: 'bottom',
-                ui: 'light',
+                ui: 'dark',
                 layout: {
                     pack: 'center'
                 },
                 items:this.senchaData
+            });
+            
+            this.senchaElement.on("change",function(elt,tab,card) {
+                
+                self.app.tree.moveTo("focus",self.treeRoot+tab.id);
+                self.app.publish("input",["enter"]);
+                
             });
 
         },
@@ -134,6 +143,93 @@
                     id:this.data[i].id,
                     text:this.data[i].label,
                     iconCls: 'info'
+                    //cls
+                    //badgeText: '4'
+                };
+            }
+            this.senchaData =  items;
+        }
+    });
+    
+    
+    /**
+     * @class Sencha backend for Bottom Tabs
+     * @augments J.UI.ListBase
+     */
+    J.UI.ListSenchaSegmentedButton = J.Class(J.UI.ListBase,
+    /** @lends J.UI.ListSenchaBottom.prototype */
+    {
+    
+        init: function() {
+            
+            var self = this;
+            
+            this.isLoading = true;
+            this.focusedIndex = null;
+            this.data = [];
+            this.id2index={};
+            this.grid = new J.Utils.Grid({}); //todo remove
+            
+            // Sencha touch bug? : there must be at least one element in the initial items
+            // for the element to be rendered correctly.
+            this.senchaData=[{
+                text: 'Empty',
+                iconCls: 'info',
+                cls: 'card card1'
+            }];
+            
+            this.senchaList = new Ext.SegmentedButton({
+                items:this.senchaData,
+                "ui":"dark"
+            });
+            
+            this.senchaElement = new Ext.Toolbar({
+                dock : 'bottom',
+                title: '',
+                layout: {
+                    pack: 'center'
+                },
+                ui: 'dark',
+                items: [this.senchaList]
+            });
+            
+            
+            this.senchaList.on("toggle",function(elt,tab,card) {
+                
+                self.app.tree.moveTo("focus",self.treeRoot+tab.id);
+                self.app.publish("input",["enter"]);
+                
+            });
+
+        },
+
+        refresh:function() {
+            
+            //TODO perfs
+            this.senchaList.removeAll();
+            for (var i=0;i<this.senchaData.length;i++) {
+                this.senchaList.add(this.senchaData[i]);
+            }
+            this.senchaList.doLayout();
+        },
+        
+        setData:function(data) {
+
+            this.data = data;
+            this.isLoading = false;
+            
+            //todo: do this in tree
+            for (var i = 0; i < data.length; i++) {
+                this.id2index[data[i].id] = i;
+            }
+            
+            var items = [];
+            
+            for (var i=0;i<this.data.length;i++) {
+                items[i] = {
+                    id:this.data[i].id,
+                    text:this.data[i].label
+                    //iconCls: 'info'
                     //cls
                     //badgeText: '4'
                 };

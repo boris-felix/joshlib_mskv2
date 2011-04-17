@@ -27,8 +27,8 @@
     	 * Puts the element in loading mode
     	 * @function
     	 */
-        setLoading: function() {
-            this.senchaElement.setLoading(1);
+        setLoading: function(isLoading) {
+            this.senchaElement.setLoading(isLoading);
         },
 
         /**

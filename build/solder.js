@@ -250,6 +250,8 @@ exports.config = {
           'js/josh/uielement_sencha.js',
           'js/josh/uielements/panel/sencha.js',
           'js/josh/uielements/list/sencha.js',
+          'js/josh/uielements/list/multiselect_sencha.js',
+          
           'js/josh/uielements/video/popup.js',
           'js/josh/uielements/video/sencha_youtube.js',
           
@@ -258,6 +260,8 @@ exports.config = {
           'js/josh/uielements/map/sencha.js',
           
           'js/josh/targets/smartphones/sencha.js'
+          
+          
       ],
       compressors: {
           css: [],

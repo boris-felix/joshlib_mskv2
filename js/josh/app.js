@@ -105,7 +105,7 @@
         insert: function() {
             
             this.baseHtml = document.getElementById(this.options.parentNodeId);
-            
+
             var self = this;
             this.beforeInsert(function() {
 
@@ -116,7 +116,6 @@
                 _.each(self.inputs,function(input) {
                     J.Input.create(self, input).start();
                 });
-                
                 self.afterInsert();
 
             });

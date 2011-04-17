@@ -15,7 +15,6 @@
             if (!this.options.parent) {
                 opts.layout = 'card';
                 opts.fullscreen=true;
-                console.log("np",this.id);
             }
             opts.cls='joshlib-id-'+this.id;
             
