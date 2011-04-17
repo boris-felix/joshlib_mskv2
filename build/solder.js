@@ -27,7 +27,12 @@ exports.config = {
       }
     }*/],
 
-    js: [COMP_JS_YUI]
+    js: [COMP_JS_YUI, /*{
+      name   : 'uglify',
+      options: {
+        
+      }
+    }*/]
 
     // js: {
     //   name   : 'closure',
