@@ -18,17 +18,17 @@
         
             var self=this;
             Ext.regModel('UIListEntry_'+this.id, {
-                fields: ['id', 'label', 'type']
+                fields: ['id','item','i']
             });
             
             this.senchaStore = new Ext.data.Store({
                 model: 'UIListEntry_'+self.id,
                 sorters: 'id',
-                data: [].concat(self.data)
+                data: this._getSenchaData()
             });
-            
+
             this.senchaElement = new Ext.List({
-                itemTpl: '<div>{label}</div>',
+                itemTpl: '<div>'+this.options.itemInnerTemplate.replace(/\<\%\=/g,'{').replace(/\%\>/g,'}')+'</div>',
 
                 singleSelect: true,
 
@@ -38,7 +38,6 @@
                 /*width: 350,
                 height: 370,*/
                 hideOnMaskTap: false,
-                style: "padding-bottom:100px;",
 
                 disclosure: {
                     scope: 'test',
@@ -50,6 +49,8 @@
                 store: this.senchaStore
             });
             
+            
+            
             this.senchaElement.on("selectionchange",function(selectionModel,records) {
                 if (records.length==0) return;
                 
@@ -60,9 +61,22 @@
             });
 
         },
+        
+        _getSenchaData:function() {
+            var newData = [];
+            
+            for (var i=0;i<this.data.length;i++) {
+                newData.push({
+                    i:i,
+                    item:this.data[i],
+                    id:this.data[i].id
+                });
+            }
+            return newData;
+        },
 
         refresh:function() {
-            this.senchaStore.loadData([].concat(this.data));
+            this.senchaStore.loadData(this._getSenchaData());
             //this.senchaStore.sync();
             
         }

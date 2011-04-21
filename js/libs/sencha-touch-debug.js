@@ -22078,6 +22078,7 @@ Ext.AbstractStoreSelectionModel = Ext.extend(Ext.util.Observable, {
     selectWithEvent: function(record, e) {
         switch (this.selectionMode) {
             case 'MULTI':
+            
                 if (e.ctrlKey && this.isSelected(record)) {
                     this.doDeselect(record, false);
                 } else if (e.shiftKey && this.lastFocused) {

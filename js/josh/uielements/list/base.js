@@ -39,8 +39,8 @@
             
             "incrementalRefresh":false,
             
-            "itemTemplate": "<li id='<%= htmlId %>_<%= i %>' josh-ui-element='<%= id %>' josh-grid-id='<%= item.id %>' data-path='<%= treeRoot %><%= item.id %>' class='joshover'><img src='<%= item.image %>' /><br/><%= item.label %></li>",
-
+            "itemTemplate": "<li id='<%= htmlId %>_<%= i %>' josh-ui-element='<%= id %>' josh-grid-id='<%= item.id %>' data-path='<%= treeRoot %><%= item.id %>' class='joshover'><%= itemInner %></li>",
+            "itemInnerTemplate":"<img src='<%= item.image %>' /><br/><%= item.label %>",
             "loadingTemplate": "<li class='loading'>Loading...</li>"
             
         },
@@ -126,9 +126,12 @@
                 }
             } else {
                 var tmpl = _.template(this.options.itemTemplate);
+                var tmplInner = _.template(this.options.itemInnerTemplate);
+                
                 for (var i = itemFrom,l=this.data.length; i < l; i++) {
                     this.item=this.data[i];
                     this.i = i;
+                    this.itemInner = tmplInner(this);
                     ret.push(tmpl(this));
                 }
             }

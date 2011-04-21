@@ -9,18 +9,19 @@
     {
         init:function() {
             var opts = {
-                getLocation: true,
+                useCurrentLocation:true,
                 mapOptions: {
                     zoom: 12
-                }/*,
-                fullscreen:true*/
+                }
             };
 
             opts.cls='joshlib-id-'+this.id;
             
-            opts = Ext.apply(opts,this.options.senchaOptions || {});
+            opts = J.extend(opts,this.options.senchaOptions || {});
             
             this.senchaElement = new Ext.Map(opts);
+            
+            this.map = this.senchaElement.map;
             
         }
     });

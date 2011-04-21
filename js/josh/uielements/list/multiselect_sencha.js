@@ -30,7 +30,10 @@
             this.senchaElement = new Ext.List({
                 itemTpl: '<div>{label}</div>',
 
-                singleSelect: true,
+                //Definitely a sencha touch bug ; we want multiSelect but it has code for key events.
+                multiSelect:false,
+                simpleSelect:true,
+                singleSelect:false,
 
                 //fullscreen:true,
                 
@@ -38,7 +41,6 @@
                 /*width: 350,
                 height: 370,*/
                 hideOnMaskTap: false,
-                style: "padding-bottom:100px;",
 
                 disclosure: {
                     scope: 'test',
