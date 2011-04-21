@@ -23,7 +23,13 @@
                 }
                 
                 if (params.dataType=="json" || params.dataType=="text json" || params.dataType=="jsonp") {
-                    params.success(JSON.parse(body));
+                    try {
+                        params.success(JSON.parse(body));
+                    } catch (e) {
+                        console.log("Invalid JSON : ",body);
+                        return params.error(e);
+                    }
+                    
                 } else {
                     params.success(body);
                 }
