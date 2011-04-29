@@ -31,7 +31,8 @@
                 itemTpl: '<div>'+this.options.itemInnerTemplate.replace(/\<\%\=/g,'{').replace(/\%\>/g,'}')+'</div>',
 
                 singleSelect: true,
-
+                cls:'joshlib-id-'+this.id,
+                
                 //fullscreen:true,
                 
                 //floating: true,
@@ -114,6 +115,7 @@
             
             this.senchaElement = new Ext.TabBar({
                 dock: 'bottom',
+                cls:'joshlib-id-'+this.id,
                 ui: 'dark',
                 layout: {
                     pack: 'center'
@@ -199,6 +201,7 @@
             
             this.senchaElement = new Ext.Toolbar({
                 dock : 'bottom',
+                cls:'joshlib-id-'+this.id,
                 title: '',
                 layout: {
                     pack: 'center'

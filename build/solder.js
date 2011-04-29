@@ -99,8 +99,8 @@ exports.config = {
       css: [],
       js: [
         "js/libs/historyjs/history.adapter.jquery.js",
-         "js/libs/historyjs/history.js",
-         "js/libs/historyjs/history.html4.js"
+        "js/libs/historyjs/json2.js", //TODO needed?
+        "js/libs/historyjs/history.js"
       ]
     },
     

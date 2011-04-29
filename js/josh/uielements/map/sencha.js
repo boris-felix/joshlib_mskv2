@@ -9,7 +9,7 @@
     {
         init:function() {
             var opts = {
-                useCurrentLocation:true,
+                //useCurrentLocation:true,
                 mapOptions: {
                     zoom: 12
                 }
@@ -21,8 +21,9 @@
             
             this.senchaElement = new Ext.Map(opts);
             
-            this.map = this.senchaElement.map;
-            
+        },
+        getMap:function() {
+            return this.senchaElement.map;
         }
     });
 
