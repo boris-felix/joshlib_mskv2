@@ -224,6 +224,48 @@
             this.focusIndex(null);
             this.grid.currentCoords = false;
         },
+        
+        scrollToNextPage:function() {
+            var self = this;
+            
+	        var list=$("#"+self.htmlId).offset().left+$("#"+self.htmlId).width();
+	        
+	        for (i = self.focusedIndex;i<self.data.length-1;i++) {
+	            
+		        var elem=$("#"+self.htmlId+"_"+i).offset().left+$("#"+self.htmlId+"_"+self.focusedIndex).width();
+
+                //focus to first element out of screen
+		        if (elem>list) break;
+	        }
+	        
+	        if (i!=self.focusedIndex) {
+	            self.focusIndex(i);
+	        }
+	        
+	        self.autoScroll();
+	        
+        },
+        
+        scrollToPrevPage:function() {
+            var self = this;
+            
+	        var list=$("#"+self.htmlId).offset().left;
+	        
+	        for (i = self.focusedIndex;i>0;i--) {
+	            var elem=$("#"+self.htmlId+"_"+i).offset().left
+	            
+	            //focus to first element out of screen
+	            if (elem<list) break;
+	        
+	        }
+	        
+	        if (i!=self.focusedIndex) {
+	            self.focusIndex(i);
+	        }
+	        
+	        self.autoScroll();
+        },
+        
 
         autoScroll: function() {
 
