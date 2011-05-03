@@ -27,28 +27,40 @@
             });
             
         },
+        
+        testCache:function(args) {
+            var hash = this.hash(args);
+//            console.warn("test cache",this.hash(args),args.cache,this.cache[hash],this.cache,args.cache*1000,(new Date()))
+            if (args.cache) {
+                var hash = this.hash(args);
+                if (this.cache[hash] && (this.cache[hash]["time"]+args.cache*1000)>+(new Date())) {
+
+                    args.success.apply(null, JSON.parse(JSON.stringify(this.cache[hash]["result"])));
+                    return true;
+                }
+            }
+            return false;
+        },
 
 
         request: function(args) {
-            var hash = this.hash(args);
-
-            if (this.cache[hash] && this.options.cache) {
-                args.success.apply(null, this.cache[hash]["result"]);
-                return;
-            } else {
-
+            var self=this;
+            
+            if (!this.testCache(args)) {
+            
                 var params = J.extend({},args);
-                var self = this;
-                params["success"] = function() {
-                    if (self.options.cache) {
-                        self.cache[hash] = {
-                            "result": arguments
+
+                params["success"] = function(data) {
+                    if (args.cache) {
+                        self.cache[self.hash(args)] = {
+                            "result": JSON.parse(JSON.stringify([data])),
+                            "time":+(new Date())
                         };
                     }
                     
                     self.pool.release();
                     
-                    args["success"].apply(null, arguments);
+                    args["success"].apply(null, [data]);
                 };
                 
                 params["error"] = function() {
@@ -61,13 +73,9 @@
 
                 var makeTheQuery = function() {
                     //Been cached in the meantime?
-                    if (self.cache[hash] && self.options.cache) {
-                        params["success"].apply(null, self.cache[hash]["result"]);
-                        return;
-                    } else {
+                    if (!self.testCache(args)) {
                         return self._request(params);
                     }
-
                 };
 
                 this.pool.acquire(makeTheQuery);
@@ -81,7 +89,7 @@
 
 
         hash: function(args) {
-            return args.url;
+            return JSON.stringify([args.url,args.dataType,args.data,args.type,args.username,args.password]);
         }
 
     });
