@@ -15,6 +15,9 @@
 	// Localise Globals
 	var
 		document = window.document, // Make sure we are using the correct document
+		setTimeout = window.setTimeout||setTimeout,
+		clearTimeout = window.clearTimeout||clearTimeout,
+		setInterval = window.setInterval||setInterval,
 		History = window.History = window.History||{}; // Public History Object
 
 	// Check Existence
@@ -35,6 +38,16 @@
 		else {
 			History.initHtml4.initialized = true;
 		}
+
+		// ----------------------------------------------------------------------
+		// Properties
+
+		/**
+		 * History.enabled
+		 * Is History enabled?
+		 */
+		History.enabled = true;
+
 
 		// ----------------------------------------------------------------------
 		// Hash Storage
@@ -401,14 +414,16 @@
 				History.saveHash(currentHash);
 
 				// Expand Hash
-				currentState = History.extractState(currentHash||document.location.href);
-				if ( !currentState ) {
+				if ( currentHash && History.isTraditionalAnchor(currentHash) ) {
 					//History.debug('History.onHashChange: traditional anchor', currentHash);
 					// Traditional Anchor Hash
 					History.Adapter.trigger(window,'anchorchange');
 					History.busy(false);
 					return false;
 				}
+
+				// Create State
+				currentState = History.extractState(History.getFullUrl(currentHash||document.location.href,false),true);
 
 				// Check if we are the same state
 				if ( History.isLastSavedState(currentState) ) {
@@ -434,7 +449,6 @@
 						//History.debug('History.onHashChange: go forwards');
 						History.forward(false);
 					}
-					History.busy(false);
 					return false;
 				}
 
@@ -572,11 +586,6 @@
 				// End replaceState closure
 				return true;
 			};
-
-			/**
-			 * Create the initial State
-			 */
-			History.saveState(History.storeState(History.createStateObject({},'',document.location.href)));
 
 			/**
 			 * Ensure initial state is handled correctly

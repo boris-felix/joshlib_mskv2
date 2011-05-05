@@ -24,11 +24,19 @@
                 
                 if (params.dataType=="json" || params.dataType=="text json" || params.dataType=="jsonp") {
                     try {
-                        params.success(JSON.parse(body));
+                        var tmp_json = JSON.parse(body);
                     } catch (e) {
-                        console.log("Invalid JSON : ",body);
+                        console.warn("Invalid JSON : ",body);
                         return params.error(e);
                     }
+					try{
+						params.success(tmp_json);
+					}
+					catch(ecallback){
+						return params.error(ecallback);
+						
+					}
+
                     
                 } else {
                     params.success(body);
