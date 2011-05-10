@@ -2,7 +2,7 @@
 
     J.onReady = $;
     J.extend = _.extend;
-
+	J.getScript = $.getScript; //Todo the josh way
 
 
     /* Protect against forgotten console.logs */

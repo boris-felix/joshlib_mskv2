@@ -187,7 +187,8 @@ exports.config = {
         'js/josh/uielements/video/mediaelement.js',
         'js/josh/uielements/mediacontrols/base.js',
         
-        
+        'js/josh/utils/geolocation.js',
+
         'js/josh/targets/web/general.js'
       ]
     },
@@ -299,6 +300,7 @@ exports.config = {
             'js/josh/utils/pool.js',
             'js/josh/utils/datasource.js',
             'js/josh/utils/datasource.node.js',
+			'js/josh/utils/geolocation.js',
        
             'js/josh/app.js',
             'js/josh/tree.js',        
