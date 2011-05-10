@@ -85,6 +85,6 @@
 		watchPosition:function(){
 			
 			
-		},
+		}
 });
 })(Joshlib);
